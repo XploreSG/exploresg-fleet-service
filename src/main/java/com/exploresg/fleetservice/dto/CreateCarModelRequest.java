@@ -3,15 +3,14 @@ package com.exploresg.fleetservice.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor; // Added for completeness, useful with @Builder
-import lombok.Builder; // Added for completeness, useful for service
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor; // Added for completeness, useful with @Builder
+import lombok.NoArgsConstructor;
 
 /**
  * DTO for creating a new CarModel.
  * Includes validation annotations to ensure data integrity.
- * This DTO now reflects all static specifications of the CarModel entity.
  */
 @Data
 @NoArgsConstructor
@@ -42,7 +41,7 @@ public class CreateCarModelRequest {
     @NotBlank(message = "Category is required")
     private String category;
 
-    // --- Enhanced Fields from CarModel Entity ---
+    // --- Static Performance & Specs ---
 
     @NotBlank(message = "Fuel Type is required")
     private String fuelType;
@@ -51,7 +50,7 @@ public class CreateCarModelRequest {
     @Positive(message = "Model year must be a valid year")
     private Integer modelYear;
 
-    // RENAMED: Must be 'rangeInKm' to align with the CarModel entity
+    // Correctly named to match entity
     @NotNull(message = "Range in KM is required")
     @Positive(message = "Range must be a positive number")
     private Integer rangeInKm;

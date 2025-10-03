@@ -27,7 +27,7 @@ public class FleetVehicle {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "car_model_id", nullable = false)
-    private CarModel carModel;
+    private CarModel carModel; // Foreign Key to CarModel
 
     @Column(nullable = false)
     private Long ownerId; // The user ID of the FLEET_MANAGER
@@ -39,8 +39,6 @@ public class FleetVehicle {
     private String licensePlate;
 
     // --- Instance-Specific Identity & Compliance ---
-
-    // The VIN and engine number are unique to the physical car
     @Column(unique = true)
     private String chassisNumber;
 
@@ -50,7 +48,6 @@ public class FleetVehicle {
     private String insuranceReference; // Policy ID or document link
     private String coeReference; // Certificate of Entitlement reference
 
-    // Color and capacity can be customized per instance/fleet
     private String primaryColour;
     private String secondaryColour;
 
@@ -60,12 +57,10 @@ public class FleetVehicle {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private VehicleStatus status;
+    private VehicleStatus status; // Must be an enum VehicleStatus
 
-    // The current usage of this specific vehicle instance
-    private Integer mileageKm;
+    private Integer mileageKm; // Odometer reading
 
-    // Current location/availability
     private String currentLocation; // GPS coordinates (e.g., "1.345678, 103.923456") or zone name
     private LocalDateTime availableFrom; // Start of an availability window
     private LocalDateTime availableUntil; // End of an availability window
@@ -77,9 +72,9 @@ public class FleetVehicle {
 
     // Documentation/Attachments unique to this physical car
     @Column(length = 1024)
-    private String vehicleAttachment1; // URL to a document/image in S3 (e.g., log card)
+    private String vehicleAttachment1;
     @Column(length = 1024)
-    private String vehicleAttachment2; // URL to another document/image in S3
+    private String vehicleAttachment2;
 
     // --- Audit Fields ---
     @Column(nullable = false, updatable = false)
