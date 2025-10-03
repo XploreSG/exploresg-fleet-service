@@ -1,4 +1,4 @@
-name: "CI Backend - Build, Test & Security Scan"
+name: "CI Fleet-Service - Build, Test & Security Scan"
 
 on:
   push:
