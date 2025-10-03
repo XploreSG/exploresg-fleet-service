@@ -19,8 +19,8 @@ public class CarModelService {
 
     /**
      * Creates a new CarModel and saves it to the database.
+     * * @param request The DTO containing the details for the new car model.
      * 
-     * @param request The DTO containing the details for the new car model.
      * @return The saved CarModel entity.
      */
     public CarModel createCarModel(CreateCarModelRequest request) {
@@ -32,9 +32,20 @@ public class CarModelService {
                 .transmission(request.getTransmission())
                 .imageUrl(request.getImageUrl())
                 .category(request.getCategory())
+
+                // --- MAPPING NEW/UPDATED FIELDS ---
                 .fuelType(request.getFuelType())
                 .modelYear(request.getModelYear())
-                .rangeKm(request.getRangeKm())
+
+                // New fields from the updated CarModel entity:
+                .engineCapacityCc(request.getEngineCapacityCc())
+                .maxUnladenWeightKg(request.getMaxUnladenWeightKg())
+                .maxLadenWeightKg(request.getMaxLadenWeightKg())
+
+                // Renamed field: rangeKm -> rangeInKm
+                .rangeInKm(request.getRangeInKm())
+
+                // Existing fields:
                 .hasAirConditioning(request.isHasAirConditioning())
                 .hasInfotainmentSystem(request.isHasInfotainmentSystem())
                 .safetyRating(request.getSafetyRating())
@@ -47,8 +58,7 @@ public class CarModelService {
 
     /**
      * Retrieves all car models from the database.
-     * 
-     * @return A list of all CarModel entities.
+     * * @return A list of all CarModel entities.
      */
     public List<CarModel> getAllCarModels() {
         return carModelRepository.findAll();

@@ -43,13 +43,20 @@ public class CarModel {
     @Column(nullable = false)
     private String category; // e.g., "Sedan", "SUV", "Luxury"
 
-    // --- Enhanced Fields for Capstone Project ---
-
+    // --- Static Performance & Specs ---
+    @Column(nullable = false)
     private String fuelType; // e.g., "Petrol", "Electric", "Hybrid"
 
     private Integer modelYear;
 
-    private Integer rangeKm; // Estimated driving range in kilometers
+    // Engine size is defined by the model design
+    private Integer engineCapacityCc; // Engine size in cubic centimeters
+
+    // Weight limits are structural/design specifications
+    private Integer maxUnladenWeightKg;
+    private Integer maxLadenWeightKg;
+
+    private Integer rangeInKm; // Estimated driving range in kilometers
 
     private boolean hasAirConditioning;
 
