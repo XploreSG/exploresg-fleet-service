@@ -1,0 +1,52 @@
+services:
+  fleet-db:
+    image: postgres:15
+    container_name: dev-exploresg-fleet-db
+    environment:
+      POSTGRES_DB: exploresg-fleet-service-db
+      POSTGRES_USER: exploresguser
+      POSTGRES_PASSWORD: exploresgpass
+    ports:
+      - "5433:5432" # Use a different host port (5433)
+    volumes:
+      - xpl-fleet-pgdata:/var/lib/postgresql/data
+    networks:
+      - default # The DB only needs to talk to its own service
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U exploresguser -d exploresg-fleet-service-db",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend-fleet-dev:
+    build:
+      context: .
+    image: exploresg-fleet-backend:dev
+    container_name: dev-exploresg-fleet-service
+    depends_on:
+      fleet-db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://fleet-db:5432/exploresg-fleet-service-db
+      SPRING_DATASOURCE_USERNAME: exploresguser
+      SPRING_DATASOURCE_PASSWORD: exploresgpass
+    ports:
+      - "8081:8081"
+    networks:
+      - default
+      - exploresg-network # Connect the app to the shared network
+    restart: on-failure
+
+volumes:
+  xpl-fleet-pgdata:
+
+# Define the shared network as external, connecting to the one we created
+networks:
+  exploresg-network:
+    name: exploresg-net
+    external: true

@@ -1,0 +1,18 @@
+# Maven build output
+target
+
+# Git files
+.git
+.gitignore
+
+# IDE and editor files
+.idea
+.vscode
+*.iml
+
+# Log files
+*.log
+
+# Docker files that shouldn't be in the image
+Dockerfile*
+docker-compose.yml
