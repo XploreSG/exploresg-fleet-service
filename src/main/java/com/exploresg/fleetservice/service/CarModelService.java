@@ -2,6 +2,7 @@ package com.exploresg.fleetservice.service;
 
 import com.exploresg.fleetservice.dto.CreateCarModelRequest;
 import com.exploresg.fleetservice.dto.CarModelResponseDto;
+import com.exploresg.fleetservice.dto.OperatorCarModelDto;
 import com.exploresg.fleetservice.model.CarModel;
 import com.exploresg.fleetservice.model.FleetVehicle;
 import com.exploresg.fleetservice.model.VehicleStatus;
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -66,59 +69,92 @@ public class CarModelService {
     }
 
     /**
+     * Retrieves available car models with one entry per operator-model combination.
+     * If Operator A has BMW X3 (10 vehicles) and Operator B has BMW X3 (20
+     * vehicles),
+     * this returns 2 entries - one for each operator.
+     * 
+     * @return A list of car models grouped by operator.
+     */
+    @Transactional(readOnly = true)
+    public List<OperatorCarModelDto> getAvailableModelsPerOperator() {
+        // Get all available vehicles
+        List<FleetVehicle> availableVehicles = fleetVehicleRepository
+                .findByStatus(VehicleStatus.AVAILABLE);
+
+        // Group by (ownerId, carModelId) combination
+        // This ensures each operator-model pair gets one entry
+        Map<String, List<FleetVehicle>> groupedVehicles = availableVehicles.stream()
+                .collect(Collectors.groupingBy(v -> v.getOwnerId() + "-" + v.getCarModel().getId()));
+
+        List<OperatorCarModelDto> result = new ArrayList<>();
+
+        for (List<FleetVehicle> vehicles : groupedVehicles.values()) {
+            if (vehicles.isEmpty())
+                continue;
+
+            FleetVehicle firstVehicle = vehicles.get(0);
+            CarModel carModel = firstVehicle.getCarModel();
+
+            // Find lowest price from this operator for this model
+            BigDecimal lowestPrice = vehicles.stream()
+                    .map(FleetVehicle::getDailyPrice)
+                    .min(BigDecimal::compareTo)
+                    .orElse(BigDecimal.ZERO);
+
+            OperatorCarModelDto dto = OperatorCarModelDto.builder()
+                    .operatorId(firstVehicle.getOwnerId())
+                    .operatorName("Fleet Operator " + firstVehicle.getOwnerId()) // TODO: Fetch from user service
+                    .carModelId(carModel.getId())
+                    .model(carModel.getModel())
+                    .manufacturer(carModel.getManufacturer())
+                    .seats(carModel.getSeats())
+                    .luggage(carModel.getLuggage())
+                    .transmission(carModel.getTransmission())
+                    .imageUrl(carModel.getImageUrl())
+                    .category(carModel.getCategory())
+                    .fuelType(carModel.getFuelType())
+                    .modelYear(carModel.getModelYear())
+                    .dailyPrice(lowestPrice)
+                    .availableVehicleCount(vehicles.size()) // Count for allocation
+                    .build();
+
+            result.add(dto);
+        }
+
+        return result;
+    }
+
+    /**
      * Retrieves all unique CarModel templates that have at least one physical car
      * instance available in the fleet.
-     * Shows one model per car type with the lowest daily rental rate across all
-     * operators.
+     * Returns detailed response DTOs.
      * 
      * @return A list of DTOs representing the available unique car models.
      */
-    @Transactional(readOnly = true)
     public List<CarModelResponseDto> getAvailableCarModels() {
-        // Get all distinct car models that have available vehicles
         List<CarModel> availableModels = fleetVehicleRepository.findAvailableCarModels();
 
-        // Map each model to DTO with aggregated pricing
         return availableModels.stream()
                 .map(this::mapToCarModelResponseDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
      * Utility method to map a CarModel entity to a CarModelResponseDto.
-     * Includes the lowest daily rental rate from all available vehicles of this
-     * model.
      */
     private CarModelResponseDto mapToCarModelResponseDto(CarModel carModel) {
-        // Get all available vehicles for this model to find the lowest price
-        List<FleetVehicle> availableVehicles = fleetVehicleRepository
-                .findByCarModelIdAndStatus(carModel.getId(), VehicleStatus.AVAILABLE);
-
-        // Calculate the lowest daily rate across all operators
-        BigDecimal lowestDailyRate = availableVehicles.stream()
-                .map(FleetVehicle::getDailyPrice)
-                .min(BigDecimal::compareTo)
-                .orElse(BigDecimal.ZERO);
-
         return CarModelResponseDto.builder()
                 .modelId(carModel.getId())
                 .model(carModel.getModel())
                 .manufacturer(carModel.getManufacturer())
-                .category(carModel.getCategory())
                 .imageUrl(carModel.getImageUrl())
-                .dailyRentalRate(lowestDailyRate) // Lowest price across all operators
                 .seats(carModel.getSeats())
                 .luggage(carModel.getLuggage())
                 .transmission(carModel.getTransmission())
+                .category(carModel.getCategory())
                 .fuelType(carModel.getFuelType())
                 .modelYear(carModel.getModelYear())
-                .topSpeedKph(carModel.getTopSpeedKph())
-                .zeroToHundredSec(carModel.getZeroToHundredSec())
-                .rangeInKm(carModel.getRangeInKm())
-                .engineCapacityCc(carModel.getEngineCapacityCc())
-                .safetyRating(carModel.getSafetyRating())
-                .hasAirConditioning(carModel.isHasAirConditioning())
-                .hasInfotainmentSystem(carModel.isHasInfotainmentSystem())
                 .build();
     }
 }

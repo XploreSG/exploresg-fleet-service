@@ -31,4 +31,9 @@ public interface FleetVehicleRepository extends JpaRepository<FleetVehicle, Long
      * Used to aggregate pricing and availability data.
      */
     List<FleetVehicle> findByCarModelIdAndStatus(Long carModelId, VehicleStatus status);
+
+    /**
+     * Find all vehicles with a specific status.
+     */
+    List<FleetVehicle> findByStatus(VehicleStatus status);
 }

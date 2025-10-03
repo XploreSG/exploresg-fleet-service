@@ -1,7 +1,7 @@
 package com.exploresg.fleetservice.controller;
 
-import com.exploresg.fleetservice.dto.CarModelResponseDto;
 import com.exploresg.fleetservice.dto.CreateCarModelRequest;
+import com.exploresg.fleetservice.dto.OperatorCarModelDto;
 import com.exploresg.fleetservice.model.CarModel;
 import com.exploresg.fleetservice.service.CarModelService;
 import jakarta.validation.Valid;
@@ -36,16 +36,16 @@ public class FleetController {
 
     /**
      * Public endpoint to browse available car models.
-     * Returns only models that have at least one AVAILABLE vehicle.
-     * Shows the lowest daily rental rate across all fleet operators.
+     * Returns one entry per operator-model combination.
+     * If multiple operators have the same model, it appears multiple times.
      * GET /api/v1/fleet/models
      * 
-     * @return A list of available car models for browsing.
+     * @return A list of available car models grouped by operator.
      */
     @GetMapping("/models")
-    public ResponseEntity<List<CarModelResponseDto>> getAvailableCarModels() {
-        List<CarModelResponseDto> carModels = carModelService.getAvailableCarModels();
-        return ResponseEntity.ok(carModels);
+    public ResponseEntity<List<OperatorCarModelDto>> getAvailableModels() {
+        List<OperatorCarModelDto> models = carModelService.getAvailableModelsPerOperator();
+        return ResponseEntity.ok(models);
     }
 
     /**
