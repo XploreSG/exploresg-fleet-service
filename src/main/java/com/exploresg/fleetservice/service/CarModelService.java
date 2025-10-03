@@ -3,12 +3,17 @@ package com.exploresg.fleetservice.service;
 import com.exploresg.fleetservice.dto.CreateCarModelRequest;
 import com.exploresg.fleetservice.dto.CarModelResponseDto;
 import com.exploresg.fleetservice.model.CarModel;
+import com.exploresg.fleetservice.model.FleetVehicle;
+import com.exploresg.fleetservice.model.VehicleStatus;
 import com.exploresg.fleetservice.repository.CarModelRepository;
 import com.exploresg.fleetservice.repository.FleetVehicleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service class containing business logic for managing CarModels.
@@ -18,7 +23,7 @@ import java.util.List;
 public class CarModelService {
 
     private final CarModelRepository carModelRepository;
-    private final FleetVehicleRepository fleetVehicleRepository; // Injected for availability logic
+    private final FleetVehicleRepository fleetVehicleRepository;
 
     /**
      * Creates a new CarModel and saves it to the database.
@@ -35,20 +40,12 @@ public class CarModelService {
                 .transmission(request.getTransmission())
                 .imageUrl(request.getImageUrl())
                 .category(request.getCategory())
-
-                // --- MAPPING NEW/UPDATED FIELDS ---
                 .fuelType(request.getFuelType())
                 .modelYear(request.getModelYear())
-
-                // New fields from the updated CarModel entity:
                 .engineCapacityCc(request.getEngineCapacityCc())
                 .maxUnladenWeightKg(request.getMaxUnladenWeightKg())
                 .maxLadenWeightKg(request.getMaxLadenWeightKg())
-
-                // Renamed field: rangeKm -> rangeInKm
                 .rangeInKm(request.getRangeInKm())
-
-                // Existing fields:
                 .hasAirConditioning(request.isHasAirConditioning())
                 .hasInfotainmentSystem(request.isHasInfotainmentSystem())
                 .safetyRating(request.getSafetyRating())
@@ -68,41 +65,60 @@ public class CarModelService {
         return carModelRepository.findAll();
     }
 
-    // ----------------------------------------------------------------------
-    // --- NEW LOGIC: Availability for Customer Frontend ----------------------
-    // ----------------------------------------------------------------------
-
     /**
      * Retrieves all unique CarModel templates that have at least one physical car
-     * instance available
-     * in the fleet. This is used to populate the main car selection screen (Car
-     * Cards).
-     * * @return A list of DTOs representing the available unique car models.
+     * instance available in the fleet.
+     * Shows one model per car type with the lowest daily rental rate across all
+     * operators.
+     * 
+     * @return A list of DTOs representing the available unique car models.
      */
+    @Transactional(readOnly = true)
     public List<CarModelResponseDto> getAvailableCarModels() {
-        // Calls the custom query in the FleetVehicleRepository to get distinct
-        // available CarModel entities.
+        // Get all distinct car models that have available vehicles
         List<CarModel> availableModels = fleetVehicleRepository.findAvailableCarModels();
 
-        // Map the entities to the response DTO
+        // Map each model to DTO with aggregated pricing
         return availableModels.stream()
                 .map(this::mapToCarModelResponseDto)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     /**
      * Utility method to map a CarModel entity to a CarModelResponseDto.
-     * NOTE: In a complete system, this mapping might be handled by MapStruct.
+     * Includes the lowest daily rental rate from all available vehicles of this
+     * model.
      */
     private CarModelResponseDto mapToCarModelResponseDto(CarModel carModel) {
-        // For a full DTO, you'd map all fields. This is a simplified example.
+        // Get all available vehicles for this model to find the lowest price
+        List<FleetVehicle> availableVehicles = fleetVehicleRepository
+                .findByCarModelIdAndStatus(carModel.getId(), VehicleStatus.AVAILABLE);
+
+        // Calculate the lowest daily rate across all operators
+        BigDecimal lowestDailyRate = availableVehicles.stream()
+                .map(FleetVehicle::getDailyPrice)
+                .min(BigDecimal::compareTo)
+                .orElse(BigDecimal.ZERO);
+
         return CarModelResponseDto.builder()
                 .modelId(carModel.getId())
                 .model(carModel.getModel())
                 .manufacturer(carModel.getManufacturer())
+                .category(carModel.getCategory())
                 .imageUrl(carModel.getImageUrl())
+                .dailyRentalRate(lowestDailyRate) // Lowest price across all operators
                 .seats(carModel.getSeats())
-                // ... map all other CarModel fields...
+                .luggage(carModel.getLuggage())
+                .transmission(carModel.getTransmission())
+                .fuelType(carModel.getFuelType())
+                .modelYear(carModel.getModelYear())
+                .topSpeedKph(carModel.getTopSpeedKph())
+                .zeroToHundredSec(carModel.getZeroToHundredSec())
+                .rangeInKm(carModel.getRangeInKm())
+                .engineCapacityCc(carModel.getEngineCapacityCc())
+                .safetyRating(carModel.getSafetyRating())
+                .hasAirConditioning(carModel.isHasAirConditioning())
+                .hasInfotainmentSystem(carModel.isHasInfotainmentSystem())
                 .build();
     }
 }

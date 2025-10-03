@@ -1,5 +1,6 @@
 package com.exploresg.fleetservice.controller;
 
+import com.exploresg.fleetservice.dto.CarModelResponseDto;
 import com.exploresg.fleetservice.dto.CreateCarModelRequest;
 import com.exploresg.fleetservice.model.CarModel;
 import com.exploresg.fleetservice.service.CarModelService;
@@ -21,6 +22,7 @@ public class FleetController {
 
     /**
      * Endpoint for an ADMIN to create a new master CarModel.
+     * POST /api/v1/fleet/models
      * 
      * @param request The request body containing car model details.
      * @return The created CarModel.
@@ -33,11 +35,27 @@ public class FleetController {
     }
 
     /**
-     * Public endpoint for anyone to view all available car models.
+     * Public endpoint to browse available car models.
+     * Returns only models that have at least one AVAILABLE vehicle.
+     * Shows the lowest daily rental rate across all fleet operators.
+     * GET /api/v1/fleet/models
      * 
-     * @return A list of all car models.
+     * @return A list of available car models for browsing.
      */
     @GetMapping("/models")
+    public ResponseEntity<List<CarModelResponseDto>> getAvailableCarModels() {
+        List<CarModelResponseDto> carModels = carModelService.getAvailableCarModels();
+        return ResponseEntity.ok(carModels);
+    }
+
+    /**
+     * Admin endpoint to view ALL car models (master catalog).
+     * GET /api/v1/fleet/models/all
+     * 
+     * @return A list of all car models in the system.
+     */
+    @GetMapping("/models/all")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<CarModel>> getAllCarModels() {
         List<CarModel> carModels = carModelService.getAllCarModels();
         return ResponseEntity.ok(carModels);
