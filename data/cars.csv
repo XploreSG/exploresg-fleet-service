@@ -1,0 +1,19 @@
+model,manufacturer,seats,luggage,transmission,imageUrl,category,fuelType,modelYear,rangeKm,hasAirConditioning,hasInfotainmentSystem,safetyRating,topSpeedKph,zeroToHundredSec
+Maserati Grecale,Maserati,5,4,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/maserati-grecale.png,luxury-suv,Petrol,2024,650,TRUE,TRUE,5-Star Euro NCAP,285,5.6
+Skoda Octavia,Skoda,5,4,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/skoda-octavia.png,compact,Petrol,2024,800,TRUE,TRUE,5-Star Euro NCAP,220,8.5
+Nissan Sentra,Nissan,4,2,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/nissan-sentra.png,economy,Petrol,2023,700,TRUE,TRUE,5-Star ASEAN NCAP,190,10.5
+BMW Z4,BMW,2,2,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/bmw-z4.png,luxury-sports,Petrol,2024,680,TRUE,TRUE,5-Star Euro NCAP,250,5.4
+BMW X3,BMW,5,4,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/bmw-x3.png,luxury-suv,Petrol,2024,720,TRUE,TRUE,5-Star Euro NCAP,240,6.6
+BMW 5 Touring,BMW,5,4,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/bmw-5-t.png,luxury,Petrol,2024,750,TRUE,TRUE,5-Star Euro NCAP,250,5.8
+BMW M240i,BMW,4,2,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/bmw-2.png,luxury,Petrol,2024,700,TRUE,TRUE,5-Star Euro NCAP,250,4.3
+BMW M440i,BMW,4,2,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/bmw-440i.png,luxury,Petrol,2024,710,TRUE,TRUE,5-Star Euro NCAP,250,4.5
+Porsche 911,Porsche,2,2,Manual,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/porsche-911-c.png,luxury-sports,Petrol,2025,600,TRUE,TRUE,5-Star Euro NCAP,293,4.2
+AMG SL63,Mercedes-AMG,2,2,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/merc-sl63.png,luxury-sports,Petrol,2024,580,TRUE,TRUE,5-Star Euro NCAP,315,3.6
+Mercedes V Class,Mercedes-AMG,7,5,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/merc-v.png,van,Diesel,2023,850,TRUE,TRUE,5-Star Euro NCAP,205,8.9
+Peugeot 5008,Peugeot,5,3,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/peugeot-5008.png,suv,Petrol,2023,780,TRUE,TRUE,5-Star Euro NCAP,200,9.9
+Toyota Alphard,Toyota,7,3,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/toyota-alphard.png,van,Hybrid,2024,1050,TRUE,TRUE,5-Star JNCAP,180,9.5
+Toyota Prius,Toyota,5,3,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/toyota-prius.png,hybrid,Hybrid,2024,1200,TRUE,TRUE,5-Star JNCAP,180,9.2
+VW Golf,Volkswagen,5,2,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/vw-golf.png,compact,Petrol,2023,750,TRUE,TRUE,5-Star Euro NCAP,224,8.7
+VW Polo,Volkswagen,5,2,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/vw-polo.png,compact,Petrol,2023,720,TRUE,TRUE,5-Star Euro NCAP,200,10.4
+Mini Cooper,Mini,5,2,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/mini-cooper.png,compact,Petrol,2023,680,TRUE,TRUE,4-Star Euro NCAP,210,8.2
+Range Rover,Land Rover,5,2,Automatic,https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/landrover-rr.png,luxury-suv,Petrol,2024,650,TRUE,TRUE,5-Star Euro NCAP,285,5.6
