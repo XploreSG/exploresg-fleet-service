@@ -8,16 +8,19 @@ on:
         branches:
             - main
             - "release/**"
+            # - "feature/**"
     workflow_dispatch:
         inputs:
             image_tag:
-                description: "Docker image tag (default: latest)"
-                required: false
-                default: "latest"
+                description: "Docker image version tag (e.g., v1.0.0)"
+                required: true
+                default: "v1.0.0"
+
 jobs:
     docker-publish:
         name: 🐳 Docker Build & Publish
         runs-on: ubuntu-latest
+
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -31,6 +34,10 @@ jobs:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+            - name: Get Git SHA
+              id: git_sha
+              run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
             - name: Build and push Docker image
               uses: docker/build-push-action@v5
               with:
@@ -39,4 +46,7 @@ jobs:
                   push: true
                   tags: |
                       ${{ secrets.DOCKERHUB_USERNAME }}/exploresg-fleet-service:latest
-                      ${{ secrets.DOCKERHUB_USERNAME }}/exploresg-fleet-service:${{ github.sha }}
+                      ${{ secrets.DOCKERHUB_USERNAME }}/exploresg-fleet-service:sha-${{ steps.git_sha.outputs.sha_short }}
+                      ${{ secrets.DOCKERHUB_USERNAME }}/exploresg-fleet-service:${{ github.event.inputs.image_tag || 'latest' }}
+                  cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/exploresg-fleet-service:latest
+                  cache-to: type=inline
