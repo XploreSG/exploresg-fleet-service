@@ -21,7 +21,7 @@ public class OperatorCarModelDto {
     private String operatorName;
 
     // Car model information
-    private Long carModelId;
+    private String publicModelId; // <-- USING PUBLIC UUID STRING
     private String model;
     private String manufacturer;
     private Integer seats;

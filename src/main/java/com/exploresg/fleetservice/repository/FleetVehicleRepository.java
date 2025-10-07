@@ -5,10 +5,11 @@ import com.exploresg.fleetservice.model.FleetVehicle;
 import com.exploresg.fleetservice.model.VehicleStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
+import java.util.UUID; // <-- NEW IMPORT
 import java.util.List;
 
-public interface FleetVehicleRepository extends JpaRepository<FleetVehicle, Long> {
+// JpaRepository<Entity, ID_TYPE>
+public interface FleetVehicleRepository extends JpaRepository<FleetVehicle, UUID> { // <-- ID TYPE CHANGED TO UUID
 
     /**
      * Retrieves all unique CarModel entities that currently have at least one
@@ -36,4 +37,10 @@ public interface FleetVehicleRepository extends JpaRepository<FleetVehicle, Long
      * Find all vehicles with a specific status.
      */
     List<FleetVehicle> findByStatus(VehicleStatus status);
+
+    /**
+     * Retrieves all physical vehicles for a specific operator that are AVAILABLE.
+     * This is the source data for the per-operator model list.
+     */
+    List<FleetVehicle> findByOwnerIdAndStatus(Long ownerId, VehicleStatus status);
 }

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID; // <-- NEW IMPORT
 
 /**
  * Represents a specific, physical vehicle instance owned by a fleet operator.
@@ -22,12 +23,13 @@ import java.time.LocalDateTime;
 public class FleetVehicle {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    // Changed primary key to UUID for cross-service compatibility
+    @Column(columnDefinition = "UUID", updatable = false, nullable = false)
+    private UUID id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "car_model_id", nullable = false)
-    private CarModel carModel; // Foreign Key to CarModel
+    private CarModel carModel; // Foreign Key to CarModel (references Long ID internally)
 
     @Column(nullable = false)
     private Long ownerId; // The user ID of the FLEET_MANAGER
@@ -86,6 +88,9 @@ public class FleetVehicle {
 
     @PrePersist
     protected void onCreate() {
+        if (id == null) {
+            id = UUID.randomUUID(); // <-- GENERATE UUID FOR PK
+        }
         createdAt = LocalDateTime.now();
         lastUpdatedAt = LocalDateTime.now();
     }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.UUID;
 
 /**
  * Represents the master template for a car model, managed by platform admins.
@@ -21,6 +22,9 @@ public class CarModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
+    private UUID publicId; // <-- NEW PUBLIC REFERENCE ID (UUID)
 
     @Column(nullable = false)
     private String model;
@@ -67,4 +71,11 @@ public class CarModel {
     private Integer topSpeedKph; // Top speed in km/h
 
     private Double zeroToHundredSec; // Acceleration time (0-100 km/h) in seconds
+
+    @PrePersist // <-- JPA HOOK to automatically set the UUID before saving
+    protected void onCreate() {
+        if (publicId == null) {
+            publicId = UUID.randomUUID();
+        }
+    }
 }

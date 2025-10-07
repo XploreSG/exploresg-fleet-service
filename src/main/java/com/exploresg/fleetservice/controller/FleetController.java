@@ -23,8 +23,8 @@ public class FleetController {
     /**
      * Endpoint for an ADMIN to create a new master CarModel.
      * POST /api/v1/fleet/models
+     * * @param request The request body containing car model details.
      * 
-     * @param request The request body containing car model details.
      * @return The created CarModel.
      */
     @PostMapping("/models")
@@ -37,10 +37,8 @@ public class FleetController {
     /**
      * Public endpoint to browse available car models.
      * Returns one entry per operator-model combination.
-     * If multiple operators have the same model, it appears multiple times.
      * GET /api/v1/fleet/models
-     * 
-     * @return A list of available car models grouped by operator.
+     * * @return A list of available car models grouped by operator.
      */
     @GetMapping("/models")
     public ResponseEntity<List<OperatorCarModelDto>> getAvailableModels() {
@@ -49,10 +47,30 @@ public class FleetController {
     }
 
     /**
+     * NEW CORE ENDPOINT: Public endpoint to browse available car models for a
+     * specific operator.
+     * Returns one entry per Car Model that has at least one vehicle available
+     * in the specified operator's fleet.
+     * GET /api/v1/fleet/operators/{operatorId}/models
+     * * @param operatorId The ID of the fleet operator.
+     * 
+     * @return A list of available car models aggregated for the given operator.
+     */
+    @GetMapping("/operators/{operatorId}/models")
+    public ResponseEntity<List<OperatorCarModelDto>> getAvailableModelsByOperator(@PathVariable Long operatorId) {
+        List<OperatorCarModelDto> models = carModelService.getAvailableModelsByOperator(operatorId);
+
+        if (models.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(models);
+    }
+
+    /**
      * Admin endpoint to view ALL car models (master catalog).
      * GET /api/v1/fleet/models/all
-     * 
-     * @return A list of all car models in the system.
+     * * @return A list of all car models in the system.
      */
     @GetMapping("/models/all")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

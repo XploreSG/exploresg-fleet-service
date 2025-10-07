@@ -1,3 +1,54 @@
+-- ==============================================================================
+-- DDL SETUP: FLEET_VEHICLES TABLE WITH UUID PRIMARY KEY
+-- This section ensures the 'fleet_vehicles' table is correctly set up with a UUID
+-- as its primary key, automatically generated upon insertion.
+-- NOTE: If the table already exists, you may need to manually drop it or run a migration.
+-- ==============================================================================
+
+-- 1. Ensure uuid-ossp extension is enabled (if using PostgreSQL)
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- 2. Drop table if exists to ensure a clean run for seeding
+DROP TABLE IF EXISTS fleet_vehicles;
+
+-- 3. Create the fleet_vehicles table with a UUID Primary Key
+CREATE TABLE fleet_vehicles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(), -- PK is now UUID and auto-generated
+    car_model_id BIGINT NOT NULL,                  -- Foreign Key to car_models.id (Long)
+    owner_id BIGINT NOT NULL,
+    daily_price NUMERIC(10, 2) NOT NULL,
+    license_plate VARCHAR(255) UNIQUE NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    mileage_km INTEGER,
+    current_location VARCHAR(255),
+    available_from TIMESTAMP,
+    available_until TIMESTAMP,
+    maintenance_note VARCHAR(2048),
+    expected_return_date TIMESTAMP,
+    chassis_number VARCHAR(255) UNIQUE,
+    engine_number VARCHAR(255) UNIQUE,
+    insurance_reference VARCHAR(255),
+    coe_reference VARCHAR(255),
+    primary_colour VARCHAR(50),
+    secondary_colour VARCHAR(50),
+    passenger_capacity INTEGER,
+    vehicle_attachment1 VARCHAR(1024),
+    vehicle_attachment2 VARCHAR(1024),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    last_updated_at TIMESTAMP
+);
+
+-- NOTE: You will need to ensure the Foreign Key constraint is added 
+-- or handled by your Spring application's DDL generation (ddl-auto=update).
+-- The following command is for manual constraint setup:
+-- ALTER TABLE fleet_vehicles ADD CONSTRAINT fk_car_model FOREIGN KEY (car_model_id) REFERENCES car_models(id);
+
+
+-- ==============================================================================
+-- DATA INSERTION (328 Records)
+-- The 'id' column is omitted, relying on the database default (gen_random_uuid()).
+-- ==============================================================================
+
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -27,7 +78,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -57,7 +107,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -87,7 +136,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -117,7 +165,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -147,7 +194,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -177,7 +223,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -207,7 +252,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -237,7 +281,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -267,7 +310,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -297,7 +339,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -327,7 +368,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -357,7 +397,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -387,7 +426,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -417,7 +455,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -447,7 +484,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -477,7 +513,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -507,7 +542,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -537,7 +571,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -567,7 +600,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -597,7 +629,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -627,7 +658,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -657,7 +687,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -687,7 +716,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -717,7 +745,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -747,7 +774,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -777,7 +803,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -807,7 +832,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -837,7 +861,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -867,7 +890,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -897,7 +919,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -927,7 +948,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -957,7 +977,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -987,7 +1006,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1017,7 +1035,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1047,7 +1064,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1077,7 +1093,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1107,7 +1122,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1137,7 +1151,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1167,7 +1180,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1197,7 +1209,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1227,7 +1238,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1257,7 +1267,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1287,7 +1296,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1317,7 +1325,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1347,7 +1354,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1377,7 +1383,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1407,7 +1412,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1437,7 +1441,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1467,7 +1470,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1497,7 +1499,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1527,7 +1528,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1557,7 +1557,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1587,7 +1586,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1617,7 +1615,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1647,7 +1644,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1677,7 +1673,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1707,7 +1702,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1737,7 +1731,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1767,7 +1760,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1797,7 +1789,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1827,7 +1818,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1857,7 +1847,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1887,7 +1876,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1917,7 +1905,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1947,7 +1934,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -1977,7 +1963,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2007,7 +1992,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2037,7 +2021,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2067,7 +2050,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2097,7 +2079,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2127,7 +2108,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2157,7 +2137,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2187,7 +2166,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2217,7 +2195,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2247,7 +2224,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2277,7 +2253,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2307,7 +2282,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2337,7 +2311,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2367,7 +2340,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2397,7 +2369,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2427,7 +2398,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2457,7 +2427,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2487,7 +2456,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2517,7 +2485,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2547,7 +2514,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2577,7 +2543,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2607,7 +2572,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2637,7 +2601,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2667,7 +2630,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2697,7 +2659,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2727,7 +2688,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2757,7 +2717,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2787,7 +2746,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2817,7 +2775,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2847,7 +2804,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2877,7 +2833,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2907,7 +2862,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2937,7 +2891,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2967,7 +2920,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -2997,7 +2949,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3027,7 +2978,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3057,7 +3007,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3087,7 +3036,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3117,7 +3065,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3147,7 +3094,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3177,7 +3123,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3207,7 +3152,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3237,7 +3181,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3267,7 +3210,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3297,7 +3239,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3327,7 +3268,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3357,7 +3297,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3387,7 +3326,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3417,7 +3355,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3447,7 +3384,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3477,7 +3413,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3507,7 +3442,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3537,7 +3471,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3567,7 +3500,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3597,7 +3529,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3627,7 +3558,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3657,7 +3587,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3687,7 +3616,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3717,7 +3645,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3747,7 +3674,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3777,7 +3703,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3807,7 +3732,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3837,7 +3761,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3867,7 +3790,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3897,7 +3819,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3927,7 +3848,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3957,7 +3877,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -3987,7 +3906,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4017,7 +3935,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4047,7 +3964,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4077,7 +3993,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4107,7 +4022,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4137,7 +4051,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4167,7 +4080,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4197,7 +4109,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4227,7 +4138,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4257,7 +4167,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4287,7 +4196,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4317,7 +4225,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4347,7 +4254,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4377,7 +4283,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4407,7 +4312,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4437,7 +4341,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4467,7 +4370,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4497,7 +4399,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4527,7 +4428,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4557,7 +4457,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4587,7 +4486,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4617,7 +4515,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4647,7 +4544,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4677,7 +4573,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4707,7 +4602,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4737,7 +4631,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4767,7 +4660,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4797,7 +4689,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4827,7 +4718,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4857,7 +4747,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4887,7 +4776,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4917,7 +4805,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4947,7 +4834,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -4977,7 +4863,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5007,7 +4892,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5037,7 +4921,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5067,7 +4950,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5097,7 +4979,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5127,7 +5008,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5157,7 +5037,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5187,7 +5066,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5217,7 +5095,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5247,7 +5124,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5277,7 +5153,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5307,7 +5182,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5337,7 +5211,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5367,7 +5240,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5397,7 +5269,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5427,7 +5298,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5457,7 +5327,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5487,7 +5356,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5517,7 +5385,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5547,7 +5414,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5577,7 +5443,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5607,7 +5472,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5637,7 +5501,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5667,7 +5530,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5697,7 +5559,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5727,7 +5588,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5757,7 +5617,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5787,7 +5646,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5817,7 +5675,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5847,7 +5704,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -5877,4003 +5733,3 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        17,
-        102,
-        114.71,
-        'SGP2197',
-        'AVAILABLE',
-        761,
-        '1.317587, 103.883737',
-        '2025-10-05 06:45:00',
-        '2025-10-05 10:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH197',
-        'MKVKZ9REY2H197',
-        'INS-638437',
-        'COE-555130',
-        'Grey',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        18,
-        101,
-        115.14,
-        'SGP2198',
-        'AVAILABLE',
-        15632,
-        '1.472741, 103.708848',
-        '2025-10-06 10:00:00',
-        '2025-10-06 14:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH198',
-        'MKVKZ9REY2H198',
-        'INS-638438',
-        'COE-555131',
-        'Grey',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        1,
-        102,
-        155.98,
-        'SGP2199',
-        'UNDER_MAINTENANCE',
-        2193,
-        '1.453675, 103.621496',
-        '2025-10-06 16:15:00',
-        NULL,
-        'scheduled service',
-        '2025-10-05 01:00:00',
-        'MXYZZZZZZZHHHHHH199',
-        'MKVKZ9REY2H199',
-        'INS-638439',
-        'COE-555132',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        2,
-        102,
-        111.42,
-        'SGP2200',
-        'AVAILABLE',
-        15139,
-        '1.476059, 103.850566',
-        '2025-10-06 19:00:00',
-        '2025-10-06 23:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH200',
-        'MKVKZ9REY2H200',
-        'INS-638440',
-        'COE-555133',
-        'Red',
-        'Black',
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        3,
-        101,
-        100.17,
-        'SGP2201',
-        'AVAILABLE',
-        15194,
-        '1.346918, 103.746129',
-        '2025-10-06 22:00:00',
-        '2025-10-07 02:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH201',
-        'MKVKZ9REY2H201',
-        'INS-638441',
-        'COE-555134',
-        'White',
-        'Silver',
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        4,
-        102,
-        154.46,
-        'SGP2202',
-        'AVAILABLE',
-        8380,
-        '1.35072, 103.817648',
-        '2025-10-05 16:30:00',
-        '2025-10-05 20:30:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH202',
-        'MKVKZ9REY2H202',
-        'INS-638442',
-        'COE-555135',
-        'Red',
-        NULL,
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        5,
-        101,
-        139.89,
-        'SGP2203',
-        'BOOKED',
-        4625,
-        '1.467584, 103.730245',
-        '2025-10-05 17:15:00',
-        NULL,
-        NULL,
-        '2025-10-12 01:15:00',
-        'MXYZZZZZZZHHHHHH203',
-        'MKVKZ9REY2H203',
-        'INS-638443',
-        'COE-555136',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        6,
-        101,
-        158.11,
-        'SGP2204',
-        'AVAILABLE',
-        19664,
-        '1.294783, 103.658529',
-        '2025-10-07 14:00:00',
-        '2025-10-07 18:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH204',
-        'MKVKZ9REY2H204',
-        'INS-638444',
-        'COE-555137',
-        'Silver',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        7,
-        102,
-        188.72,
-        'SGP2205',
-        'AVAILABLE',
-        11734,
-        '1.299307, 103.749111',
-        '2025-10-07 13:00:00',
-        '2025-10-07 17:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH205',
-        'MKVKZ9REY2H205',
-        'INS-638445',
-        'COE-555138',
-        'Black',
-        'Silver',
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        8,
-        102,
-        204.63,
-        'SGP2206',
-        'AVAILABLE',
-        10792,
-        '1.270292, 103.989567',
-        '2025-10-07 10:15:00',
-        '2025-10-07 14:15:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH206',
-        'MKVKZ9REY2H206',
-        'INS-638446',
-        'COE-555139',
-        'Blue',
-        NULL,
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        9,
-        101,
-        207.76,
-        'SGP2207',
-        'AVAILABLE',
-        842,
-        '1.344357, 103.698688',
-        '2025-10-04 19:00:00',
-        '2025-10-04 23:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH207',
-        'MKVKZ9REY2H207',
-        'INS-638447',
-        'COE-555140',
-        'Silver',
-        'Silver',
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        10,
-        101,
-        233.54,
-        'SGP2208',
-        'AVAILABLE',
-        7791,
-        '1.268721, 103.732705',
-        '2025-10-03 18:45:00',
-        '2025-10-03 22:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH208',
-        'MKVKZ9REY2H208',
-        'INS-638448',
-        'COE-555141',
-        'Blue',
-        'Black',
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        11,
-        101,
-        96.67,
-        'SGP2209',
-        'BOOKED',
-        10712,
-        '1.408712, 103.818461',
-        '2025-10-07 05:00:00',
-        NULL,
-        NULL,
-        '2025-10-18 05:00:00',
-        'MXYZZZZZZZHHHHHH209',
-        'MKVKZ9REY2H209',
-        'INS-638449',
-        'COE-555142',
-        'Grey',
-        'Black',
-        7,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        12,
-        102,
-        87.73,
-        'SGP2210',
-        'UNDER_MAINTENANCE',
-        14828,
-        '1.472111, 103.649964',
-        '2025-10-06 00:00:00',
-        NULL,
-        'Brake inspection',
-        '2025-10-04 23:00:00',
-        'MXYZZZZZZZHHHHHH210',
-        'MKVKZ9REY2H210',
-        'INS-638450',
-        'COE-555143',
-        'Red',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        13,
-        102,
-        87.9,
-        'SGP2211',
-        'AVAILABLE',
-        4130,
-        '1.312154, 103.738366',
-        '2025-10-07 19:45:00',
-        '2025-10-07 23:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH211',
-        'MKVKZ9REY2H211',
-        'INS-638451',
-        'COE-555144',
-        'Red',
-        'Black',
-        7,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        14,
-        102,
-        98.42,
-        'SGP2212',
-        'AVAILABLE',
-        3058,
-        '1.39655, 103.765691',
-        '2025-10-07 06:15:00',
-        '2025-10-07 10:15:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH212',
-        'MKVKZ9REY2H212',
-        'INS-638452',
-        'COE-555145',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        15,
-        101,
-        100.82,
-        'SGP2213',
-        'AVAILABLE',
-        8856,
-        '1.362141, 103.699317',
-        '2025-10-06 09:30:00',
-        '2025-10-06 13:30:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH213',
-        'MKVKZ9REY2H213',
-        'INS-638453',
-        'COE-555146',
-        'Black',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        16,
-        101,
-        94.67,
-        'SGP2214',
-        'BOOKED',
-        8660,
-        '1.25832, 103.684175',
-        '2025-10-07 18:30:00',
-        NULL,
-        NULL,
-        '2025-10-18 18:30:00',
-        'MXYZZZZZZZHHHHHH214',
-        'MKVKZ9REY2H214',
-        'INS-638454',
-        'COE-555147',
-        'Blue',
-        'Black',
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        17,
-        102,
-        114.71,
-        'SGP2215',
-        'AVAILABLE',
-        761,
-        '1.317587, 103.883737',
-        '2025-10-05 06:45:00',
-        '2025-10-05 10:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH215',
-        'MKVKZ9REY2H215',
-        'INS-638455',
-        'COE-555148',
-        'Grey',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        18,
-        101,
-        115.14,
-        'SGP2216',
-        'AVAILABLE',
-        15632,
-        '1.472741, 103.708848',
-        '2025-10-06 10:00:00',
-        '2025-10-06 14:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH216',
-        'MKVKZ9REY2H216',
-        'INS-638456',
-        'COE-555149',
-        'Grey',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        1,
-        102,
-        155.98,
-        'SGP2217',
-        'UNDER_MAINTENANCE',
-        2193,
-        '1.453675, 103.621496',
-        '2025-10-06 16:15:00',
-        NULL,
-        'scheduled service',
-        '2025-10-05 01:00:00',
-        'MXYZZZZZZZHHHHHH217',
-        'MKVKZ9REY2H217',
-        'INS-638457',
-        'COE-555150',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        2,
-        102,
-        111.42,
-        'SGP2218',
-        'AVAILABLE',
-        15139,
-        '1.476059, 103.850566',
-        '2025-10-06 19:00:00',
-        '2025-10-06 23:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH218',
-        'MKVKZ9REY2H218',
-        'INS-638458',
-        'COE-555151',
-        'Red',
-        'Black',
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        3,
-        101,
-        100.17,
-        'SGP2219',
-        'AVAILABLE',
-        15194,
-        '1.346918, 103.746129',
-        '2025-10-06 22:00:00',
-        '2025-10-07 02:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH219',
-        'MKVKZ9REY2H219',
-        'INS-638459',
-        'COE-555152',
-        'White',
-        'Silver',
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        4,
-        102,
-        154.46,
-        'SGP2220',
-        'AVAILABLE',
-        8380,
-        '1.35072, 103.817648',
-        '2025-10-05 16:30:00',
-        '2025-10-05 20:30:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH220',
-        'MKVKZ9REY2H220',
-        'INS-638460',
-        'COE-555153',
-        'Red',
-        NULL,
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        5,
-        101,
-        139.89,
-        'SGP2221',
-        'BOOKED',
-        4625,
-        '1.467584, 103.730245',
-        '2025-10-05 17:15:00',
-        NULL,
-        NULL,
-        '2025-10-12 01:15:00',
-        'MXYZZZZZZZHHHHHH221',
-        'MKVKZ9REY2H221',
-        'INS-638461',
-        'COE-555154',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        6,
-        101,
-        158.11,
-        'SGP2222',
-        'AVAILABLE',
-        19664,
-        '1.294783, 103.658529',
-        '2025-10-07 14:00:00',
-        '2025-10-07 18:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH222',
-        'MKVKZ9REY2H222',
-        'INS-638462',
-        'COE-555155',
-        'Silver',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        7,
-        102,
-        188.72,
-        'SGP2223',
-        'AVAILABLE',
-        11734,
-        '1.299307, 103.749111',
-        '2025-10-07 13:00:00',
-        '2025-10-07 17:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH223',
-        'MKVKZ9REY2H223',
-        'INS-638463',
-        'COE-555156',
-        'Black',
-        'Silver',
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        8,
-        102,
-        204.63,
-        'SGP2224',
-        'AVAILABLE',
-        10792,
-        '1.270292, 103.989567',
-        '2025-10-07 10:15:00',
-        '2025-10-07 14:15:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH224',
-        'MKVKZ9REY2H224',
-        'INS-638464',
-        'COE-555157',
-        'Blue',
-        NULL,
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        9,
-        101,
-        207.76,
-        'SGP2225',
-        'AVAILABLE',
-        842,
-        '1.344357, 103.698688',
-        '2025-10-04 19:00:00',
-        '2025-10-04 23:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH225',
-        'MKVKZ9REY2H225',
-        'INS-638465',
-        'COE-555158',
-        'Silver',
-        'Silver',
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        10,
-        101,
-        233.54,
-        'SGP2226',
-        'AVAILABLE',
-        7791,
-        '1.268721, 103.732705',
-        '2025-10-03 18:45:00',
-        '2025-10-03 22:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH226',
-        'MKVKZ9REY2H226',
-        'INS-638466',
-        'COE-555159',
-        'Blue',
-        'Black',
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        11,
-        101,
-        96.67,
-        'SGP2227',
-        'BOOKED',
-        10712,
-        '1.408712, 103.818461',
-        '2025-10-07 05:00:00',
-        NULL,
-        NULL,
-        '2025-10-18 05:00:00',
-        'MXYZZZZZZZHHHHHH227',
-        'MKVKZ9REY2H227',
-        'INS-638467',
-        'COE-555160',
-        'Grey',
-        'Black',
-        7,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        12,
-        102,
-        87.73,
-        'SGP2228',
-        'UNDER_MAINTENANCE',
-        14828,
-        '1.472111, 103.649964',
-        '2025-10-06 00:00:00',
-        NULL,
-        'Brake inspection',
-        '2025-10-04 23:00:00',
-        'MXYZZZZZZZHHHHHH228',
-        'MKVKZ9REY2H228',
-        'INS-638468',
-        'COE-555161',
-        'Red',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        13,
-        102,
-        87.9,
-        'SGP2229',
-        'AVAILABLE',
-        4130,
-        '1.312154, 103.738366',
-        '2025-10-07 19:45:00',
-        '2025-10-07 23:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH229',
-        'MKVKZ9REY2H229',
-        'INS-638469',
-        'COE-555162',
-        'Red',
-        'Black',
-        7,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        14,
-        102,
-        98.42,
-        'SGP2230',
-        'AVAILABLE',
-        3058,
-        '1.39655, 103.765691',
-        '2025-10-07 06:15:00',
-        '2025-10-07 10:15:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH230',
-        'MKVKZ9REY2H230',
-        'INS-638470',
-        'COE-555163',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        15,
-        101,
-        100.82,
-        'SGP2231',
-        'AVAILABLE',
-        8856,
-        '1.362141, 103.699317',
-        '2025-10-06 09:30:00',
-        '2025-10-06 13:30:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH231',
-        'MKVKZ9REY2H231',
-        'INS-638471',
-        'COE-555164',
-        'Black',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        16,
-        101,
-        94.67,
-        'SGP2232',
-        'BOOKED',
-        8660,
-        '1.25832, 103.684175',
-        '2025-10-07 18:30:00',
-        NULL,
-        NULL,
-        '2025-10-18 18:30:00',
-        'MXYZZZZZZZHHHHHH232',
-        'MKVKZ9REY2H232',
-        'INS-638472',
-        'COE-555165',
-        'Blue',
-        'Black',
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        17,
-        102,
-        114.71,
-        'SGP2233',
-        'AVAILABLE',
-        761,
-        '1.317587, 103.883737',
-        '2025-10-05 06:45:00',
-        '2025-10-05 10:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH233',
-        'MKVKZ9REY2H233',
-        'INS-638473',
-        'COE-555166',
-        'Grey',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        18,
-        101,
-        115.14,
-        'SGP2234',
-        'AVAILABLE',
-        15632,
-        '1.472741, 103.708848',
-        '2025-10-06 10:00:00',
-        '2025-10-06 14:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH234',
-        'MKVKZ9REY2H234',
-        'INS-638474',
-        'COE-555167',
-        'Grey',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        1,
-        102,
-        155.98,
-        'SGP2235',
-        'UNDER_MAINTENANCE',
-        2193,
-        '1.453675, 103.621496',
-        '2025-10-06 16:15:00',
-        NULL,
-        'scheduled service',
-        '2025-10-05 01:00:00',
-        'MXYZZZZZZZHHHHHH235',
-        'MKVKZ9REY2H235',
-        'INS-638475',
-        'COE-555168',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        2,
-        102,
-        111.42,
-        'SGP2236',
-        'AVAILABLE',
-        15139,
-        '1.476059, 103.850566',
-        '2025-10-06 19:00:00',
-        '2025-10-06 23:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH236',
-        'MKVKZ9REY2H236',
-        'INS-638476',
-        'COE-555169',
-        'Red',
-        'Black',
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        3,
-        101,
-        100.17,
-        'SGP2237',
-        'AVAILABLE',
-        15194,
-        '1.346918, 103.746129',
-        '2025-10-06 22:00:00',
-        '2025-10-07 02:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH237',
-        'MKVKZ9REY2H237',
-        'INS-638477',
-        'COE-555170',
-        'White',
-        'Silver',
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        4,
-        102,
-        154.46,
-        'SGP2238',
-        'AVAILABLE',
-        8380,
-        '1.35072, 103.817648',
-        '2025-10-05 16:30:00',
-        '2025-10-05 20:30:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH238',
-        'MKVKZ9REY2H238',
-        'INS-638478',
-        'COE-555171',
-        'Red',
-        NULL,
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        5,
-        101,
-        139.89,
-        'SGP2239',
-        'BOOKED',
-        4625,
-        '1.467584, 103.730245',
-        '2025-10-05 17:15:00',
-        NULL,
-        NULL,
-        '2025-10-12 01:15:00',
-        'MXYZZZZZZZHHHHHH239',
-        'MKVKZ9REY2H239',
-        'INS-638479',
-        'COE-555172',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        6,
-        101,
-        158.11,
-        'SGP2240',
-        'AVAILABLE',
-        19664,
-        '1.294783, 103.658529',
-        '2025-10-07 14:00:00',
-        '2025-10-07 18:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH240',
-        'MKVKZ9REY2H240',
-        'INS-638480',
-        'COE-555173',
-        'Silver',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        7,
-        102,
-        188.72,
-        'SGP2241',
-        'AVAILABLE',
-        11734,
-        '1.299307, 103.749111',
-        '2025-10-07 13:00:00',
-        '2025-10-07 17:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH241',
-        'MKVKZ9REY2H241',
-        'INS-638481',
-        'COE-555174',
-        'Black',
-        'Silver',
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        8,
-        102,
-        204.63,
-        'SGP2242',
-        'AVAILABLE',
-        10792,
-        '1.270292, 103.989567',
-        '2025-10-07 10:15:00',
-        '2025-10-07 14:15:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH242',
-        'MKVKZ9REY2H242',
-        'INS-638482',
-        'COE-555175',
-        'Blue',
-        NULL,
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        9,
-        101,
-        207.76,
-        'SGP2243',
-        'AVAILABLE',
-        842,
-        '1.344357, 103.698688',
-        '2025-10-04 19:00:00',
-        '2025-10-04 23:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH243',
-        'MKVKZ9REY2H243',
-        'INS-638483',
-        'COE-555176',
-        'Silver',
-        'Silver',
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        10,
-        101,
-        233.54,
-        'SGP2244',
-        'AVAILABLE',
-        7791,
-        '1.268721, 103.732705',
-        '2025-10-03 18:45:00',
-        '2025-10-03 22:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH244',
-        'MKVKZ9REY2H244',
-        'INS-638484',
-        'COE-555177',
-        'Blue',
-        'Black',
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        11,
-        101,
-        96.67,
-        'SGP2245',
-        'BOOKED',
-        10712,
-        '1.408712, 103.818461',
-        '2025-10-07 05:00:00',
-        NULL,
-        NULL,
-        '2025-10-18 05:00:00',
-        'MXYZZZZZZZHHHHHH245',
-        'MKVKZ9REY2H245',
-        'INS-638485',
-        'COE-555178',
-        'Grey',
-        'Black',
-        7,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        12,
-        102,
-        87.73,
-        'SGP2246',
-        'UNDER_MAINTENANCE',
-        14828,
-        '1.472111, 103.649964',
-        '2025-10-06 00:00:00',
-        NULL,
-        'Brake inspection',
-        '2025-10-04 23:00:00',
-        'MXYZZZZZZZHHHHHH246',
-        'MKVKZ9REY2H246',
-        'INS-638486',
-        'COE-555179',
-        'Red',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        13,
-        102,
-        87.9,
-        'SGP2247',
-        'AVAILABLE',
-        4130,
-        '1.312154, 103.738366',
-        '2025-10-07 19:45:00',
-        '2025-10-07 23:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH247',
-        'MKVKZ9REY2H247',
-        'INS-638487',
-        'COE-555180',
-        'Red',
-        'Black',
-        7,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        14,
-        102,
-        98.42,
-        'SGP2248',
-        'AVAILABLE',
-        3058,
-        '1.39655, 103.765691',
-        '2025-10-07 06:15:00',
-        '2025-10-07 10:15:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH248',
-        'MKVKZ9REY2H248',
-        'INS-638488',
-        'COE-555181',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        15,
-        101,
-        100.82,
-        'SGP2249',
-        'AVAILABLE',
-        8856,
-        '1.362141, 103.699317',
-        '2025-10-06 09:30:00',
-        '2025-10-06 13:30:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH249',
-        'MKVKZ9REY2H249',
-        'INS-638489',
-        'COE-555182',
-        'Black',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        16,
-        101,
-        94.67,
-        'SGP2250',
-        'BOOKED',
-        8660,
-        '1.25832, 103.684175',
-        '2025-10-07 18:30:00',
-        NULL,
-        NULL,
-        '2025-10-18 18:30:00',
-        'MXYZZZZZZZHHHHHH250',
-        'MKVKZ9REY2H250',
-        'INS-638490',
-        'COE-555183',
-        'Blue',
-        'Black',
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        17,
-        102,
-        114.71,
-        'SGP2251',
-        'AVAILABLE',
-        761,
-        '1.317587, 103.883737',
-        '2025-10-05 06:45:00',
-        '2025-10-05 10:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH251',
-        'MKVKZ9REY2H251',
-        'INS-638491',
-        'COE-555184',
-        'Grey',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        18,
-        101,
-        115.14,
-        'SGP2252',
-        'AVAILABLE',
-        15632,
-        '1.472741, 103.708848',
-        '2025-10-06 10:00:00',
-        '2025-10-06 14:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH252',
-        'MKVKZ9REY2H252',
-        'INS-638492',
-        'COE-555185',
-        'Grey',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        1,
-        102,
-        155.98,
-        'SGP2253',
-        'UNDER_MAINTENANCE',
-        2193,
-        '1.453675, 103.621496',
-        '2025-10-06 16:15:00',
-        NULL,
-        'scheduled service',
-        '2025-10-05 01:00:00',
-        'MXYZZZZZZZHHHHHH253',
-        'MKVKZ9REY2H253',
-        'INS-638493',
-        'COE-555186',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        2,
-        102,
-        111.42,
-        'SGP2254',
-        'AVAILABLE',
-        15139,
-        '1.476059, 103.850566',
-        '2025-10-06 19:00:00',
-        '2025-10-06 23:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH254',
-        'MKVKZ9REY2H254',
-        'INS-638494',
-        'COE-555187',
-        'Red',
-        'Black',
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        3,
-        101,
-        100.17,
-        'SGP2255',
-        'AVAILABLE',
-        15194,
-        '1.346918, 103.746129',
-        '2025-10-06 22:00:00',
-        '2025-10-07 02:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH255',
-        'MKVKZ9REY2H255',
-        'INS-638495',
-        'COE-555188',
-        'White',
-        'Silver',
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        4,
-        102,
-        154.46,
-        'SGP2256',
-        'AVAILABLE',
-        8380,
-        '1.35072, 103.817648',
-        '2025-10-05 16:30:00',
-        '2025-10-05 20:30:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH256',
-        'MKVKZ9REY2H256',
-        'INS-638496',
-        'COE-555189',
-        'Red',
-        NULL,
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        5,
-        101,
-        139.89,
-        'SGP2257',
-        'BOOKED',
-        4625,
-        '1.467584, 103.730245',
-        '2025-10-05 17:15:00',
-        NULL,
-        NULL,
-        '2025-10-12 01:15:00',
-        'MXYZZZZZZZHHHHHH257',
-        'MKVKZ9REY2H257',
-        'INS-638497',
-        'COE-555190',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        6,
-        101,
-        158.11,
-        'SGP2258',
-        'AVAILABLE',
-        19664,
-        '1.294783, 103.658529',
-        '2025-10-07 14:00:00',
-        '2025-10-07 18:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH258',
-        'MKVKZ9REY2H258',
-        'INS-638498',
-        'COE-555191',
-        'Silver',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        7,
-        102,
-        188.72,
-        'SGP2259',
-        'AVAILABLE',
-        11734,
-        '1.299307, 103.749111',
-        '2025-10-07 13:00:00',
-        '2025-10-07 17:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH259',
-        'MKVKZ9REY2H259',
-        'INS-638499',
-        'COE-555192',
-        'Black',
-        'Silver',
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        8,
-        102,
-        204.63,
-        'SGP2260',
-        'AVAILABLE',
-        10792,
-        '1.270292, 103.989567',
-        '2025-10-07 10:15:00',
-        '2025-10-07 14:15:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH260',
-        'MKVKZ9REY2H260',
-        'INS-638500',
-        'COE-555193',
-        'Blue',
-        NULL,
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        9,
-        101,
-        207.76,
-        'SGP2261',
-        'AVAILABLE',
-        842,
-        '1.344357, 103.698688',
-        '2025-10-04 19:00:00',
-        '2025-10-04 23:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH261',
-        'MKVKZ9REY2H261',
-        'INS-638501',
-        'COE-555194',
-        'Silver',
-        'Silver',
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        10,
-        101,
-        233.54,
-        'SGP2262',
-        'AVAILABLE',
-        7791,
-        '1.268721, 103.732705',
-        '2025-10-03 18:45:00',
-        '2025-10-03 22:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH262',
-        'MKVKZ9REY2H262',
-        'INS-638502',
-        'COE-555195',
-        'Blue',
-        'Black',
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        11,
-        101,
-        96.67,
-        'SGP2263',
-        'BOOKED',
-        10712,
-        '1.408712, 103.818461',
-        '2025-10-07 05:00:00',
-        NULL,
-        NULL,
-        '2025-10-18 05:00:00',
-        'MXYZZZZZZZHHHHHH263',
-        'MKVKZ9REY2H263',
-        'INS-638503',
-        'COE-555196',
-        'Grey',
-        'Black',
-        7,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        12,
-        102,
-        87.73,
-        'SGP2264',
-        'UNDER_MAINTENANCE',
-        14828,
-        '1.472111, 103.649964',
-        '2025-10-06 00:00:00',
-        NULL,
-        'Brake inspection',
-        '2025-10-04 23:00:00',
-        'MXYZZZZZZZHHHHHH264',
-        'MKVKZ9REY2H264',
-        'INS-638504',
-        'COE-555197',
-        'Red',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        13,
-        102,
-        87.9,
-        'SGP2265',
-        'AVAILABLE',
-        4130,
-        '1.312154, 103.738366',
-        '2025-10-07 19:45:00',
-        '2025-10-07 23:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH265',
-        'MKVKZ9REY2H265',
-        'INS-638505',
-        'COE-555198',
-        'Red',
-        'Black',
-        7,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        14,
-        102,
-        98.42,
-        'SGP2266',
-        'AVAILABLE',
-        3058,
-        '1.39655, 103.765691',
-        '2025-10-07 06:15:00',
-        '2025-10-07 10:15:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH266',
-        'MKVKZ9REY2H266',
-        'INS-638506',
-        'COE-555199',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        15,
-        101,
-        100.82,
-        'SGP2267',
-        'AVAILABLE',
-        8856,
-        '1.362141, 103.699317',
-        '2025-10-06 09:30:00',
-        '2025-10-06 13:30:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH267',
-        'MKVKZ9REY2H267',
-        'INS-638507',
-        'COE-555200',
-        'Black',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        16,
-        101,
-        94.67,
-        'SGP2268',
-        'BOOKED',
-        8660,
-        '1.25832, 103.684175',
-        '2025-10-07 18:30:00',
-        NULL,
-        NULL,
-        '2025-10-18 18:30:00',
-        'MXYZZZZZZZHHHHHH268',
-        'MKVKZ9REY2H268',
-        'INS-638508',
-        'COE-555201',
-        'Blue',
-        'Black',
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        17,
-        102,
-        114.71,
-        'SGP2269',
-        'AVAILABLE',
-        761,
-        '1.317587, 103.883737',
-        '2025-10-05 06:45:00',
-        '2025-10-05 10:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH269',
-        'MKVKZ9REY2H269',
-        'INS-638509',
-        'COE-555202',
-        'Grey',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        18,
-        101,
-        115.14,
-        'SGP2270',
-        'AVAILABLE',
-        15632,
-        '1.472741, 103.708848',
-        '2025-10-06 10:00:00',
-        '2025-10-06 14:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH270',
-        'MKVKZ9REY2H270',
-        'INS-638510',
-        'COE-555203',
-        'Grey',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        1,
-        102,
-        155.98,
-        'SGP2271',
-        'UNDER_MAINTENANCE',
-        2193,
-        '1.453675, 103.621496',
-        '2025-10-06 16:15:00',
-        NULL,
-        'scheduled service',
-        '2025-10-05 01:00:00',
-        'MXYZZZZZZZHHHHHH271',
-        'MKVKZ9REY2H271',
-        'INS-638511',
-        'COE-555204',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        2,
-        102,
-        111.42,
-        'SGP2272',
-        'AVAILABLE',
-        15139,
-        '1.476059, 103.850566',
-        '2025-10-06 19:00:00',
-        '2025-10-06 23:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH272',
-        'MKVKZ9REY2H272',
-        'INS-638512',
-        'COE-555205',
-        'Red',
-        'Black',
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        3,
-        101,
-        100.17,
-        'SGP2273',
-        'AVAILABLE',
-        15194,
-        '1.346918, 103.746129',
-        '2025-10-06 22:00:00',
-        '2025-10-07 02:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH273',
-        'MKVKZ9REY2H273',
-        'INS-638513',
-        'COE-555206',
-        'White',
-        'Silver',
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        4,
-        102,
-        154.46,
-        'SGP2274',
-        'AVAILABLE',
-        8380,
-        '1.35072, 103.817648',
-        '2025-10-05 16:30:00',
-        '2025-10-05 20:30:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH274',
-        'MKVKZ9REY2H274',
-        'INS-638514',
-        'COE-555207',
-        'Red',
-        NULL,
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        5,
-        101,
-        139.89,
-        'SGP2275',
-        'BOOKED',
-        4625,
-        '1.467584, 103.730245',
-        '2025-10-05 17:15:00',
-        NULL,
-        NULL,
-        '2025-10-12 01:15:00',
-        'MXYZZZZZZZHHHHHH275',
-        'MKVKZ9REY2H275',
-        'INS-638515',
-        'COE-555208',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        6,
-        101,
-        158.11,
-        'SGP2276',
-        'AVAILABLE',
-        19664,
-        '1.294783, 103.658529',
-        '2025-10-07 14:00:00',
-        '2025-10-07 18:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH276',
-        'MKVKZ9REY2H276',
-        'INS-638516',
-        'COE-555209',
-        'Silver',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        7,
-        102,
-        188.72,
-        'SGP2277',
-        'AVAILABLE',
-        11734,
-        '1.299307, 103.749111',
-        '2025-10-07 13:00:00',
-        '2025-10-07 17:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH277',
-        'MKVKZ9REY2H277',
-        'INS-638517',
-        'COE-555210',
-        'Black',
-        'Silver',
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        8,
-        102,
-        204.63,
-        'SGP2278',
-        'AVAILABLE',
-        10792,
-        '1.270292, 103.989567',
-        '2025-10-07 10:15:00',
-        '2025-10-07 14:15:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH278',
-        'MKVKZ9REY2H278',
-        'INS-638518',
-        'COE-555211',
-        'Blue',
-        NULL,
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        9,
-        101,
-        207.76,
-        'SGP2279',
-        'AVAILABLE',
-        842,
-        '1.344357, 103.698688',
-        '2025-10-04 19:00:00',
-        '2025-10-04 23:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH279',
-        'MKVKZ9REY2H279',
-        'INS-638519',
-        'COE-555212',
-        'Silver',
-        'Silver',
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        10,
-        101,
-        233.54,
-        'SGP2280',
-        'AVAILABLE',
-        7791,
-        '1.268721, 103.732705',
-        '2025-10-03 18:45:00',
-        '2025-10-03 22:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH280',
-        'MKVKZ9REY2H280',
-        'INS-638520',
-        'COE-555213',
-        'Blue',
-        'Black',
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        11,
-        101,
-        96.67,
-        'SGP2281',
-        'BOOKED',
-        10712,
-        '1.408712, 103.818461',
-        '2025-10-07 05:00:00',
-        NULL,
-        NULL,
-        '2025-10-18 05:00:00',
-        'MXYZZZZZZZHHHHHH281',
-        'MKVKZ9REY2H281',
-        'INS-638521',
-        'COE-555214',
-        'Grey',
-        'Black',
-        7,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        12,
-        102,
-        87.73,
-        'SGP2282',
-        'UNDER_MAINTENANCE',
-        14828,
-        '1.472111, 103.649964',
-        '2025-10-06 00:00:00',
-        NULL,
-        'Brake inspection',
-        '2025-10-04 23:00:00',
-        'MXYZZZZZZZHHHHHH282',
-        'MKVKZ9REY2H282',
-        'INS-638522',
-        'COE-555215',
-        'Red',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        13,
-        102,
-        87.9,
-        'SGP2283',
-        'AVAILABLE',
-        4130,
-        '1.312154, 103.738366',
-        '2025-10-07 19:45:00',
-        '2025-10-07 23:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH283',
-        'MKVKZ9REY2H283',
-        'INS-638523',
-        'COE-555216',
-        'Red',
-        'Black',
-        7,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        14,
-        102,
-        98.42,
-        'SGP2284',
-        'AVAILABLE',
-        3058,
-        '1.39655, 103.765691',
-        '2025-10-07 06:15:00',
-        '2025-10-07 10:15:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH284',
-        'MKVKZ9REY2H284',
-        'INS-638524',
-        'COE-555217',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        15,
-        101,
-        100.82,
-        'SGP2285',
-        'AVAILABLE',
-        8856,
-        '1.362141, 103.699317',
-        '2025-10-06 09:30:00',
-        '2025-10-06 13:30:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH285',
-        'MKVKZ9REY2H285',
-        'INS-638525',
-        'COE-555218',
-        'Black',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        16,
-        101,
-        94.67,
-        'SGP2286',
-        'BOOKED',
-        8660,
-        '1.25832, 103.684175',
-        '2025-10-07 18:30:00',
-        NULL,
-        NULL,
-        '2025-10-18 18:30:00',
-        'MXYZZZZZZZHHHHHH286',
-        'MKVKZ9REY2H286',
-        'INS-638526',
-        'COE-555219',
-        'Blue',
-        'Black',
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        17,
-        102,
-        114.71,
-        'SGP2287',
-        'AVAILABLE',
-        761,
-        '1.317587, 103.883737',
-        '2025-10-05 06:45:00',
-        '2025-10-05 10:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH287',
-        'MKVKZ9REY2H287',
-        'INS-638527',
-        'COE-555220',
-        'Grey',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        18,
-        101,
-        115.14,
-        'SGP2288',
-        'AVAILABLE',
-        15632,
-        '1.472741, 103.708848',
-        '2025-10-06 10:00:00',
-        '2025-10-06 14:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH288',
-        'MKVKZ9REY2H288',
-        'INS-638528',
-        'COE-555221',
-        'Grey',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        1,
-        102,
-        155.98,
-        'SGP2289',
-        'UNDER_MAINTENANCE',
-        2193,
-        '1.453675, 103.621496',
-        '2025-10-06 16:15:00',
-        NULL,
-        'scheduled service',
-        '2025-10-05 01:00:00',
-        'MXYZZZZZZZHHHHHH289',
-        'MKVKZ9REY2H289',
-        'INS-638529',
-        'COE-555222',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        2,
-        102,
-        111.42,
-        'SGP2290',
-        'AVAILABLE',
-        15139,
-        '1.476059, 103.850566',
-        '2025-10-06 19:00:00',
-        '2025-10-06 23:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH290',
-        'MKVKZ9REY2H290',
-        'INS-638530',
-        'COE-555223',
-        'Red',
-        'Black',
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        3,
-        101,
-        100.17,
-        'SGP2291',
-        'AVAILABLE',
-        15194,
-        '1.346918, 103.746129',
-        '2025-10-06 22:00:00',
-        '2025-10-07 02:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH291',
-        'MKVKZ9REY2H291',
-        'INS-638531',
-        'COE-555224',
-        'White',
-        'Silver',
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        4,
-        102,
-        154.46,
-        'SGP2292',
-        'AVAILABLE',
-        8380,
-        '1.35072, 103.817648',
-        '2025-10-05 16:30:00',
-        '2025-10-05 20:30:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH292',
-        'MKVKZ9REY2H292',
-        'INS-638532',
-        'COE-555225',
-        'Red',
-        NULL,
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        5,
-        101,
-        139.89,
-        'SGP2293',
-        'BOOKED',
-        4625,
-        '1.467584, 103.730245',
-        '2025-10-05 17:15:00',
-        NULL,
-        NULL,
-        '2025-10-12 01:15:00',
-        'MXYZZZZZZZHHHHHH293',
-        'MKVKZ9REY2H293',
-        'INS-638533',
-        'COE-555226',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        6,
-        101,
-        158.11,
-        'SGP2294',
-        'AVAILABLE',
-        19664,
-        '1.294783, 103.658529',
-        '2025-10-07 14:00:00',
-        '2025-10-07 18:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH294',
-        'MKVKZ9REY2H294',
-        'INS-638534',
-        'COE-555227',
-        'Silver',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        7,
-        102,
-        188.72,
-        'SGP2295',
-        'AVAILABLE',
-        11734,
-        '1.299307, 103.749111',
-        '2025-10-07 13:00:00',
-        '2025-10-07 17:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH295',
-        'MKVKZ9REY2H295',
-        'INS-638535',
-        'COE-555228',
-        'Black',
-        'Silver',
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        8,
-        102,
-        204.63,
-        'SGP2296',
-        'AVAILABLE',
-        10792,
-        '1.270292, 103.989567',
-        '2025-10-07 10:15:00',
-        '2025-10-07 14:15:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH296',
-        'MKVKZ9REY2H296',
-        'INS-638536',
-        'COE-555229',
-        'Blue',
-        NULL,
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        9,
-        101,
-        207.76,
-        'SGP2297',
-        'AVAILABLE',
-        842,
-        '1.344357, 103.698688',
-        '2025-10-04 19:00:00',
-        '2025-10-04 23:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH297',
-        'MKVKZ9REY2H297',
-        'INS-638537',
-        'COE-555230',
-        'Silver',
-        'Silver',
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        10,
-        101,
-        233.54,
-        'SGP2298',
-        'AVAILABLE',
-        7791,
-        '1.268721, 103.732705',
-        '2025-10-03 18:45:00',
-        '2025-10-03 22:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH298',
-        'MKVKZ9REY2H298',
-        'INS-638538',
-        'COE-555231',
-        'Blue',
-        'Black',
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        11,
-        101,
-        96.67,
-        'SGP2299',
-        'BOOKED',
-        10712,
-        '1.408712, 103.818461',
-        '2025-10-07 05:00:00',
-        NULL,
-        NULL,
-        '2025-10-18 05:00:00',
-        'MXYZZZZZZZHHHHHH299',
-        'MKVKZ9REY2H299',
-        'INS-638539',
-        'COE-555232',
-        'Grey',
-        'Black',
-        7,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        12,
-        102,
-        87.73,
-        'SGP2300',
-        'UNDER_MAINTENANCE',
-        14828,
-        '1.472111, 103.649964',
-        '2025-10-06 00:00:00',
-        NULL,
-        'Brake inspection',
-        '2025-10-04 23:00:00',
-        'MXYZZZZZZZHHHHHH300',
-        'MKVKZ9REY2H300',
-        'INS-638540',
-        'COE-555233',
-        'Red',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        13,
-        102,
-        87.9,
-        'SGP2301',
-        'AVAILABLE',
-        4130,
-        '1.312154, 103.738366',
-        '2025-10-07 19:45:00',
-        '2025-10-07 23:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH301',
-        'MKVKZ9REY2H301',
-        'INS-638541',
-        'COE-555234',
-        'Red',
-        'Black',
-        7,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        14,
-        102,
-        98.42,
-        'SGP2302',
-        'AVAILABLE',
-        3058,
-        '1.39655, 103.765691',
-        '2025-10-07 06:15:00',
-        '2025-10-07 10:15:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH302',
-        'MKVKZ9REY2H302',
-        'INS-638542',
-        'COE-555235',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        15,
-        101,
-        100.82,
-        'SGP2303',
-        'AVAILABLE',
-        8856,
-        '1.362141, 103.699317',
-        '2025-10-06 09:30:00',
-        '2025-10-06 13:30:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH303',
-        'MKVKZ9REY2H303',
-        'INS-638543',
-        'COE-555236',
-        'Black',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        16,
-        101,
-        94.67,
-        'SGP2304',
-        'BOOKED',
-        8660,
-        '1.25832, 103.684175',
-        '2025-10-07 18:30:00',
-        NULL,
-        NULL,
-        '2025-10-18 18:30:00',
-        'MXYZZZZZZZHHHHHH304',
-        'MKVKZ9REY2H304',
-        'INS-638544',
-        'COE-555237',
-        'Blue',
-        'Black',
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        17,
-        102,
-        114.71,
-        'SGP2305',
-        'AVAILABLE',
-        761,
-        '1.317587, 103.883737',
-        '2025-10-05 06:45:00',
-        '2025-10-05 10:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH305',
-        'MKVKZ9REY2H305',
-        'INS-638545',
-        'COE-555238',
-        'Grey',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        18,
-        101,
-        115.14,
-        'SGP2306',
-        'AVAILABLE',
-        15632,
-        '1.472741, 103.708848',
-        '2025-10-06 10:00:00',
-        '2025-10-06 14:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH306',
-        'MKVKZ9REY2H306',
-        'INS-638546',
-        'COE-555239',
-        'Grey',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        1,
-        102,
-        155.98,
-        'SGP2307',
-        'UNDER_MAINTENANCE',
-        2193,
-        '1.453675, 103.621496',
-        '2025-10-06 16:15:00',
-        NULL,
-        'scheduled service',
-        '2025-10-05 01:00:00',
-        'MXYZZZZZZZHHHHHH307',
-        'MKVKZ9REY2H307',
-        'INS-638547',
-        'COE-555240',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        2,
-        102,
-        111.42,
-        'SGP2308',
-        'AVAILABLE',
-        15139,
-        '1.476059, 103.850566',
-        '2025-10-06 19:00:00',
-        '2025-10-06 23:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH308',
-        'MKVKZ9REY2H308',
-        'INS-638548',
-        'COE-555241',
-        'Red',
-        'Black',
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        3,
-        101,
-        100.17,
-        'SGP2309',
-        'AVAILABLE',
-        15194,
-        '1.346918, 103.746129',
-        '2025-10-06 22:00:00',
-        '2025-10-07 02:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH309',
-        'MKVKZ9REY2H309',
-        'INS-638549',
-        'COE-555242',
-        'White',
-        'Silver',
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        4,
-        102,
-        154.46,
-        'SGP2310',
-        'AVAILABLE',
-        8380,
-        '1.35072, 103.817648',
-        '2025-10-05 16:30:00',
-        '2025-10-05 20:30:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH310',
-        'MKVKZ9REY2H310',
-        'INS-638550',
-        'COE-555243',
-        'Red',
-        NULL,
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        5,
-        101,
-        139.89,
-        'SGP2311',
-        'BOOKED',
-        4625,
-        '1.467584, 103.730245',
-        '2025-10-05 17:15:00',
-        NULL,
-        NULL,
-        '2025-10-12 01:15:00',
-        'MXYZZZZZZZHHHHHH311',
-        'MKVKZ9REY2H311',
-        'INS-638551',
-        'COE-555244',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        6,
-        101,
-        158.11,
-        'SGP2312',
-        'AVAILABLE',
-        19664,
-        '1.294783, 103.658529',
-        '2025-10-07 14:00:00',
-        '2025-10-07 18:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH312',
-        'MKVKZ9REY2H312',
-        'INS-638552',
-        'COE-555245',
-        'Silver',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        7,
-        102,
-        188.72,
-        'SGP2313',
-        'AVAILABLE',
-        11734,
-        '1.299307, 103.749111',
-        '2025-10-07 13:00:00',
-        '2025-10-07 17:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH313',
-        'MKVKZ9REY2H313',
-        'INS-638553',
-        'COE-555246',
-        'Black',
-        'Silver',
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        8,
-        102,
-        204.63,
-        'SGP2314',
-        'AVAILABLE',
-        10792,
-        '1.270292, 103.989567',
-        '2025-10-07 10:15:00',
-        '2025-10-07 14:15:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH314',
-        'MKVKZ9REY2H314',
-        'INS-638554',
-        'COE-555247',
-        'Blue',
-        NULL,
-        4,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        9,
-        101,
-        207.76,
-        'SGP2315',
-        'AVAILABLE',
-        842,
-        '1.344357, 103.698688',
-        '2025-10-04 19:00:00',
-        '2025-10-04 23:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH315',
-        'MKVKZ9REY2H315',
-        'INS-638555',
-        'COE-555248',
-        'Silver',
-        'Silver',
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        10,
-        101,
-        233.54,
-        'SGP2316',
-        'AVAILABLE',
-        7791,
-        '1.268721, 103.732705',
-        '2025-10-03 18:45:00',
-        '2025-10-03 22:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH316',
-        'MKVKZ9REY2H316',
-        'INS-638556',
-        'COE-555249',
-        'Blue',
-        'Black',
-        2,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        11,
-        101,
-        96.67,
-        'SGP2317',
-        'BOOKED',
-        10712,
-        '1.408712, 103.818461',
-        '2025-10-07 05:00:00',
-        NULL,
-        NULL,
-        '2025-10-18 05:00:00',
-        'MXYZZZZZZZHHHHHH317',
-        'MKVKZ9REY2H317',
-        'INS-638557',
-        'COE-555250',
-        'Grey',
-        'Black',
-        7,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        12,
-        102,
-        87.73,
-        'SGP2318',
-        'UNDER_MAINTENANCE',
-        14828,
-        '1.472111, 103.649964',
-        '2025-10-06 00:00:00',
-        NULL,
-        'Brake inspection',
-        '2025-10-04 23:00:00',
-        'MXYZZZZZZZHHHHHH318',
-        'MKVKZ9REY2H318',
-        'INS-638558',
-        'COE-555251',
-        'Red',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        13,
-        102,
-        87.9,
-        'SGP2319',
-        'AVAILABLE',
-        4130,
-        '1.312154, 103.738366',
-        '2025-10-07 19:45:00',
-        '2025-10-07 23:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH319',
-        'MKVKZ9REY2H319',
-        'INS-638559',
-        'COE-555252',
-        'Red',
-        'Black',
-        7,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        14,
-        102,
-        98.42,
-        'SGP2320',
-        'AVAILABLE',
-        3058,
-        '1.39655, 103.765691',
-        '2025-10-07 06:15:00',
-        '2025-10-07 10:15:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH320',
-        'MKVKZ9REY2H320',
-        'INS-638560',
-        'COE-555253',
-        'White',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        15,
-        101,
-        100.82,
-        'SGP2321',
-        'AVAILABLE',
-        8856,
-        '1.362141, 103.699317',
-        '2025-10-06 09:30:00',
-        '2025-10-06 13:30:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH321',
-        'MKVKZ9REY2H321',
-        'INS-638561',
-        'COE-555254',
-        'Black',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        16,
-        101,
-        94.67,
-        'SGP2322',
-        'BOOKED',
-        8660,
-        '1.25832, 103.684175',
-        '2025-10-07 18:30:00',
-        NULL,
-        NULL,
-        '2025-10-18 18:30:00',
-        'MXYZZZZZZZHHHHHH322',
-        'MKVKZ9REY2H322',
-        'INS-638562',
-        'COE-555255',
-        'Blue',
-        'Black',
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        17,
-        102,
-        114.71,
-        'SGP2323',
-        'AVAILABLE',
-        761,
-        '1.317587, 103.883737',
-        '2025-10-05 06:45:00',
-        '2025-10-05 10:45:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH323',
-        'MKVKZ9REY2H323',
-        'INS-638563',
-        'COE-555256',
-        'Grey',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-INSERT INTO fleet_vehicles (
-        car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
-        available_from, available_until, maintenance_note, expected_return_date,
-        chassis_number, engine_number, insurance_reference, coe_reference,
-        primary_colour, secondary_colour, passenger_capacity,
-        vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
-    ) VALUES (
-        18,
-        101,
-        115.14,
-        'SGP2324',
-        'AVAILABLE',
-        15632,
-        '1.472741, 103.708848',
-        '2025-10-06 10:00:00',
-        '2025-10-06 14:00:00',
-        NULL,
-        NULL,
-        'MXYZZZZZZZHHHHHH324',
-        'MKVKZ9REY2H324',
-        'INS-638564',
-        'COE-555257',
-        'Grey',
-        NULL,
-        5,
-        '[URL]',
-        '[URL]',
-        NOW(), NOW()
-    );
-
-
--- Singapore Fleet Pricing (2025) - Multi-Operator Strategy
--- 
--- OPERATOR DISTRIBUTION:
--- Luxury vehicles (Maserati, BMW Z4, Porsche 911, Mercedes-AMG SL63, BMW M240i, BMW M440i, BMW 5 Series, Range Rover Sport):
---   - ONLY available from Sixt (101) and Hertz (102)
---   - Premium pricing with competition between these two brands
---
--- Non-luxury vehicles (all other models):
---   - Available from ALL operators (101-106: Sixt, Hertz, Lylo, Budget, Avis, Enterprise)
---   - Tiered pricing: Budget < Mid-Range < Premium
---
--- PRICING TIERS:
--- Budget Tier (Lylo-103, Budget-104): Base pricing
--- Mid-Range Tier (Avis-105, Enterprise-106): +10-12% markup
--- Premium Tier (Sixt-101, Hertz-102): +18-22% markup
-
--- ========================================
--- LUXURY VEHICLES (Sixt & Hertz ONLY)
--- ========================================
-
--- Model 1: Maserati Grecale (Luxury SUV)
-UPDATE fleet_vehicles SET daily_price = 315.00 WHERE car_model_id = 1 AND owner_id = 101; -- Sixt
-UPDATE fleet_vehicles SET daily_price = 308.00 WHERE car_model_id = 1 AND owner_id = 102; -- Hertz
-
--- Model 4: BMW Z4 (Luxury Sports)
-UPDATE fleet_vehicles SET daily_price = 425.00 WHERE car_model_id = 4 AND owner_id = 101; -- Sixt
-UPDATE fleet_vehicles SET daily_price = 418.00 WHERE car_model_id = 4 AND owner_id = 102; -- Hertz
-
--- Model 6: BMW 5 Series Touring (Luxury)
-UPDATE fleet_vehicles SET daily_price = 288.00 WHERE car_model_id = 6 AND owner_id = 101; -- Sixt
-UPDATE fleet_vehicles SET daily_price = 282.00 WHERE car_model_id = 6 AND owner_id = 102; -- Hertz
-
--- Model 7: BMW M240i (Luxury Performance)
-UPDATE fleet_vehicles SET daily_price = 348.00 WHERE car_model_id = 7 AND owner_id = 101; -- Sixt
-UPDATE fleet_vehicles SET daily_price = 342.00 WHERE car_model_id = 7 AND owner_id = 102; -- Hertz
-
--- Model 8: BMW M440i (Luxury Performance)
-UPDATE fleet_vehicles SET daily_price = 368.00 WHERE car_model_id = 8 AND owner_id = 101; -- Sixt
-UPDATE fleet_vehicles SET daily_price = 362.00 WHERE car_model_id = 8 AND owner_id = 102; -- Hertz
-
--- Model 9: Porsche 911 (Luxury Sports)
-UPDATE fleet_vehicles SET daily_price = 545.00 WHERE car_model_id = 9 AND owner_id = 101; -- Sixt
-UPDATE fleet_vehicles SET daily_price = 538.00 WHERE car_model_id = 9 AND owner_id = 102; -- Hertz
-
--- Model 10: Mercedes-AMG SL63 (Luxury Sports)
-UPDATE fleet_vehicles SET daily_price = 598.00 WHERE car_model_id = 10 AND owner_id = 101; -- Sixt
-UPDATE fleet_vehicles SET daily_price = 588.00 WHERE car_model_id = 10 AND owner_id = 102; -- Hertz
-
--- Model 18: Land Rover Range Rover Sport (Luxury SUV)
-UPDATE fleet_vehicles SET daily_price = 328.00 WHERE car_model_id = 18 AND owner_id = 101; -- Sixt
-UPDATE fleet_vehicles SET daily_price = 322.00 WHERE car_model_id = 18 AND owner_id = 102; -- Hertz
-
--- ========================================
--- NON-LUXURY VEHICLES (All Operators)
--- ========================================
-
--- Model 2: Skoda Octavia (Compact)
-UPDATE fleet_vehicles SET daily_price = 105.00 WHERE car_model_id = 2 AND owner_id = 103; -- Lylo (Budget)
-UPDATE fleet_vehicles SET daily_price = 108.00 WHERE car_model_id = 2 AND owner_id = 104; -- Budget
-UPDATE fleet_vehicles SET daily_price = 116.00 WHERE car_model_id = 2 AND owner_id = 105; -- Avis (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 118.00 WHERE car_model_id = 2 AND owner_id = 106; -- Enterprise (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 125.00 WHERE car_model_id = 2 AND owner_id = 101; -- Sixt (Premium)
-UPDATE fleet_vehicles SET daily_price = 122.00 WHERE car_model_id = 2 AND owner_id = 102; -- Hertz (Premium)
-
--- Model 3: Nissan Sentra (Economy)
-UPDATE fleet_vehicles SET daily_price = 85.00 WHERE car_model_id = 3 AND owner_id = 103; -- Lylo (Budget)
-UPDATE fleet_vehicles SET daily_price = 88.00 WHERE car_model_id = 3 AND owner_id = 104; -- Budget
-UPDATE fleet_vehicles SET daily_price = 95.00 WHERE car_model_id = 3 AND owner_id = 105; -- Avis (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 96.00 WHERE car_model_id = 3 AND owner_id = 106; -- Enterprise (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 102.00 WHERE car_model_id = 3 AND owner_id = 101; -- Sixt (Premium)
-UPDATE fleet_vehicles SET daily_price = 100.00 WHERE car_model_id = 3 AND owner_id = 102; -- Hertz (Premium)
-
--- Model 5: BMW X3 (Luxury SUV)
-UPDATE fleet_vehicles SET daily_price = 205.00 WHERE car_model_id = 5 AND owner_id = 103; -- Lylo (Budget)
-UPDATE fleet_vehicles SET daily_price = 208.00 WHERE car_model_id = 5 AND owner_id = 104; -- Budget
-UPDATE fleet_vehicles SET daily_price = 226.00 WHERE car_model_id = 5 AND owner_id = 105; -- Avis (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 228.00 WHERE car_model_id = 5 AND owner_id = 106; -- Enterprise (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 242.00 WHERE car_model_id = 5 AND owner_id = 101; -- Sixt (Premium)
-UPDATE fleet_vehicles SET daily_price = 238.00 WHERE car_model_id = 5 AND owner_id = 102; -- Hertz (Premium)
-
--- Model 11: Mercedes-Benz Vito (7-Seater Van)
-UPDATE fleet_vehicles SET daily_price = 128.00 WHERE car_model_id = 11 AND owner_id = 103; -- Lylo (Budget)
-UPDATE fleet_vehicles SET daily_price = 132.00 WHERE car_model_id = 11 AND owner_id = 104; -- Budget
-UPDATE fleet_vehicles SET daily_price = 142.00 WHERE car_model_id = 11 AND owner_id = 105; -- Avis (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 145.00 WHERE car_model_id = 11 AND owner_id = 106; -- Enterprise (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 155.00 WHERE car_model_id = 11 AND owner_id = 101; -- Sixt (Premium)
-UPDATE fleet_vehicles SET daily_price = 152.00 WHERE car_model_id = 11 AND owner_id = 102; -- Hertz (Premium)
-
--- Model 12: Peugeot 5008 (SUV)
-UPDATE fleet_vehicles SET daily_price = 112.00 WHERE car_model_id = 12 AND owner_id = 103; -- Lylo (Budget)
-UPDATE fleet_vehicles SET daily_price = 115.00 WHERE car_model_id = 12 AND owner_id = 104; -- Budget
-UPDATE fleet_vehicles SET daily_price = 124.00 WHERE car_model_id = 12 AND owner_id = 105; -- Avis (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 126.00 WHERE car_model_id = 12 AND owner_id = 106; -- Enterprise (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 135.00 WHERE car_model_id = 12 AND owner_id = 101; -- Sixt (Premium)
-UPDATE fleet_vehicles SET daily_price = 132.00 WHERE car_model_id = 12 AND owner_id = 102; -- Hertz (Premium)
-
--- Model 13: Toyota Alphard (Premium 7-Seater)
-UPDATE fleet_vehicles SET daily_price = 145.00 WHERE car_model_id = 13 AND owner_id = 103; -- Lylo (Budget)
-UPDATE fleet_vehicles SET daily_price = 148.00 WHERE car_model_id = 13 AND owner_id = 104; -- Budget
-UPDATE fleet_vehicles SET daily_price = 160.00 WHERE car_model_id = 13 AND owner_id = 105; -- Avis (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 162.00 WHERE car_model_id = 13 AND owner_id = 106; -- Enterprise (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 172.00 WHERE car_model_id = 13 AND owner_id = 101; -- Sixt (Premium)
-UPDATE fleet_vehicles SET daily_price = 168.00 WHERE car_model_id = 13 AND owner_id = 102; -- Hertz (Premium)
-
--- Model 14: Toyota Prius (Hybrid)
-UPDATE fleet_vehicles SET daily_price = 95.00 WHERE car_model_id = 14 AND owner_id = 103; -- Lylo (Budget)
-UPDATE fleet_vehicles SET daily_price = 98.00 WHERE car_model_id = 14 AND owner_id = 104; -- Budget
-UPDATE fleet_vehicles SET daily_price = 106.00 WHERE car_model_id = 14 AND owner_id = 105; -- Avis (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 108.00 WHERE car_model_id = 14 AND owner_id = 106; -- Enterprise (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 115.00 WHERE car_model_id = 14 AND owner_id = 101; -- Sixt (Premium)
-UPDATE fleet_vehicles SET daily_price = 112.00 WHERE car_model_id = 14 AND owner_id = 102; -- Hertz (Premium)
-
--- Model 15: VW Golf (Compact)
-UPDATE fleet_vehicles SET daily_price = 100.00 WHERE car_model_id = 15 AND owner_id = 103; -- Lylo (Budget)
-UPDATE fleet_vehicles SET daily_price = 102.00 WHERE car_model_id = 15 AND owner_id = 104; -- Budget
-UPDATE fleet_vehicles SET daily_price = 111.00 WHERE car_model_id = 15 AND owner_id = 105; -- Avis (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 113.00 WHERE car_model_id = 15 AND owner_id = 106; -- Enterprise (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 120.00 WHERE car_model_id = 15 AND owner_id = 101; -- Sixt (Premium)
-UPDATE fleet_vehicles SET daily_price = 118.00 WHERE car_model_id = 15 AND owner_id = 102; -- Hertz (Premium)
-
--- Model 16: VW Polo (Compact)
-UPDATE fleet_vehicles SET daily_price = 90.00 WHERE car_model_id = 16 AND owner_id = 103; -- Lylo (Budget)
-UPDATE fleet_vehicles SET daily_price = 92.00 WHERE car_model_id = 16 AND owner_id = 104; -- Budget
-UPDATE fleet_vehicles SET daily_price = 100.00 WHERE car_model_id = 16 AND owner_id = 105; -- Avis (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 102.00 WHERE car_model_id = 16 AND owner_id = 106; -- Enterprise (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 108.00 WHERE car_model_id = 16 AND owner_id = 101; -- Sixt (Premium)
-UPDATE fleet_vehicles SET daily_price = 106.00 WHERE car_model_id = 16 AND owner_id = 102; -- Hertz (Premium)
-
--- Model 17: Mini Cooper (Compact)
-UPDATE fleet_vehicles SET daily_price = 112.00 WHERE car_model_id = 17 AND owner_id = 103; -- Lylo (Budget)
-UPDATE fleet_vehicles SET daily_price = 115.00 WHERE car_model_id = 17 AND owner_id = 104; -- Budget
-UPDATE fleet_vehicles SET daily_price = 124.00 WHERE car_model_id = 17 AND owner_id = 105; -- Avis (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 126.00 WHERE car_model_id = 17 AND owner_id = 106; -- Enterprise (Mid-Range)
-UPDATE fleet_vehicles SET daily_price = 135.00 WHERE car_model_id = 17 AND owner_id = 101; -- Sixt (Premium)
-UPDATE fleet_vehicles SET daily_price = 132.00 WHERE car_model_id = 17 AND owner_id = 102; -- Hertz (Premium)
-
--- ========================================
--- PRICING COMPARISON TABLE
--- ========================================
--- 
--- Example: Nissan Sentra (Economy)
--- Lylo (103):       SGD 85/day  (Budget - Cheapest)
--- Budget (104):     SGD 88/day  (Budget)
--- Avis (105):       SGD 95/day  (Mid-Range)
--- Enterprise (106): SGD 96/day  (Mid-Range)
--- Hertz (102):      SGD 100/day (Premium)
--- Sixt (101):       SGD 102/day (Premium - Most Expensive)
---
--- Example: Porsche 911 (Luxury Sports - SIXT & HERTZ ONLY)
--- Hertz (102):      SGD 538/day (Premium Luxury)
--- Sixt (101):       SGD 545/day (Premium Luxury - Slight Premium)
---
--- This creates realistic market dynamics:
--- 1. Customers can compare prices across 6 operators for non-luxury cars
--- 2. Luxury vehicles are exclusive to premium operators (Sixt & Hertz)
--- 3. Clear price differentiation encourages shopping behavior
--- 4. Budget-conscious customers gravitate to Lylo/Budget
--- 5. Premium customers choose Sixt/Hertz for all vehicles
