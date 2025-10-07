@@ -18,6 +18,8 @@ public class FleetStatistics {
     private long totalVehicles;
     private long totalModels;
     private Double averageMileage;
+    private Long totalMileage; // Sum of all mileageKm
     private BigDecimal totalPotentialDailyRevenue;
+    private BigDecimal totalRevenue; // Total potential revenue (sum of all dailyPrice)
     private Double utilizationRate; // Percentage of vehicles currently in use (booked)
 }

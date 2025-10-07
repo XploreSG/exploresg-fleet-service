@@ -17,6 +17,9 @@ import java.util.List;
 @AllArgsConstructor
 public class FleetDashboardDto {
     private VehicleStatusSummary vehicleStatus;
+    private ServiceRemindersSummary serviceReminders;
+    private WorkOrdersSummary workOrders;
+    private VehicleAssignmentsSummary vehicleAssignments;
     private FleetStatistics statistics;
     private List<FleetModelBreakdown> fleetByModel;
 }

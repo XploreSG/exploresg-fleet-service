@@ -227,11 +227,25 @@ public class CarModelService {
                                                         .booked(0)
                                                         .total(0)
                                                         .build())
+                                        .serviceReminders(com.exploresg.fleetservice.dto.ServiceRemindersSummary.builder()
+                                                        .overdue(0)
+                                                        .dueSoon(0)
+                                                        .build())
+                                        .workOrders(com.exploresg.fleetservice.dto.WorkOrdersSummary.builder()
+                                                        .active(0)
+                                                        .pending(0)
+                                                        .build())
+                                        .vehicleAssignments(com.exploresg.fleetservice.dto.VehicleAssignmentsSummary.builder()
+                                                        .assigned(0)
+                                                        .unassigned(0)
+                                                        .build())
                                         .statistics(com.exploresg.fleetservice.dto.FleetStatistics.builder()
                                                         .totalVehicles(0)
                                                         .totalModels(0)
                                                         .averageMileage(0.0)
+                                                        .totalMileage(0L)
                                                         .totalPotentialDailyRevenue(BigDecimal.ZERO)
+                                                        .totalRevenue(BigDecimal.ZERO)
                                                         .utilizationRate(0.0)
                                                         .build())
                                         .fleetByModel(List.of())
@@ -257,12 +271,59 @@ public class CarModelService {
                                 .total(allVehicles.size())
                                 .build();
 
-                // 3. Calculate overall fleet statistics
+                // 3. Calculate service reminders (based on maintenance schedule)
+                // For now, using simple logic: vehicles with high mileage need service
+                java.time.LocalDateTime now = java.time.LocalDateTime.now();
+                
+                long overdueCount = allVehicles.stream()
+                                .filter(v -> v.getExpectedReturnDate() != null 
+                                        && v.getExpectedReturnDate().isBefore(now)
+                                        && v.getStatus() == VehicleStatus.UNDER_MAINTENANCE)
+                                .count();
+                
+                long dueSoonCount = allVehicles.stream()
+                                .filter(v -> v.getMileageKm() != null && v.getMileageKm() > 50000)
+                                .filter(v -> v.getStatus() != VehicleStatus.UNDER_MAINTENANCE)
+                                .count();
+
+                com.exploresg.fleetservice.dto.ServiceRemindersSummary serviceReminders = com.exploresg.fleetservice.dto.ServiceRemindersSummary
+                                .builder()
+                                .overdue(overdueCount)
+                                .dueSoon(dueSoonCount)
+                                .build();
+
+                // 4. Calculate work orders
+                long activeWorkOrders = underMaintenanceCount; // Vehicles currently in maintenance
+                long pendingWorkOrders = allVehicles.stream()
+                                .filter(v -> v.getExpectedReturnDate() != null 
+                                        && v.getExpectedReturnDate().isAfter(now)
+                                        && v.getStatus() != VehicleStatus.UNDER_MAINTENANCE)
+                                .count();
+
+                com.exploresg.fleetservice.dto.WorkOrdersSummary workOrders = com.exploresg.fleetservice.dto.WorkOrdersSummary
+                                .builder()
+                                .active(activeWorkOrders)
+                                .pending(pendingWorkOrders)
+                                .build();
+
+                // 5. Calculate vehicle assignments
+                com.exploresg.fleetservice.dto.VehicleAssignmentsSummary vehicleAssignments = com.exploresg.fleetservice.dto.VehicleAssignmentsSummary
+                                .builder()
+                                .assigned(bookedCount)      // Currently booked/rented
+                                .unassigned(availableCount)  // Available for rent
+                                .build();
+
+                // 6. Calculate overall fleet statistics
                 Double averageMileage = allVehicles.stream()
                                 .filter(v -> v.getMileageKm() != null)
                                 .mapToInt(FleetVehicle::getMileageKm)
                                 .average()
                                 .orElse(0.0);
+
+                Long totalMileage = allVehicles.stream()
+                                .filter(v -> v.getMileageKm() != null)
+                                .mapToLong(FleetVehicle::getMileageKm)
+                                .sum();
 
                 BigDecimal totalPotentialRevenue = allVehicles.stream()
                                 .map(FleetVehicle::getDailyPrice)
@@ -282,7 +343,9 @@ public class CarModelService {
                                 .totalVehicles(allVehicles.size())
                                 .totalModels(uniqueModels)
                                 .averageMileage(averageMileage)
+                                .totalMileage(totalMileage)
                                 .totalPotentialDailyRevenue(totalPotentialRevenue)
+                                .totalRevenue(totalPotentialRevenue) // Same as potential for now
                                 .utilizationRate(utilizationRate)
                                 .build();
 
@@ -332,9 +395,12 @@ public class CarModelService {
                                 })
                                 .collect(Collectors.toList());
 
-                // 5. Build and return the complete dashboard
+                // 7. Build and return the complete dashboard
                 return com.exploresg.fleetservice.dto.FleetDashboardDto.builder()
                                 .vehicleStatus(vehicleStatus)
+                                .serviceReminders(serviceReminders)
+                                .workOrders(workOrders)
+                                .vehicleAssignments(vehicleAssignments)
                                 .statistics(statistics)
                                 .fleetByModel(fleetByModel)
                                 .build();
