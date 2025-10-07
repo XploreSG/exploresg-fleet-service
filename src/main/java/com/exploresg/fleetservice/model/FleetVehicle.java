@@ -1,5 +1,6 @@
 package com.exploresg.fleetservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ import java.util.UUID; // <-- NEW IMPORT
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class FleetVehicle {
 
     @Id
@@ -27,8 +29,9 @@ public class FleetVehicle {
     @Column(columnDefinition = "UUID", updatable = false, nullable = false)
     private UUID id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "car_model_id", nullable = false)
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private CarModel carModel; // Foreign Key to CarModel (references Long ID internally)
 
     @Column(nullable = false, columnDefinition = "UUID")
