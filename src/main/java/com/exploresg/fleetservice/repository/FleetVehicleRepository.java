@@ -43,4 +43,11 @@ public interface FleetVehicleRepository extends JpaRepository<FleetVehicle, UUID
      * This is the source data for the per-operator model list.
      */
     List<FleetVehicle> findByOwnerIdAndStatus(UUID ownerId, VehicleStatus status);
+
+    /**
+     * Retrieves ALL physical vehicles for a specific operator (regardless of
+     * status).
+     * Useful for fleet management and testing purposes.
+     */
+    List<FleetVehicle> findByOwnerId(UUID ownerId);
 }

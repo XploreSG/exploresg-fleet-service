@@ -194,6 +194,19 @@ public class CarModelService {
         }
 
         /**
+         * Retrieves all fleet vehicles owned by a specific operator.
+         * Returns ALL vehicles regardless of status - useful for fleet management and
+         * testing.
+         * * @param ownerId The ID of the fleet operator (fleet manager's userId).
+         * 
+         * @return A list of all FleetVehicle entities owned by the operator.
+         */
+        @Transactional(readOnly = true)
+        public List<FleetVehicle> getAllFleetVehiclesByOwner(UUID ownerId) {
+                return fleetVehicleRepository.findByOwnerId(ownerId);
+        }
+
+        /**
          * Utility method to map a CarModel entity to a CarModelResponseDto.
          */
         private CarModelResponseDto mapToCarModelResponseDto(CarModel carModel) {

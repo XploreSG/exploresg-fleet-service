@@ -113,4 +113,36 @@ public class FleetController {
 
         return ResponseEntity.ok(models);
     }
+
+    /**
+     * Fleet Manager endpoint to view ALL individual vehicles in their fleet (for
+     * testing).
+     * Returns detailed information about each physical vehicle owned by the fleet
+     * manager.
+     * GET /api/v1/fleet/operators/fleet/all
+     * 
+     * @param jwt The authenticated user's JWT token containing userId.
+     * @return A list of all fleet vehicles owned by the fleet manager.
+     */
+    @GetMapping("/operators/fleet/all")
+    @PreAuthorize(SecurityConstants.HAS_ROLE_FLEET_MANAGER)
+    public ResponseEntity<List<com.exploresg.fleetservice.model.FleetVehicle>> getAllMyFleetVehicles(
+            @AuthenticationPrincipal Jwt jwt) {
+        // Extract user ID from JWT token (userId is the ownerId in the fleet table)
+        String userIdStr = jwt.getClaimAsString("userId");
+
+        if (userIdStr == null || userIdStr.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        UUID userId = UUID.fromString(userIdStr);
+        List<com.exploresg.fleetservice.model.FleetVehicle> vehicles = carModelService
+                .getAllFleetVehiclesByOwner(userId);
+
+        if (vehicles.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(vehicles);
+    }
 }
