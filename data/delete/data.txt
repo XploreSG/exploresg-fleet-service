@@ -1,5 +1,3 @@
-
--- ==============================================================================
 -- 1. SCHEMA MIGRATION (DDL)
 -- Safely adds the public_id column (UUID, unique, indexed) to car_models.
 -- This DDL is designed for PostgreSQL, based on your docker-compose file.
@@ -363,33 +361,56 @@ INSERT INTO car_models (
     top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
 
 
+-- ==============================================================================
+-- DDL SETUP: FLEET_VEHICLES TABLE WITH UUID PRIMARY KEY
+-- This section ensures the 'fleet_vehicles' table is correctly set up with a UUID
+-- as its primary key, automatically generated upon insertion.
+-- NOTE: If the table already exists, you may need to manually drop it or run a migration.
+-- ==============================================================================
+
+-- 1. Ensure uuid-ossp extension is enabled (if using PostgreSQL)
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- 2. Drop table if exists to ensure a clean run for seeding
+DROP TABLE IF EXISTS fleet_vehicles;
+
+-- 3. Create the fleet_vehicles table with a UUID Primary Key
+CREATE TABLE fleet_vehicles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(), -- PK is now UUID and auto-generated
+    car_model_id BIGINT NOT NULL,                  -- Foreign Key to car_models.id (Long)
+    owner_id UUID NOT NULL,                        -- Foreign Key to user service (UUID)
+    daily_price NUMERIC(10, 2) NOT NULL,
+    license_plate VARCHAR(255) UNIQUE NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    mileage_km INTEGER,
+    current_location VARCHAR(255),
+    available_from TIMESTAMP,
+    available_until TIMESTAMP,
+    maintenance_note VARCHAR(2048),
+    expected_return_date TIMESTAMP,
+    chassis_number VARCHAR(255) UNIQUE,
+    engine_number VARCHAR(255) UNIQUE,
+    insurance_reference VARCHAR(255),
+    coe_reference VARCHAR(255),
+    primary_colour VARCHAR(50),
+    secondary_colour VARCHAR(50),
+    passenger_capacity INTEGER,
+    vehicle_attachment1 VARCHAR(1024),
+    vehicle_attachment2 VARCHAR(1024),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    last_updated_at TIMESTAMP
+);
+
+-- NOTE: You will need to ensure the Foreign Key constraint is added 
+-- or handled by your Spring application's DDL generation (ddl-auto=update).
+-- The following command is for manual constraint setup:
+-- ALTER TABLE fleet_vehicles ADD CONSTRAINT fk_car_model FOREIGN KEY (car_model_id) REFERENCES car_models(id);
+
 
 -- ==============================================================================
--- 1. SCHEMA MIGRATION (DDL)
--- Safely adds the public_id column (UUID, unique, indexed) to fleet_vehicles,
--- and sets default values to auto-generate UUIDs for both id and public_id.
--- This DDL is designed for PostgreSQL, based on your docker-compose file.
+-- DATA INSERTION (328 Records)
+-- The 'id' column is omitted, relying on the database default (gen_random_uuid()).
 -- ==============================================================================
-DO $$ BEGIN
-    -- Set the id column to auto-generate UUIDs
-    -- Since id is a UUID type (not integer), we use gen_random_uuid()
-    ALTER TABLE fleet_vehicles ALTER COLUMN id SET DEFAULT gen_random_uuid();
-    ALTER TABLE fleet_vehicles ALTER COLUMN id SET NOT NULL;
-
-    -- Add the public_id column if it doesn't exist
-    IF NOT EXISTS (
-        SELECT 1 FROM information_schema.columns 
-        WHERE table_name='fleet_vehicles' AND column_name='public_id'
-    ) THEN
-        ALTER TABLE fleet_vehicles ADD COLUMN public_id UUID UNIQUE;
-    END IF;
-
-    -- Set the default value for public_id to generate a UUID automatically
-    -- This avoids needing to manually specify it in INSERT statements
-    ALTER TABLE fleet_vehicles ALTER COLUMN public_id SET DEFAULT gen_random_uuid();
-END $$;
-
-
 
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
@@ -420,7 +441,6 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         NOW(), NOW()
     );
-
 INSERT INTO fleet_vehicles (
         car_model_id, owner_id, daily_price, license_plate, status, mileage_km, current_location,
         available_from, available_until, maintenance_note, expected_return_date,
@@ -6075,4 +6095,4 @@ INSERT INTO fleet_vehicles (
         '[URL]',
         '[URL]',
         NOW(), NOW()
-    );    
+    );
