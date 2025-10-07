@@ -145,4 +145,32 @@ public class FleetController {
 
         return ResponseEntity.ok(vehicles);
     }
+
+    /**
+     * Fleet Manager dashboard endpoint.
+     * Returns comprehensive fleet statistics and breakdowns for the authenticated
+     * fleet manager.
+     * Includes vehicle status summary, fleet statistics, and breakdown by car
+     * model.
+     * GET /api/v1/fleet/operators/dashboard
+     * 
+     * @param jwt The authenticated user's JWT token containing userId.
+     * @return FleetDashboardDto containing all dashboard metrics and breakdowns.
+     */
+    @GetMapping("/operators/dashboard")
+    @PreAuthorize(SecurityConstants.HAS_ROLE_FLEET_MANAGER)
+    public ResponseEntity<com.exploresg.fleetservice.dto.FleetDashboardDto> getFleetDashboard(
+            @AuthenticationPrincipal Jwt jwt) {
+        // Extract user ID from JWT token (userId is the ownerId in the fleet table)
+        String userIdStr = jwt.getClaimAsString("userId");
+
+        if (userIdStr == null || userIdStr.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        UUID userId = UUID.fromString(userIdStr);
+        com.exploresg.fleetservice.dto.FleetDashboardDto dashboard = carModelService.getFleetDashboard(userId);
+
+        return ResponseEntity.ok(dashboard);
+    }
 }

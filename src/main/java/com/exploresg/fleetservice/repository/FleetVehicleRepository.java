@@ -50,4 +50,16 @@ public interface FleetVehicleRepository extends JpaRepository<FleetVehicle, UUID
      * Useful for fleet management and testing purposes.
      */
     List<FleetVehicle> findByOwnerId(UUID ownerId);
+
+    /**
+     * Count vehicles by owner and status.
+     * Used for dashboard statistics.
+     */
+    long countByOwnerIdAndStatus(UUID ownerId, VehicleStatus status);
+
+    /**
+     * Count total vehicles by owner.
+     * Used for dashboard statistics.
+     */
+    long countByOwnerId(UUID ownerId);
 }

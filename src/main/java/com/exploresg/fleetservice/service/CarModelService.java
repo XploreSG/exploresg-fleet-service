@@ -207,6 +207,140 @@ public class CarModelService {
         }
 
         /**
+         * Retrieves comprehensive dashboard statistics for a fleet manager.
+         * Includes vehicle status summary, fleet statistics, and breakdown by model.
+         * * @param ownerId The ID of the fleet operator (fleet manager's userId).
+         * 
+         * @return FleetDashboardDto containing all dashboard metrics.
+         */
+        @Transactional(readOnly = true)
+        public com.exploresg.fleetservice.dto.FleetDashboardDto getFleetDashboard(UUID ownerId) {
+                // 1. Get all vehicles for this owner
+                List<FleetVehicle> allVehicles = fleetVehicleRepository.findByOwnerId(ownerId);
+
+                if (allVehicles.isEmpty()) {
+                        // Return empty dashboard if no vehicles
+                        return com.exploresg.fleetservice.dto.FleetDashboardDto.builder()
+                                        .vehicleStatus(com.exploresg.fleetservice.dto.VehicleStatusSummary.builder()
+                                                        .available(0)
+                                                        .underMaintenance(0)
+                                                        .booked(0)
+                                                        .total(0)
+                                                        .build())
+                                        .statistics(com.exploresg.fleetservice.dto.FleetStatistics.builder()
+                                                        .totalVehicles(0)
+                                                        .totalModels(0)
+                                                        .averageMileage(0.0)
+                                                        .totalPotentialDailyRevenue(BigDecimal.ZERO)
+                                                        .utilizationRate(0.0)
+                                                        .build())
+                                        .fleetByModel(List.of())
+                                        .build();
+                }
+
+                // 2. Calculate vehicle status counts
+                long availableCount = allVehicles.stream()
+                                .filter(v -> v.getStatus() == VehicleStatus.AVAILABLE)
+                                .count();
+                long bookedCount = allVehicles.stream()
+                                .filter(v -> v.getStatus() == VehicleStatus.BOOKED)
+                                .count();
+                long underMaintenanceCount = allVehicles.stream()
+                                .filter(v -> v.getStatus() == VehicleStatus.UNDER_MAINTENANCE)
+                                .count();
+
+                com.exploresg.fleetservice.dto.VehicleStatusSummary vehicleStatus = com.exploresg.fleetservice.dto.VehicleStatusSummary
+                                .builder()
+                                .available(availableCount)
+                                .booked(bookedCount)
+                                .underMaintenance(underMaintenanceCount)
+                                .total(allVehicles.size())
+                                .build();
+
+                // 3. Calculate overall fleet statistics
+                Double averageMileage = allVehicles.stream()
+                                .filter(v -> v.getMileageKm() != null)
+                                .mapToInt(FleetVehicle::getMileageKm)
+                                .average()
+                                .orElse(0.0);
+
+                BigDecimal totalPotentialRevenue = allVehicles.stream()
+                                .map(FleetVehicle::getDailyPrice)
+                                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+                double utilizationRate = allVehicles.size() > 0
+                                ? (bookedCount * 100.0 / allVehicles.size())
+                                : 0.0;
+
+                long uniqueModels = allVehicles.stream()
+                                .map(v -> v.getCarModel().getId())
+                                .distinct()
+                                .count();
+
+                com.exploresg.fleetservice.dto.FleetStatistics statistics = com.exploresg.fleetservice.dto.FleetStatistics
+                                .builder()
+                                .totalVehicles(allVehicles.size())
+                                .totalModels(uniqueModels)
+                                .averageMileage(averageMileage)
+                                .totalPotentialDailyRevenue(totalPotentialRevenue)
+                                .utilizationRate(utilizationRate)
+                                .build();
+
+                // 4. Group vehicles by model and calculate breakdowns
+                Map<CarModel, List<FleetVehicle>> vehiclesByModel = allVehicles.stream()
+                                .collect(Collectors.groupingBy(FleetVehicle::getCarModel));
+
+                List<com.exploresg.fleetservice.dto.FleetModelBreakdown> fleetByModel = vehiclesByModel.entrySet()
+                                .stream()
+                                .map(entry -> {
+                                        CarModel model = entry.getKey();
+                                        List<FleetVehicle> vehicles = entry.getValue();
+
+                                        long modelAvailableCount = vehicles.stream()
+                                                        .filter(v -> v.getStatus() == VehicleStatus.AVAILABLE)
+                                                        .count();
+                                        long modelBookedCount = vehicles.stream()
+                                                        .filter(v -> v.getStatus() == VehicleStatus.BOOKED)
+                                                        .count();
+                                        long modelMaintenanceCount = vehicles.stream()
+                                                        .filter(v -> v.getStatus() == VehicleStatus.UNDER_MAINTENANCE)
+                                                        .count();
+
+                                        Double modelAvgMileage = vehicles.stream()
+                                                        .filter(v -> v.getMileageKm() != null)
+                                                        .mapToInt(FleetVehicle::getMileageKm)
+                                                        .average()
+                                                        .orElse(0.0);
+
+                                        BigDecimal modelAvgPrice = vehicles.stream()
+                                                        .map(FleetVehicle::getDailyPrice)
+                                                        .reduce(BigDecimal.ZERO, BigDecimal::add)
+                                                        .divide(BigDecimal.valueOf(vehicles.size()), 2,
+                                                                        java.math.RoundingMode.HALF_UP);
+
+                                        return com.exploresg.fleetservice.dto.FleetModelBreakdown.builder()
+                                                        .manufacturer(model.getManufacturer())
+                                                        .model(model.getModel())
+                                                        .imageUrl(model.getImageUrl())
+                                                        .totalCount(vehicles.size())
+                                                        .availableCount(modelAvailableCount)
+                                                        .bookedCount(modelBookedCount)
+                                                        .underMaintenanceCount(modelMaintenanceCount)
+                                                        .averageMileage(modelAvgMileage)
+                                                        .averageDailyPrice(modelAvgPrice)
+                                                        .build();
+                                })
+                                .collect(Collectors.toList());
+
+                // 5. Build and return the complete dashboard
+                return com.exploresg.fleetservice.dto.FleetDashboardDto.builder()
+                                .vehicleStatus(vehicleStatus)
+                                .statistics(statistics)
+                                .fleetByModel(fleetByModel)
+                                .build();
+        }
+
+        /**
          * Utility method to map a CarModel entity to a CarModelResponseDto.
          */
         private CarModelResponseDto mapToCarModelResponseDto(CarModel carModel) {
