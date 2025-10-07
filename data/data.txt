@@ -1,5 +1,3 @@
-
--- ==============================================================================
 -- 1. SCHEMA MIGRATION (DDL)
 -- Safely adds the public_id column (UUID, unique, indexed) to car_models.
 -- This DDL is designed for PostgreSQL, based on your docker-compose file.
@@ -1466,7 +1464,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         1,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         155.98,
         'SGP2037',
         'UNDER_MAINTENANCE',
@@ -1495,7 +1493,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         2,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         111.42,
         'SGP2038',
         'AVAILABLE',
@@ -1553,7 +1551,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         4,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         154.46,
         'SGP2040',
         'AVAILABLE',
@@ -1640,7 +1638,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         7,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         188.72,
         'SGP2043',
         'AVAILABLE',
@@ -1669,7 +1667,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         8,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         204.63,
         'SGP2044',
         'AVAILABLE',
@@ -1785,7 +1783,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         12,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         87.73,
         'SGP2048',
         'UNDER_MAINTENANCE',
@@ -1814,7 +1812,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         13,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         87.9,
         'SGP2049',
         'AVAILABLE',
@@ -1843,7 +1841,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         14,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         98.42,
         'SGP2050',
         'AVAILABLE',
@@ -1930,7 +1928,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         17,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         114.71,
         'SGP2053',
         'AVAILABLE',
@@ -1988,7 +1986,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         1,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         155.98,
         'SGP2055',
         'UNDER_MAINTENANCE',
@@ -2017,7 +2015,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         2,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         111.42,
         'SGP2056',
         'AVAILABLE',
@@ -2075,7 +2073,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         4,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         154.46,
         'SGP2058',
         'AVAILABLE',
@@ -2162,7 +2160,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         7,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         188.72,
         'SGP2061',
         'AVAILABLE',
@@ -2191,7 +2189,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         8,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         204.63,
         'SGP2062',
         'AVAILABLE',
@@ -2307,7 +2305,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         12,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         87.73,
         'SGP2066',
         'UNDER_MAINTENANCE',
@@ -2336,7 +2334,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         13,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         87.9,
         'SGP2067',
         'AVAILABLE',
@@ -2365,7 +2363,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         14,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         98.42,
         'SGP2068',
         'AVAILABLE',
@@ -2452,7 +2450,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         17,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         114.71,
         'SGP2071',
         'AVAILABLE',
@@ -2510,7 +2508,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         1,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         155.98,
         'SGP2073',
         'UNDER_MAINTENANCE',
@@ -2539,7 +2537,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         2,
-        103,
+        'ddb04738-d252-4dcb-8d69-ecab0aee8072',
         111.42,
         'SGP2074',
         'AVAILABLE',
@@ -2568,7 +2566,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         3,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         100.17,
         'SGP2075',
         'AVAILABLE',
@@ -2626,7 +2624,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         5,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         139.89,
         'SGP2077',
         'BOOKED',
@@ -2655,7 +2653,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         6,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         158.11,
         'SGP2078',
         'AVAILABLE',
@@ -2742,7 +2740,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         9,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         207.76,
         'SGP2081',
         'AVAILABLE',
@@ -2771,7 +2769,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         10,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         233.54,
         'SGP2082',
         'AVAILABLE',
@@ -2800,7 +2798,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         11,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         96.67,
         'SGP2083',
         'BOOKED',
@@ -2916,7 +2914,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         15,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         100.82,
         'SGP2087',
         'AVAILABLE',
@@ -2945,7 +2943,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         16,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         94.67,
         'SGP2088',
         'BOOKED',
@@ -3003,7 +3001,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         18,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         115.14,
         'SGP2090',
         'AVAILABLE',
@@ -3090,7 +3088,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         3,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         100.17,
         'SGP2093',
         'AVAILABLE',
@@ -3148,7 +3146,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         5,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         139.89,
         'SGP2095',
         'BOOKED',
@@ -3177,7 +3175,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         6,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         158.11,
         'SGP2096',
         'AVAILABLE',
@@ -3264,7 +3262,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         9,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         207.76,
         'SGP2099',
         'AVAILABLE',
@@ -3293,7 +3291,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         10,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         233.54,
         'SGP2100',
         'AVAILABLE',
@@ -3322,7 +3320,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         11,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         96.67,
         'SGP2101',
         'BOOKED',
@@ -3438,7 +3436,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         15,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         100.82,
         'SGP2105',
         'AVAILABLE',
@@ -3467,7 +3465,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         16,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         94.67,
         'SGP2106',
         'BOOKED',
@@ -3525,7 +3523,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         18,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         115.14,
         'SGP2108',
         'AVAILABLE',
@@ -3612,7 +3610,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         3,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         100.17,
         'SGP2111',
         'AVAILABLE',
@@ -3670,7 +3668,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         5,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         139.89,
         'SGP2113',
         'BOOKED',
@@ -3699,7 +3697,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         6,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         158.11,
         'SGP2114',
         'AVAILABLE',
@@ -3786,7 +3784,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         9,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         207.76,
         'SGP2117',
         'AVAILABLE',
@@ -3815,7 +3813,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         10,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         233.54,
         'SGP2118',
         'AVAILABLE',
@@ -3844,7 +3842,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         11,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         96.67,
         'SGP2119',
         'BOOKED',
@@ -3960,7 +3958,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         15,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         100.82,
         'SGP2123',
         'AVAILABLE',
@@ -3989,7 +3987,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         16,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         94.67,
         'SGP2124',
         'BOOKED',
@@ -4047,7 +4045,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         18,
-        104,
+        '1c6a4a97-0608-41d4-b20d-e6cb023af975',
         115.14,
         'SGP2126',
         'AVAILABLE',
@@ -4076,7 +4074,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         1,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         155.98,
         'SGP2127',
         'UNDER_MAINTENANCE',
@@ -4105,7 +4103,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         2,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         111.42,
         'SGP2128',
         'AVAILABLE',
@@ -4163,7 +4161,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         4,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         154.46,
         'SGP2130',
         'AVAILABLE',
@@ -4250,7 +4248,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         7,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         188.72,
         'SGP2133',
         'AVAILABLE',
@@ -4279,7 +4277,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         8,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         204.63,
         'SGP2134',
         'AVAILABLE',
@@ -4395,7 +4393,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         12,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         87.73,
         'SGP2138',
         'UNDER_MAINTENANCE',
@@ -4424,7 +4422,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         13,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         87.9,
         'SGP2139',
         'AVAILABLE',
@@ -4453,7 +4451,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         14,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         98.42,
         'SGP2140',
         'AVAILABLE',
@@ -4540,7 +4538,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         17,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         114.71,
         'SGP2143',
         'AVAILABLE',
@@ -4598,7 +4596,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         1,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         155.98,
         'SGP2145',
         'UNDER_MAINTENANCE',
@@ -4627,7 +4625,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         2,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         111.42,
         'SGP2146',
         'AVAILABLE',
@@ -4685,7 +4683,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         4,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         154.46,
         'SGP2148',
         'AVAILABLE',
@@ -4772,7 +4770,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         7,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         188.72,
         'SGP2151',
         'AVAILABLE',
@@ -4801,7 +4799,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         8,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         204.63,
         'SGP2152',
         'AVAILABLE',
@@ -4917,7 +4915,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         12,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         87.73,
         'SGP2156',
         'UNDER_MAINTENANCE',
@@ -4946,7 +4944,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         13,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         87.9,
         'SGP2157',
         'AVAILABLE',
@@ -4975,7 +4973,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         14,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         98.42,
         'SGP2158',
         'AVAILABLE',
@@ -5062,7 +5060,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         17,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         114.71,
         'SGP2161',
         'AVAILABLE',
@@ -5120,7 +5118,7 @@ INSERT INTO fleet_vehicles (
         vehicle_attachment1, vehicle_attachment2, created_at, last_updated_at
     ) VALUES (
         1,
-        106,
+        'ca9fd637-1c01-4ff8-9245-a0d41c910475',
         155.98,
         'SGP2163',
         'UNDER_MAINTENANCE',
