@@ -3,6 +3,8 @@ package com.exploresg.fleetservice.repository;
 import com.exploresg.fleetservice.model.CarModel;
 import com.exploresg.fleetservice.model.FleetVehicle;
 import com.exploresg.fleetservice.model.VehicleStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import java.util.UUID; // <-- NEW IMPORT
@@ -50,6 +52,17 @@ public interface FleetVehicleRepository extends JpaRepository<FleetVehicle, UUID
      * Useful for fleet management and testing purposes.
      */
     List<FleetVehicle> findByOwnerId(UUID ownerId);
+
+    /**
+     * Retrieves ALL physical vehicles for a specific operator with pagination
+     * support.
+     * Useful for fleet management and testing purposes.
+     * 
+     * @param ownerId  The owner/operator UUID
+     * @param pageable Pagination information
+     * @return Page of FleetVehicle entities
+     */
+    Page<FleetVehicle> findByOwnerId(UUID ownerId, Pageable pageable);
 
     /**
      * Count vehicles by owner and status.

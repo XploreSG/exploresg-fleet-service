@@ -9,6 +9,8 @@ import com.exploresg.fleetservice.model.VehicleStatus;
 import com.exploresg.fleetservice.repository.CarModelRepository;
 import com.exploresg.fleetservice.repository.FleetVehicleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -207,6 +209,21 @@ public class CarModelService {
         }
 
         /**
+         * Retrieves all fleet vehicles owned by a specific operator with pagination
+         * support.
+         * Returns ALL vehicles regardless of status - useful for fleet management and
+         * testing.
+         * 
+         * @param ownerId  The ID of the fleet operator (fleet manager's userId).
+         * @param pageable Pagination information (page number, size, sort).
+         * @return A Page of FleetVehicle entities owned by the operator.
+         */
+        @Transactional(readOnly = true)
+        public Page<FleetVehicle> getAllFleetVehiclesByOwnerPaginated(UUID ownerId, Pageable pageable) {
+                return fleetVehicleRepository.findByOwnerId(ownerId, pageable);
+        }
+
+        /**
          * Retrieves comprehensive dashboard statistics for a fleet manager.
          * Includes vehicle status summary, fleet statistics, and breakdown by model.
          * * @param ownerId The ID of the fleet operator (fleet manager's userId).
@@ -227,15 +244,17 @@ public class CarModelService {
                                                         .booked(0)
                                                         .total(0)
                                                         .build())
-                                        .serviceReminders(com.exploresg.fleetservice.dto.ServiceRemindersSummary.builder()
-                                                        .overdue(0)
-                                                        .dueSoon(0)
-                                                        .build())
+                                        .serviceReminders(
+                                                        com.exploresg.fleetservice.dto.ServiceRemindersSummary.builder()
+                                                                        .overdue(0)
+                                                                        .dueSoon(0)
+                                                                        .build())
                                         .workOrders(com.exploresg.fleetservice.dto.WorkOrdersSummary.builder()
                                                         .active(0)
                                                         .pending(0)
                                                         .build())
-                                        .vehicleAssignments(com.exploresg.fleetservice.dto.VehicleAssignmentsSummary.builder()
+                                        .vehicleAssignments(com.exploresg.fleetservice.dto.VehicleAssignmentsSummary
+                                                        .builder()
                                                         .assigned(0)
                                                         .unassigned(0)
                                                         .build())
@@ -274,13 +293,13 @@ public class CarModelService {
                 // 3. Calculate service reminders (based on maintenance schedule)
                 // For now, using simple logic: vehicles with high mileage need service
                 java.time.LocalDateTime now = java.time.LocalDateTime.now();
-                
+
                 long overdueCount = allVehicles.stream()
-                                .filter(v -> v.getExpectedReturnDate() != null 
-                                        && v.getExpectedReturnDate().isBefore(now)
-                                        && v.getStatus() == VehicleStatus.UNDER_MAINTENANCE)
+                                .filter(v -> v.getExpectedReturnDate() != null
+                                                && v.getExpectedReturnDate().isBefore(now)
+                                                && v.getStatus() == VehicleStatus.UNDER_MAINTENANCE)
                                 .count();
-                
+
                 long dueSoonCount = allVehicles.stream()
                                 .filter(v -> v.getMileageKm() != null && v.getMileageKm() > 50000)
                                 .filter(v -> v.getStatus() != VehicleStatus.UNDER_MAINTENANCE)
@@ -295,9 +314,9 @@ public class CarModelService {
                 // 4. Calculate work orders
                 long activeWorkOrders = underMaintenanceCount; // Vehicles currently in maintenance
                 long pendingWorkOrders = allVehicles.stream()
-                                .filter(v -> v.getExpectedReturnDate() != null 
-                                        && v.getExpectedReturnDate().isAfter(now)
-                                        && v.getStatus() != VehicleStatus.UNDER_MAINTENANCE)
+                                .filter(v -> v.getExpectedReturnDate() != null
+                                                && v.getExpectedReturnDate().isAfter(now)
+                                                && v.getStatus() != VehicleStatus.UNDER_MAINTENANCE)
                                 .count();
 
                 com.exploresg.fleetservice.dto.WorkOrdersSummary workOrders = com.exploresg.fleetservice.dto.WorkOrdersSummary
@@ -309,8 +328,8 @@ public class CarModelService {
                 // 5. Calculate vehicle assignments
                 com.exploresg.fleetservice.dto.VehicleAssignmentsSummary vehicleAssignments = com.exploresg.fleetservice.dto.VehicleAssignmentsSummary
                                 .builder()
-                                .assigned(bookedCount)      // Currently booked/rented
-                                .unassigned(availableCount)  // Available for rent
+                                .assigned(bookedCount) // Currently booked/rented
+                                .unassigned(availableCount) // Available for rent
                                 .build();
 
                 // 6. Calculate overall fleet statistics

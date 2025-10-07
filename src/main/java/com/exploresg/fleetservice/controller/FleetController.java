@@ -7,6 +7,10 @@ import com.exploresg.fleetservice.model.CarModel;
 import com.exploresg.fleetservice.service.CarModelService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -144,6 +148,51 @@ public class FleetController {
         }
 
         return ResponseEntity.ok(vehicles);
+    }
+
+    /**
+     * Fleet Manager endpoint to view ALL individual vehicles in their fleet with
+     * pagination support.
+     * Returns detailed information about each physical vehicle owned by the fleet
+     * manager with pagination.
+     * GET /api/v1/fleet/operators/fleet/all/paginated
+     * 
+     * @param jwt           The authenticated user's JWT token containing userId.
+     * @param page          The page number (0-indexed, default: 0).
+     * @param size          The page size (default: 10).
+     * @param sortBy        The field to sort by (default: "licensePlate").
+     * @param sortDirection The sort direction - "asc" or "desc" (default: "asc").
+     * @return A paginated response of fleet vehicles owned by the fleet manager.
+     */
+    @GetMapping("/operators/fleet/all/paginated")
+    @PreAuthorize(SecurityConstants.HAS_ROLE_FLEET_MANAGER)
+    public ResponseEntity<Page<com.exploresg.fleetservice.model.FleetVehicle>> getAllMyFleetVehiclesPaginated(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "licensePlate") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDirection) {
+        // Extract user ID from JWT token (userId is the ownerId in the fleet table)
+        String userIdStr = jwt.getClaimAsString("userId");
+
+        if (userIdStr == null || userIdStr.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        UUID userId = UUID.fromString(userIdStr);
+
+        // Create sort object based on direction
+        Sort sort = sortDirection.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        // Create pageable object
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<com.exploresg.fleetservice.model.FleetVehicle> vehiclesPage = carModelService
+                .getAllFleetVehiclesByOwnerPaginated(userId, pageable);
+
+        return ResponseEntity.ok(vehiclesPage);
     }
 
     /**
