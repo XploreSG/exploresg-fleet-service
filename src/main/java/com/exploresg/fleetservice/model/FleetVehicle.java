@@ -31,8 +31,8 @@ public class FleetVehicle {
     @JoinColumn(name = "car_model_id", nullable = false)
     private CarModel carModel; // Foreign Key to CarModel (references Long ID internally)
 
-    @Column(nullable = false)
-    private Long ownerId; // The user ID of the FLEET_MANAGER
+    @Column(nullable = false, columnDefinition = "UUID")
+    private UUID ownerId; // The user ID of the FLEET_MANAGER
 
     @Column(nullable = false)
     private BigDecimal dailyPrice; // The owner's specific price for this instance

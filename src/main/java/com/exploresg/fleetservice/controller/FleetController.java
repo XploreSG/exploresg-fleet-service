@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/fleet")
@@ -57,7 +58,7 @@ public class FleetController {
      * @return A list of available car models aggregated for the given operator.
      */
     @GetMapping("/operators/{operatorId}/models")
-    public ResponseEntity<List<OperatorCarModelDto>> getAvailableModelsByOperator(@PathVariable Long operatorId) {
+    public ResponseEntity<List<OperatorCarModelDto>> getAvailableModelsByOperator(@PathVariable UUID operatorId) {
         List<OperatorCarModelDto> models = carModelService.getAvailableModelsByOperator(operatorId);
 
         if (models.isEmpty()) {

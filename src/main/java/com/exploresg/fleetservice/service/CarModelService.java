@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -130,7 +131,7 @@ public class CarModelService {
          * @return A list of available car models aggregated for the given operator.
          */
         @Transactional(readOnly = true)
-        public List<OperatorCarModelDto> getAvailableModelsByOperator(Long operatorId) {
+        public List<OperatorCarModelDto> getAvailableModelsByOperator(UUID operatorId) {
                 // 1. Fetch all available physical vehicles belonging to the specific operator
                 List<FleetVehicle> availableVehicles = fleetVehicleRepository
                                 .findByOwnerIdAndStatus(operatorId, VehicleStatus.AVAILABLE);
