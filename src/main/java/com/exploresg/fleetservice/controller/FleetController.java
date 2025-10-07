@@ -85,25 +85,27 @@ public class FleetController {
 
     /**
      * Fleet Manager endpoint to view their own operator's car models.
-     * Extracts the operator ID from the JWT token and returns models under their
+     * Extracts the user ID from the JWT token and returns models under their
      * ownership.
+     * The userId from JWT is used as the ownerId to filter vehicles in the fleet
+     * table.
      * GET /api/v1/fleet/operators/fleet
      * 
-     * @param jwt The authenticated user's JWT token containing operator ID.
+     * @param jwt The authenticated user's JWT token containing userId.
      * @return A list of car models under the fleet manager's ownership.
      */
     @GetMapping("/operators/fleet")
     @PreAuthorize(SecurityConstants.HAS_ROLE_FLEET_MANAGER)
     public ResponseEntity<List<OperatorCarModelDto>> getMyFleetModels(@AuthenticationPrincipal Jwt jwt) {
-        // Extract operator ID from JWT token
-        String operatorIdStr = jwt.getClaimAsString("operatorId");
+        // Extract user ID from JWT token (userId is the ownerId in the fleet table)
+        String userIdStr = jwt.getClaimAsString("userId");
 
-        if (operatorIdStr == null || operatorIdStr.isEmpty()) {
+        if (userIdStr == null || userIdStr.isEmpty()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        UUID operatorId = UUID.fromString(operatorIdStr);
-        List<OperatorCarModelDto> models = carModelService.getAvailableModelsByOperator(operatorId);
+        UUID userId = UUID.fromString(userIdStr);
+        List<OperatorCarModelDto> models = carModelService.getAvailableModelsByOperator(userId);
 
         if (models.isEmpty()) {
             return ResponseEntity.noContent().build();
