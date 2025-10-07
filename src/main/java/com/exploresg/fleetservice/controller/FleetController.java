@@ -1,5 +1,6 @@
 package com.exploresg.fleetservice.controller;
 
+import com.exploresg.fleetservice.constants.SecurityConstants;
 import com.exploresg.fleetservice.dto.CreateCarModelRequest;
 import com.exploresg.fleetservice.dto.OperatorCarModelDto;
 import com.exploresg.fleetservice.model.CarModel;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +32,7 @@ public class FleetController {
      * @return The created CarModel.
      */
     @PostMapping("/models")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize(SecurityConstants.HAS_ROLE_ADMIN)
     public ResponseEntity<CarModel> createCarModel(@Valid @RequestBody CreateCarModelRequest request) {
         CarModel createdCarModel = carModelService.createCarModel(request);
         return new ResponseEntity<>(createdCarModel, HttpStatus.CREATED);
@@ -74,9 +77,38 @@ public class FleetController {
      * * @return A list of all car models in the system.
      */
     @GetMapping("/models/all")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize(SecurityConstants.HAS_ROLE_ADMIN)
     public ResponseEntity<List<CarModel>> getAllCarModels() {
         List<CarModel> carModels = carModelService.getAllCarModels();
         return ResponseEntity.ok(carModels);
+    }
+
+    /**
+     * Fleet Manager endpoint to view their own operator's car models.
+     * Extracts the operator ID from the JWT token and returns models under their
+     * ownership.
+     * GET /api/v1/fleet/operators/fleet
+     * 
+     * @param jwt The authenticated user's JWT token containing operator ID.
+     * @return A list of car models under the fleet manager's ownership.
+     */
+    @GetMapping("/operators/fleet")
+    @PreAuthorize(SecurityConstants.HAS_ROLE_FLEET_MANAGER)
+    public ResponseEntity<List<OperatorCarModelDto>> getMyFleetModels(@AuthenticationPrincipal Jwt jwt) {
+        // Extract operator ID from JWT token
+        String operatorIdStr = jwt.getClaimAsString("operatorId");
+
+        if (operatorIdStr == null || operatorIdStr.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        UUID operatorId = UUID.fromString(operatorIdStr);
+        List<OperatorCarModelDto> models = carModelService.getAvailableModelsByOperator(operatorId);
+
+        if (models.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(models);
     }
 }
