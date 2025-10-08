@@ -152,9 +152,9 @@ public class FleetController {
 
     /**
      * Fleet Manager endpoint to view ALL individual vehicles in their fleet with
-     * pagination support.
+     * pagination and search support.
      * Returns detailed information about each physical vehicle owned by the fleet
-     * manager with pagination.
+     * manager with pagination and optional filtering.
      * GET /api/v1/fleet/operators/fleet/all/paginated
      * 
      * @param jwt           The authenticated user's JWT token containing userId.
@@ -162,7 +162,13 @@ public class FleetController {
      * @param size          The page size (default: 10).
      * @param sortBy        The field to sort by (default: "licensePlate").
      * @param sortDirection The sort direction - "asc" or "desc" (default: "asc").
-     * @return A paginated response of fleet vehicles owned by the fleet manager.
+     * @param licensePlate  Optional: Filter by license plate (partial match).
+     * @param status        Optional: Filter by vehicle status (AVAILABLE, BOOKED,
+     *                      UNDER_MAINTENANCE).
+     * @param model         Optional: Filter by car model name (partial match).
+     * @param manufacturer  Optional: Filter by manufacturer name (partial match).
+     * @param location      Optional: Filter by current location (partial match).
+     * @return A paginated response of fleet vehicles matching the search criteria.
      */
     @GetMapping("/operators/fleet/all/paginated")
     @PreAuthorize(SecurityConstants.HAS_ROLE_FLEET_MANAGER)
@@ -171,7 +177,12 @@ public class FleetController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "licensePlate") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDirection) {
+            @RequestParam(defaultValue = "asc") String sortDirection,
+            @RequestParam(required = false) String licensePlate,
+            @RequestParam(required = false) com.exploresg.fleetservice.model.VehicleStatus status,
+            @RequestParam(required = false) String model,
+            @RequestParam(required = false) String manufacturer,
+            @RequestParam(required = false) String location) {
         // Extract user ID from JWT token (userId is the ownerId in the fleet table)
         String userIdStr = jwt.getClaimAsString("userId");
 
@@ -189,8 +200,18 @@ public class FleetController {
         // Create pageable object
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<com.exploresg.fleetservice.model.FleetVehicle> vehiclesPage = carModelService
-                .getAllFleetVehiclesByOwnerPaginated(userId, pageable);
+        // Use search method if any search parameters are provided, otherwise use the
+        // basic method
+        Page<com.exploresg.fleetservice.model.FleetVehicle> vehiclesPage;
+
+        if (licensePlate != null || status != null || model != null || manufacturer != null || location != null) {
+            // Search with filters
+            vehiclesPage = carModelService.searchFleetVehicles(
+                    userId, licensePlate, status, model, manufacturer, location, pageable);
+        } else {
+            // No filters - use basic pagination
+            vehiclesPage = carModelService.getAllFleetVehiclesByOwnerPaginated(userId, pageable);
+        }
 
         return ResponseEntity.ok(vehiclesPage);
     }

@@ -10,7 +10,9 @@ import com.exploresg.fleetservice.repository.CarModelRepository;
 import com.exploresg.fleetservice.repository.FleetVehicleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -221,6 +223,93 @@ public class CarModelService {
         @Transactional(readOnly = true)
         public Page<FleetVehicle> getAllFleetVehiclesByOwnerPaginated(UUID ownerId, Pageable pageable) {
                 return fleetVehicleRepository.findByOwnerId(ownerId, pageable);
+        }
+
+        /**
+         * Search fleet vehicles with optional filters and pagination support.
+         * All search parameters are optional - if null/empty, they are ignored.
+         * 
+         * @param ownerId      The ID of the fleet operator (fleet manager's userId).
+         * @param licensePlate Optional license plate search term (partial match).
+         * @param status       Optional vehicle status filter.
+         * @param model        Optional car model name search term (partial match).
+         * @param manufacturer Optional manufacturer name search term (partial match).
+         * @param location     Optional location search term (partial match).
+         * @param pageable     Pagination information (page number, size, sort).
+         * @return A Page of FleetVehicle entities matching the search criteria.
+         */
+        @Transactional(readOnly = true)
+        public Page<FleetVehicle> searchFleetVehicles(
+                        UUID ownerId,
+                        String licensePlate,
+                        VehicleStatus status,
+                        String model,
+                        String manufacturer,
+                        String location,
+                        Pageable pageable) {
+
+                // Convert empty strings to null for cleaner query handling
+                licensePlate = (licensePlate != null && licensePlate.trim().isEmpty()) ? null : licensePlate;
+                model = (model != null && model.trim().isEmpty()) ? null : model;
+                manufacturer = (manufacturer != null && manufacturer.trim().isEmpty()) ? null : manufacturer;
+                location = (location != null && location.trim().isEmpty()) ? null : location;
+
+                // Convert status enum to string for native query
+                String statusStr = (status != null) ? status.name() : null;
+
+                // Convert Java property names to database column names for native SQL sorting
+                Pageable transformedPageable = transformPageableForNativeQuery(pageable);
+
+                return fleetVehicleRepository.searchFleetVehicles(
+                                ownerId,
+                                licensePlate,
+                                statusStr,
+                                model,
+                                manufacturer,
+                                location,
+                                transformedPageable);
+        }
+
+        /**
+         * Transforms a Pageable object to use database column names instead of Java
+         * property names.
+         * This is necessary for native SQL queries where Spring Data JPA doesn't
+         * automatically
+         * convert property names to column names.
+         * 
+         * @param pageable The original Pageable with Java property names
+         * @return A new Pageable with database column names
+         */
+        private Pageable transformPageableForNativeQuery(Pageable pageable) {
+                if (pageable.getSort().isUnsorted()) {
+                        return pageable;
+                }
+
+                // Map Java property names to database column names
+                Sort transformedSort = Sort.by(
+                                pageable.getSort().stream()
+                                                .map(order -> {
+                                                        String property = order.getProperty();
+                                                        // Convert camelCase to snake_case for database columns
+                                                        String columnName = convertToSnakeCase(property);
+                                                        return order.isAscending()
+                                                                        ? Sort.Order.asc(columnName)
+                                                                        : Sort.Order.desc(columnName);
+                                                })
+                                                .toList());
+
+                return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), transformedSort);
+        }
+
+        /**
+         * Converts camelCase property name to snake_case column name.
+         * Examples: licensePlate -> license_plate, carModel -> car_model
+         * 
+         * @param camelCase The Java property name in camelCase
+         * @return The database column name in snake_case
+         */
+        private String convertToSnakeCase(String camelCase) {
+                return camelCase.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
         }
 
         /**

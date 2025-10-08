@@ -65,6 +65,47 @@ public interface FleetVehicleRepository extends JpaRepository<FleetVehicle, UUID
     Page<FleetVehicle> findByOwnerId(UUID ownerId, Pageable pageable);
 
     /**
+     * Search fleet vehicles with optional filters and pagination.
+     * Uses native SQL query to avoid JPQL parameter binding issues with PostgreSQL.
+     * All search parameters are optional (use null to skip filtering).
+     * 
+     * @param ownerId      The owner/operator UUID (required)
+     * @param licensePlate License plate to search (partial match)
+     * @param status       Vehicle status to filter by
+     * @param model        Car model name to search (partial match)
+     * @param manufacturer Manufacturer name to search (partial match)
+     * @param location     Current location to search (partial match)
+     * @param pageable     Pagination information
+     * @return Page of FleetVehicle entities matching the search criteria
+     */
+    @Query(value = "SELECT f.* FROM fleet_vehicles f " +
+            "JOIN car_models cm ON cm.id = f.car_model_id " +
+            "WHERE f.owner_id = :ownerId " +
+            "AND (:licensePlate IS NULL OR LOWER(f.license_plate) LIKE LOWER(CONCAT('%', :licensePlate, '%'))) " +
+            "AND (:status IS NULL OR f.status = CAST(:status AS TEXT)) " +
+            "AND (:model IS NULL OR LOWER(cm.model) LIKE LOWER(CONCAT('%', :model, '%'))) " +
+            "AND (:manufacturer IS NULL OR LOWER(cm.manufacturer) LIKE LOWER(CONCAT('%', :manufacturer, '%'))) " +
+            "AND (:location IS NULL OR LOWER(f.current_location) LIKE LOWER(CONCAT('%', :location, '%')))", countQuery = "SELECT COUNT(*) FROM fleet_vehicles f "
+                    +
+                    "JOIN car_models cm ON cm.id = f.car_model_id " +
+                    "WHERE f.owner_id = :ownerId " +
+                    "AND (:licensePlate IS NULL OR LOWER(f.license_plate) LIKE LOWER(CONCAT('%', :licensePlate, '%'))) "
+                    +
+                    "AND (:status IS NULL OR f.status = CAST(:status AS TEXT)) " +
+                    "AND (:model IS NULL OR LOWER(cm.model) LIKE LOWER(CONCAT('%', :model, '%'))) " +
+                    "AND (:manufacturer IS NULL OR LOWER(cm.manufacturer) LIKE LOWER(CONCAT('%', :manufacturer, '%'))) "
+                    +
+                    "AND (:location IS NULL OR LOWER(f.current_location) LIKE LOWER(CONCAT('%', :location, '%')))", nativeQuery = true)
+    Page<FleetVehicle> searchFleetVehicles(
+            UUID ownerId,
+            String licensePlate,
+            String status,
+            String model,
+            String manufacturer,
+            String location,
+            Pageable pageable);
+
+    /**
      * Count vehicles by owner and status.
      * Used for dashboard statistics.
      */
