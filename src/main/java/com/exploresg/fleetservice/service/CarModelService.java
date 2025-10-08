@@ -559,4 +559,33 @@ public class CarModelService {
                 fleetVehicleRepository.save(vehicle);
                 return true;
         }
+
+        /**
+         * Customer: Set vehicle status to BOOKED and return updated vehicle.
+         */
+        @Transactional
+        public FleetVehicle updateFleetVehicleStatusToBookedWithDetails(UUID id) {
+                java.util.Optional<FleetVehicle> opt = fleetVehicleRepository.findById(id);
+                if (opt.isEmpty())
+                        return null;
+                FleetVehicle vehicle = opt.get();
+                vehicle.setStatus(VehicleStatus.BOOKED);
+                fleetVehicleRepository.save(vehicle);
+                return vehicle;
+        }
+
+        /**
+         * Fleet Manager: Set vehicle status to any valid value and return updated
+         * vehicle.
+         */
+        @Transactional
+        public FleetVehicle updateFleetVehicleStatusWithDetails(UUID id, VehicleStatus status) {
+                java.util.Optional<FleetVehicle> opt = fleetVehicleRepository.findById(id);
+                if (opt.isEmpty())
+                        return null;
+                FleetVehicle vehicle = opt.get();
+                vehicle.setStatus(status);
+                fleetVehicleRepository.save(vehicle);
+                return vehicle;
+        }
 }

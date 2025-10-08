@@ -250,8 +250,8 @@ public class FleetController {
      */
     @PatchMapping("/vehicles/{id}/book")
     public ResponseEntity<?> bookFleetVehicle(@PathVariable UUID id) {
-        boolean updated = carModelService.updateFleetVehicleStatusToBooked(id);
-        return updated ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+        var vehicle = carModelService.updateFleetVehicleStatusToBookedWithDetails(id);
+        return vehicle != null ? ResponseEntity.ok(vehicle) : ResponseEntity.notFound().build();
     }
 
     /**
@@ -272,7 +272,7 @@ public class FleetController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Invalid status");
         }
-        boolean updated = carModelService.updateFleetVehicleStatus(id, status);
-        return updated ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+        var vehicle = carModelService.updateFleetVehicleStatusWithDetails(id, status);
+        return vehicle != null ? ResponseEntity.ok(vehicle) : ResponseEntity.notFound().build();
     }
 }
