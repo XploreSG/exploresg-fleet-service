@@ -531,4 +531,32 @@ public class CarModelService {
                                 .modelYear(carModel.getModelYear())
                                 .build();
         }
+
+        /**
+         * Customer: Set vehicle status to BOOKED.
+         */
+        @Transactional
+        public boolean updateFleetVehicleStatusToBooked(UUID id) {
+                java.util.Optional<FleetVehicle> opt = fleetVehicleRepository.findById(id);
+                if (opt.isEmpty())
+                        return false;
+                FleetVehicle vehicle = opt.get();
+                vehicle.setStatus(VehicleStatus.BOOKED);
+                fleetVehicleRepository.save(vehicle);
+                return true;
+        }
+
+        /**
+         * Fleet Manager: Set vehicle status to any valid value.
+         */
+        @Transactional
+        public boolean updateFleetVehicleStatus(UUID id, VehicleStatus status) {
+                java.util.Optional<FleetVehicle> opt = fleetVehicleRepository.findById(id);
+                if (opt.isEmpty())
+                        return false;
+                FleetVehicle vehicle = opt.get();
+                vehicle.setStatus(status);
+                fleetVehicleRepository.save(vehicle);
+                return true;
+        }
 }

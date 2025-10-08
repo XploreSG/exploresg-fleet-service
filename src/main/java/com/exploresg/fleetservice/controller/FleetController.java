@@ -243,4 +243,36 @@ public class FleetController {
 
         return ResponseEntity.ok(dashboard);
     }
+
+    /**
+     * Customer endpoint: Book a car (set status to BOOKED).
+     * PATCH /api/v1/fleet/vehicles/{id}/book
+     */
+    @PatchMapping("/vehicles/{id}/book")
+    public ResponseEntity<?> bookFleetVehicle(@PathVariable UUID id) {
+        boolean updated = carModelService.updateFleetVehicleStatusToBooked(id);
+        return updated ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
+
+    /**
+     * Fleet Manager endpoint: Update car status to any valid value.
+     * PATCH /api/v1/fleet/operators/fleet/{id}/status
+     */
+    @PatchMapping("/operators/fleet/{id}/status")
+    @PreAuthorize(SecurityConstants.HAS_ROLE_FLEET_MANAGER)
+    public ResponseEntity<?> updateFleetVehicleStatus(
+            @PathVariable UUID id,
+            @RequestBody java.util.Map<String, String> body) {
+        String statusStr = body.get("status");
+        if (statusStr == null)
+            return ResponseEntity.badRequest().body("Missing status");
+        com.exploresg.fleetservice.model.VehicleStatus status;
+        try {
+            status = com.exploresg.fleetservice.model.VehicleStatus.valueOf(statusStr);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Invalid status");
+        }
+        boolean updated = carModelService.updateFleetVehicleStatus(id, status);
+        return updated ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
 }
