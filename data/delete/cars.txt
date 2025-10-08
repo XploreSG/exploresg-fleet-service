@@ -1,0 +1,363 @@
+
+-- ==============================================================================
+-- 1. SCHEMA MIGRATION (DDL)
+-- Safely adds the public_id column (UUID, unique, indexed) to car_models.
+-- This DDL is designed for PostgreSQL, based on your docker-compose file.
+-- ==============================================================================
+DO $$ BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name='car_models' AND column_name='public_id'
+    ) THEN
+        ALTER TABLE car_models ADD COLUMN public_id UUID UNIQUE;
+    END IF;
+END $$;
+
+
+-- ==============================================================================
+-- 2. DATA INSERTION/UPDATE: CAR MODELS (18 Records)
+-- Inserts new models or updates existing models (ON CONFLICT) 
+-- with the explicit, stable UUID and correct data.
+-- ==============================================================================
+
+-- Model 1: Maserati Grecale
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    1, 'c04a0e91-76a0-4b2a-8950-8b38343f1101', 'Maserati Grecale', 'Maserati', 5, 4, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/maserati-grecale.png',
+    'luxury-suv', 'Petrol', 2024, 3392, 2109, 2554, 650, TRUE, TRUE,
+    '5-Star Euro NCAP', 285, 5.6
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 2: Skoda Octavia
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    2, 'c04a0e91-76a0-4b2a-8950-8b38343f1102', 'Skoda Octavia', 'Skoda', 5, 4, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/skoda-octavia.png',
+    'compact', 'Petrol', 2024, 1454, 1918, 2392, 800, TRUE, TRUE,
+    '5-Star Euro NCAP', 220, 8.5
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 3: Nissan Sentra
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    3, 'c04a0e91-76a0-4b2a-8950-8b38343f1103', 'Nissan Sentra', 'Nissan', 4, 2, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/nissan-sentra.png',
+    'economy', 'Petrol', 2023, 1314, 1836, 2293, 700, TRUE, TRUE,
+    '5-Star ASEAN NCAP', 190, 10.5
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 4: BMW Z4
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    4, 'c04a0e91-76a0-4b2a-8950-8b38343f1104', 'BMW Z4', 'BMW', 2, 2, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/bmw-z4.png',
+    'luxury-sports', 'Petrol', 2024, 3402, 1379, 1874, 680, TRUE, TRUE,
+    '5-Star Euro NCAP', 250, 5.4
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 5: BMW X3
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    5, 'c04a0e91-76a0-4b2a-8950-8b38343f1105', 'BMW X3', 'BMW', 5, 4, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/bmw-x3.png',
+    'luxury-suv', 'Petrol', 2024, 3186, 2099, 2549, 720, TRUE, TRUE,
+    '5-Star Euro NCAP', 240, 6.6
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 6: BMW 5 Series Touring
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    6, 'c04a0e91-76a0-4b2a-8950-8b38343f1106', 'BMW 5 Series Touring', 'BMW', 5, 4, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/bmw-5-t.png',
+    'luxury', 'Petrol', 2024, 3185, 1928, 2403, 750, TRUE, TRUE,
+    '5-Star Euro NCAP', 250, 5.8
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 7: BMW M240i
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    7, 'c04a0e91-76a0-4b2a-8950-8b38343f1107', 'BMW M240i', 'BMW', 4, 2, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/bmw-2.png',
+    'luxury', 'Petrol', 2024, 2919, 1797, 2272, 700, TRUE, TRUE,
+    '5-Star Euro NCAP', 250, 4.3
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 8: BMW M440i
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    8, 'c04a0e91-76a0-4b2a-8950-8b38343f1108', 'BMW M440i', 'BMW', 4, 2, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/bmw-440i.png',
+    'luxury', 'Petrol', 2024, 2831, 1833, 2315, 710, TRUE, TRUE,
+    '5-Star Euro NCAP', 250, 4.5
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 9: Porsche 911
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    9, 'c04a0e91-76a0-4b2a-8950-8b38343f1109', 'Porsche 911', 'Porsche', 2, 2, 'Manual',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/porsche-911-c.png',
+    'luxury-sports', 'Petrol', 2025, 4424, 1381, 1880, 600, TRUE, TRUE,
+    '5-Star Euro NCAP', 293, 4.2
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 10: Mercedes-AMG SL63 (Corrected missing comma)
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    10, 'c04a0e91-76a0-4b2a-8950-8b38343f1110', 'Mercedes-AMG SL63', 'Mercedes-AMG', 2, 2, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/merc-sl63.png',
+    'luxury-sports', 'Petrol', 2024, 4509, 1362, 1812, 580, TRUE, TRUE,
+    '5-Star Euro NCAP', 315, 3.6
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 11: Mercedes-Benz Vito
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    11, 'c04a0e91-76a0-4b2a-8950-8b38343f1111', 'Mercedes-Benz Vito', 'Mercedes-Benz', 7, 5, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/merc-v.png',
+    'van', 'Diesel', 2023, 2598, 2451, 2917, 850, TRUE, TRUE,
+    '5-Star Euro NCAP', 205, 8.9
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 12: Peugeot 5008
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    12, 'c04a0e91-76a0-4b2a-8950-8b38343f1112', 'Peugeot 5008', 'Peugeot', 5, 3, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/peugeot-5008.png',
+    'suv', 'Petrol', 2023, 2139, 1916, 2404, 780, TRUE, TRUE,
+    '5-Star Euro NCAP', 200, 9.9
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 13: Toyota Alphard
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    13, 'c04a0e91-76a0-4b2a-8950-8b38343f1113', 'Toyota Alphard', 'Toyota', 7, 5, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/toyota-alphard.png',
+    'van', 'Hybrid', 2024, 2073, 2465, 2940, 1050, TRUE, TRUE,
+    '5-Star JNCAP', 180, 9.5
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 14: Toyota Prius
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    14, 'c04a0e91-76a0-4b2a-8950-8b38343f1114', 'Toyota Prius', 'Toyota', 5, 3, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/toyota-prius.png',
+    'hybrid', 'Hybrid', 2024, 1802, 1944, 2420, 1200, TRUE, TRUE,
+    '5-Star JNCAP', 180, 9.2
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 15: VW Golf
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    15, 'c04a0e91-76a0-4b2a-8950-8b38343f1115', 'VW Golf', 'Volkswagen', 5, 2, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/vw-golf.png',
+    'compact', 'Petrol', 2023, 1203, 1930, 2390, 750, TRUE, TRUE,
+    '5-Star Euro NCAP', 224, 8.7
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 16: VW Polo
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    16, 'c04a0e91-76a0-4b2a-8950-8b38343f1116', 'VW Polo', 'Volkswagen', 5, 2, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/vw-polo.png',
+    'compact', 'Petrol', 2023, 1195, 1928, 2392, 720, TRUE, TRUE,
+    '5-Star Euro NCAP', 200, 10.4
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 17: Mini Cooper
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    17, 'c04a0e91-76a0-4b2a-8950-8b38343f1117', 'Mini Cooper', 'Mini', 5, 2, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/mini-cooper.png',
+    'compact', 'Petrol', 2023, 1017, 1938, 2397, 680, TRUE, TRUE,
+    '5-Star Euro NCAP', 210, 8.2
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;
+
+-- Model 18: Land Rover Range Rover Sport
+INSERT INTO car_models (
+    id, public_id, model, manufacturer, seats, luggage, transmission, image_url, category,
+    fuel_type, model_year, engine_capacity_cc, max_unladen_weight_kg, max_laden_weight_kg,
+    range_in_km, has_air_conditioning, has_infotainment_system, safety_rating, top_speed_kph, zero_to_hundred_sec
+) VALUES (
+    18, 'c04a0e91-76a0-4b2a-8950-8b38343f1118', 'Land Rover Range Rover Sport', 'Land Rover', 5, 4, 'Automatic',
+    'https://exploresg-swe5001-capstone-assets-prod.s3.ap-southeast-1.amazonaws.com/cars/landrover-rr.png',
+    'luxury-suv', 'Petrol', 2024, 2802, 2139, 2582, 650, TRUE, TRUE,
+    '5-Star Euro NCAP', 220, 7.3
+) ON CONFLICT (id) DO UPDATE SET 
+    public_id = EXCLUDED.public_id, model = EXCLUDED.model, manufacturer = EXCLUDED.manufacturer, seats = EXCLUDED.seats, 
+    luggage = EXCLUDED.luggage, transmission = EXCLUDED.transmission, image_url = EXCLUDED.image_url, category = EXCLUDED.category,
+    fuel_type = EXCLUDED.fuel_type, model_year = EXCLUDED.model_year, engine_capacity_cc = EXCLUDED.engine_capacity_cc,
+    max_unladen_weight_kg = EXCLUDED.max_unladen_weight_kg, max_laden_weight_kg = EXCLUDED.max_laden_weight_kg,
+    range_in_km = EXCLUDED.range_in_km, has_air_conditioning = EXCLUDED.has_air_conditioning,
+    has_infotainment_system = EXCLUDED.has_infotainment_system, safety_rating = EXCLUDED.safety_rating,
+    top_speed_kph = EXCLUDED.top_speed_kph, zero_to_hundred_sec = EXCLUDED.zero_to_hundred_sec;

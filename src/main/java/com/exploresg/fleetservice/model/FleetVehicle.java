@@ -1,5 +1,6 @@
 package com.exploresg.fleetservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID; // <-- NEW IMPORT
 
 /**
  * Represents a specific, physical vehicle instance owned by a fleet operator.
@@ -19,18 +21,21 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class FleetVehicle {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    // Changed primary key to UUID for cross-service compatibility
+    @Column(columnDefinition = "UUID", updatable = false, nullable = false)
+    private UUID id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "car_model_id", nullable = false)
-    private CarModel carModel; // Foreign Key to CarModel
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+    private CarModel carModel; // Foreign Key to CarModel (references Long ID internally)
 
-    @Column(nullable = false)
-    private Long ownerId; // The user ID of the FLEET_MANAGER
+    @Column(nullable = false, columnDefinition = "UUID")
+    private UUID ownerId; // The user ID of the FLEET_MANAGER
 
     @Column(nullable = false)
     private BigDecimal dailyPrice; // The owner's specific price for this instance
@@ -86,6 +91,9 @@ public class FleetVehicle {
 
     @PrePersist
     protected void onCreate() {
+        if (id == null) {
+            id = UUID.randomUUID(); // <-- GENERATE UUID FOR PK
+        }
         createdAt = LocalDateTime.now();
         lastUpdatedAt = LocalDateTime.now();
     }

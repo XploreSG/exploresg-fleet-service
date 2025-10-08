@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
  * DTO representing a car model available from a specific fleet operator.
@@ -17,11 +18,11 @@ import java.math.BigDecimal;
 @Builder
 public class OperatorCarModelDto {
     // Operator information
-    private Long operatorId;
+    private UUID operatorId;
     private String operatorName;
 
     // Car model information
-    private Long carModelId;
+    private String publicModelId; // <-- USING PUBLIC UUID STRING
     private String model;
     private String manufacturer;
     private Integer seats;
