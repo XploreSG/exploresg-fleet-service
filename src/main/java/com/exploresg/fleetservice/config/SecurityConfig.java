@@ -41,8 +41,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/hello",
-                                "/api/v1/fleet/models" // This is our public endpoint for browsing cars
-                        ).permitAll()
+                                "/api/v1/fleet/models", // This is our public endpoint for browsing cars
+                                // Swagger/OpenAPI endpoints
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html")
+                        .permitAll()
                         // All other requests require authentication
                         .anyRequest().authenticated())
                 // 5. JWT Validation (The Resource Server's primary job)
