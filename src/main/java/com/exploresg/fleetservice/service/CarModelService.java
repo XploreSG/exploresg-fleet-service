@@ -1,8 +1,6 @@
 package com.exploresg.fleetservice.service;
 
-import com.exploresg.fleetservice.dto.CreateCarModelRequest;
-import com.exploresg.fleetservice.dto.CarModelResponseDto;
-import com.exploresg.fleetservice.dto.OperatorCarModelDto;
+import com.exploresg.fleetservice.dto.*;
 import com.exploresg.fleetservice.model.CarModel;
 import com.exploresg.fleetservice.model.FleetVehicle;
 import com.exploresg.fleetservice.model.VehicleStatus;
@@ -17,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +23,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * Service class containing business logic for managing CarModels.
+ * Service class containing business logic for managing CarModels and
+ * FleetVehicles.
+ * Note: Booking operations are now handled by VehicleBookingRecordService.
  */
 @Service
 @RequiredArgsConstructor
@@ -32,12 +33,10 @@ public class CarModelService {
 
         private final CarModelRepository carModelRepository;
         private final FleetVehicleRepository fleetVehicleRepository;
+        private final VehicleBookingRecordService bookingRecordService;
 
         /**
          * Creates a new CarModel and saves it to the database.
-         * * @param request The DTO containing the details for the new car model.
-         * 
-         * @return The saved CarModel entity.
          */
         public CarModel createCarModel(CreateCarModelRequest request) {
                 CarModel carModel = CarModel.builder()
@@ -66,7 +65,6 @@ public class CarModelService {
 
         /**
          * Retrieves all car models from the database (admin view).
-         * * @return A list of all CarModel entities.
          */
         public List<CarModel> getAllCarModels() {
                 return carModelRepository.findAll();
@@ -76,7 +74,6 @@ public class CarModelService {
          * Retrieves available car models with one entry per operator-model combination.
          * Note: This method is still required for the existing `/api/v1/fleet/models`
          * endpoint.
-         * * @return A list of car models grouped by operator.
          */
         @Transactional(readOnly = true)
         public List<OperatorCarModelDto> getAvailableModelsPerOperator() {
@@ -105,9 +102,8 @@ public class CarModelService {
 
                         OperatorCarModelDto dto = OperatorCarModelDto.builder()
                                         .operatorId(firstVehicle.getOwnerId())
-                                        .operatorName("Fleet Operator " + firstVehicle.getOwnerId()) // TODO: Fetch from
-                                                                                                     // user service
-                                        .publicModelId(carModel.getPublicId().toString()) // <-- USE NEW PUBLIC ID
+                                        .operatorName("Fleet Operator " + firstVehicle.getOwnerId())
+                                        .publicModelId(carModel.getPublicId().toString())
                                         .model(carModel.getModel())
                                         .manufacturer(carModel.getManufacturer())
                                         .seats(carModel.getSeats())
@@ -118,7 +114,7 @@ public class CarModelService {
                                         .fuelType(carModel.getFuelType())
                                         .modelYear(carModel.getModelYear())
                                         .dailyPrice(lowestPrice)
-                                        .availableVehicleCount(vehicles.size()) // Count for allocation
+                                        .availableVehicleCount(vehicles.size())
                                         .build();
 
                         result.add(dto);
@@ -128,11 +124,8 @@ public class CarModelService {
         }
 
         /**
-         * NEW CORE LOGIC: Retrieves available car models for a specific operator.
+         * Retrieves available car models for a specific operator.
          * Filters by operator ID and availability, then groups by CarModel (blueprint).
-         *
-         * @param operatorId The ID of the fleet operator.
-         * @return A list of available car models aggregated for the given operator.
          */
         @Transactional(readOnly = true)
         public List<OperatorCarModelDto> getAvailableModelsByOperator(UUID operatorId) {
@@ -145,7 +138,6 @@ public class CarModelService {
                 }
 
                 // 2. Group vehicles by CarModel (the blueprint)
-                // This ensures one entry per model per operator, satisfying the request.
                 Map<CarModel, List<FleetVehicle>> groupedVehicles = availableVehicles.stream()
                                 .collect(Collectors.groupingBy(FleetVehicle::getCarModel));
 
@@ -165,8 +157,7 @@ public class CarModelService {
                                         return OperatorCarModelDto.builder()
                                                         .operatorId(operatorId)
                                                         .operatorName("Fleet Operator " + operatorId)
-                                                        .publicModelId(model.getPublicId().toString()) // Use the new
-                                                                                                       // Public ID
+                                                        .publicModelId(model.getPublicId().toString())
                                                         .model(model.getModel())
                                                         .manufacturer(model.getManufacturer())
                                                         .seats(model.getSeats())
@@ -187,7 +178,6 @@ public class CarModelService {
          * Retrieves all unique CarModel templates that have at least one physical car
          * instance available in the fleet.
          * Returns detailed response DTOs.
-         * * @return A list of DTOs representing the available unique car models.
          */
         public List<CarModelResponseDto> getAvailableCarModels() {
                 List<CarModel> availableModels = fleetVehicleRepository.findAvailableCarModels();
@@ -199,11 +189,7 @@ public class CarModelService {
 
         /**
          * Retrieves all fleet vehicles owned by a specific operator.
-         * Returns ALL vehicles regardless of status - useful for fleet management and
-         * testing.
-         * * @param ownerId The ID of the fleet operator (fleet manager's userId).
-         * 
-         * @return A list of all FleetVehicle entities owned by the operator.
+         * Returns ALL vehicles regardless of status.
          */
         @Transactional(readOnly = true)
         public List<FleetVehicle> getAllFleetVehiclesByOwner(UUID ownerId) {
@@ -213,12 +199,6 @@ public class CarModelService {
         /**
          * Retrieves all fleet vehicles owned by a specific operator with pagination
          * support.
-         * Returns ALL vehicles regardless of status - useful for fleet management and
-         * testing.
-         * 
-         * @param ownerId  The ID of the fleet operator (fleet manager's userId).
-         * @param pageable Pagination information (page number, size, sort).
-         * @return A Page of FleetVehicle entities owned by the operator.
          */
         @Transactional(readOnly = true)
         public Page<FleetVehicle> getAllFleetVehiclesByOwnerPaginated(UUID ownerId, Pageable pageable) {
@@ -228,15 +208,6 @@ public class CarModelService {
         /**
          * Search fleet vehicles with optional filters and pagination support.
          * All search parameters are optional - if null/empty, they are ignored.
-         * 
-         * @param ownerId      The ID of the fleet operator (fleet manager's userId).
-         * @param licensePlate Optional license plate search term (partial match).
-         * @param status       Optional vehicle status filter.
-         * @param model        Optional car model name search term (partial match).
-         * @param manufacturer Optional manufacturer name search term (partial match).
-         * @param location     Optional location search term (partial match).
-         * @param pageable     Pagination information (page number, size, sort).
-         * @return A Page of FleetVehicle entities matching the search criteria.
          */
         @Transactional(readOnly = true)
         public Page<FleetVehicle> searchFleetVehicles(
@@ -273,24 +244,16 @@ public class CarModelService {
         /**
          * Transforms a Pageable object to use database column names instead of Java
          * property names.
-         * This is necessary for native SQL queries where Spring Data JPA doesn't
-         * automatically
-         * convert property names to column names.
-         * 
-         * @param pageable The original Pageable with Java property names
-         * @return A new Pageable with database column names
          */
         private Pageable transformPageableForNativeQuery(Pageable pageable) {
                 if (pageable.getSort().isUnsorted()) {
                         return pageable;
                 }
 
-                // Map Java property names to database column names
                 Sort transformedSort = Sort.by(
                                 pageable.getSort().stream()
                                                 .map(order -> {
                                                         String property = order.getProperty();
-                                                        // Convert camelCase to snake_case for database columns
                                                         String columnName = convertToSnakeCase(property);
                                                         return order.isAscending()
                                                                         ? Sort.Order.asc(columnName)
@@ -303,10 +266,6 @@ public class CarModelService {
 
         /**
          * Converts camelCase property name to snake_case column name.
-         * Examples: licensePlate -> license_plate, carModel -> car_model
-         * 
-         * @param camelCase The Java property name in camelCase
-         * @return The database column name in snake_case
          */
         private String convertToSnakeCase(String camelCase) {
                 return camelCase.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
@@ -314,74 +273,38 @@ public class CarModelService {
 
         /**
          * Retrieves comprehensive dashboard statistics for a fleet manager.
-         * Includes vehicle status summary, fleet statistics, and breakdown by model.
-         * * @param ownerId The ID of the fleet operator (fleet manager's userId).
-         * 
-         * @return FleetDashboardDto containing all dashboard metrics.
+         * NOW PROPERLY INTEGRATES WITH VehicleBookingRecordService for accurate booking
+         * counts.
          */
         @Transactional(readOnly = true)
-        public com.exploresg.fleetservice.dto.FleetDashboardDto getFleetDashboard(UUID ownerId) {
-                // 1. Get all vehicles for this owner
+        public FleetDashboardDto getFleetDashboard(UUID ownerId) {
                 List<FleetVehicle> allVehicles = fleetVehicleRepository.findByOwnerId(ownerId);
 
                 if (allVehicles.isEmpty()) {
-                        // Return empty dashboard if no vehicles
-                        return com.exploresg.fleetservice.dto.FleetDashboardDto.builder()
-                                        .vehicleStatus(com.exploresg.fleetservice.dto.VehicleStatusSummary.builder()
-                                                        .available(0)
-                                                        .underMaintenance(0)
-                                                        .booked(0)
-                                                        .total(0)
-                                                        .build())
-                                        .serviceReminders(
-                                                        com.exploresg.fleetservice.dto.ServiceRemindersSummary.builder()
-                                                                        .overdue(0)
-                                                                        .dueSoon(0)
-                                                                        .build())
-                                        .workOrders(com.exploresg.fleetservice.dto.WorkOrdersSummary.builder()
-                                                        .active(0)
-                                                        .pending(0)
-                                                        .build())
-                                        .vehicleAssignments(com.exploresg.fleetservice.dto.VehicleAssignmentsSummary
-                                                        .builder()
-                                                        .assigned(0)
-                                                        .unassigned(0)
-                                                        .build())
-                                        .statistics(com.exploresg.fleetservice.dto.FleetStatistics.builder()
-                                                        .totalVehicles(0)
-                                                        .totalModels(0)
-                                                        .averageMileage(0.0)
-                                                        .totalMileage(0L)
-                                                        .totalPotentialDailyRevenue(BigDecimal.ZERO)
-                                                        .totalRevenue(BigDecimal.ZERO)
-                                                        .utilizationRate(0.0)
-                                                        .build())
-                                        .fleetByModel(List.of())
-                                        .build();
+                        return createEmptyDashboard();
                 }
 
-                // 2. Calculate vehicle status counts
+                // 1. Calculate vehicle status counts
                 long availableCount = allVehicles.stream()
                                 .filter(v -> v.getStatus() == VehicleStatus.AVAILABLE)
                                 .count();
-                long bookedCount = allVehicles.stream()
-                                .filter(v -> v.getStatus() == VehicleStatus.BOOKED)
-                                .count();
+
                 long underMaintenanceCount = allVehicles.stream()
                                 .filter(v -> v.getStatus() == VehicleStatus.UNDER_MAINTENANCE)
                                 .count();
 
-                com.exploresg.fleetservice.dto.VehicleStatusSummary vehicleStatus = com.exploresg.fleetservice.dto.VehicleStatusSummary
-                                .builder()
+                // Get booked count from booking record service (CRITICAL FIX)
+                long bookedCount = bookingRecordService.countCurrentlyBookedVehicles(ownerId);
+
+                VehicleStatusSummary vehicleStatus = VehicleStatusSummary.builder()
                                 .available(availableCount)
                                 .booked(bookedCount)
                                 .underMaintenance(underMaintenanceCount)
                                 .total(allVehicles.size())
                                 .build();
 
-                // 3. Calculate service reminders (based on maintenance schedule)
-                // For now, using simple logic: vehicles with high mileage need service
-                java.time.LocalDateTime now = java.time.LocalDateTime.now();
+                // 2. Calculate service reminders
+                LocalDateTime now = LocalDateTime.now();
 
                 long overdueCount = allVehicles.stream()
                                 .filter(v -> v.getExpectedReturnDate() != null
@@ -394,34 +317,31 @@ public class CarModelService {
                                 .filter(v -> v.getStatus() != VehicleStatus.UNDER_MAINTENANCE)
                                 .count();
 
-                com.exploresg.fleetservice.dto.ServiceRemindersSummary serviceReminders = com.exploresg.fleetservice.dto.ServiceRemindersSummary
-                                .builder()
+                ServiceRemindersSummary serviceReminders = ServiceRemindersSummary.builder()
                                 .overdue(overdueCount)
                                 .dueSoon(dueSoonCount)
                                 .build();
 
-                // 4. Calculate work orders
-                long activeWorkOrders = underMaintenanceCount; // Vehicles currently in maintenance
+                // 3. Calculate work orders
+                long activeWorkOrders = underMaintenanceCount;
                 long pendingWorkOrders = allVehicles.stream()
                                 .filter(v -> v.getExpectedReturnDate() != null
                                                 && v.getExpectedReturnDate().isAfter(now)
                                                 && v.getStatus() != VehicleStatus.UNDER_MAINTENANCE)
                                 .count();
 
-                com.exploresg.fleetservice.dto.WorkOrdersSummary workOrders = com.exploresg.fleetservice.dto.WorkOrdersSummary
-                                .builder()
+                WorkOrdersSummary workOrders = WorkOrdersSummary.builder()
                                 .active(activeWorkOrders)
                                 .pending(pendingWorkOrders)
                                 .build();
 
-                // 5. Calculate vehicle assignments
-                com.exploresg.fleetservice.dto.VehicleAssignmentsSummary vehicleAssignments = com.exploresg.fleetservice.dto.VehicleAssignmentsSummary
-                                .builder()
-                                .assigned(bookedCount) // Currently booked/rented
-                                .unassigned(availableCount) // Available for rent
+                // 4. Calculate vehicle assignments
+                VehicleAssignmentsSummary vehicleAssignments = VehicleAssignmentsSummary.builder()
+                                .assigned(bookedCount)
+                                .unassigned(availableCount)
                                 .build();
 
-                // 6. Calculate overall fleet statistics
+                // 5. Calculate overall fleet statistics
                 Double averageMileage = allVehicles.stream()
                                 .filter(v -> v.getMileageKm() != null)
                                 .mapToInt(FleetVehicle::getMileageKm)
@@ -446,22 +366,24 @@ public class CarModelService {
                                 .distinct()
                                 .count();
 
-                com.exploresg.fleetservice.dto.FleetStatistics statistics = com.exploresg.fleetservice.dto.FleetStatistics
-                                .builder()
+                FleetStatistics statistics = FleetStatistics.builder()
                                 .totalVehicles(allVehicles.size())
                                 .totalModels(uniqueModels)
                                 .averageMileage(averageMileage)
                                 .totalMileage(totalMileage)
                                 .totalPotentialDailyRevenue(totalPotentialRevenue)
-                                .totalRevenue(totalPotentialRevenue) // Same as potential for now
+                                .totalRevenue(totalPotentialRevenue)
                                 .utilizationRate(utilizationRate)
                                 .build();
 
-                // 4. Group vehicles by model and calculate breakdowns
+                // 6. Group vehicles by model and calculate breakdowns
                 Map<CarModel, List<FleetVehicle>> vehiclesByModel = allVehicles.stream()
                                 .collect(Collectors.groupingBy(FleetVehicle::getCarModel));
 
-                List<com.exploresg.fleetservice.dto.FleetModelBreakdown> fleetByModel = vehiclesByModel.entrySet()
+                // Get currently booked vehicle IDs for model breakdown
+                List<UUID> currentlyBookedIds = bookingRecordService.getCurrentlyBookedVehicleIds(ownerId);
+
+                List<FleetModelBreakdown> fleetByModel = vehiclesByModel.entrySet()
                                 .stream()
                                 .map(entry -> {
                                         CarModel model = entry.getKey();
@@ -470,9 +392,11 @@ public class CarModelService {
                                         long modelAvailableCount = vehicles.stream()
                                                         .filter(v -> v.getStatus() == VehicleStatus.AVAILABLE)
                                                         .count();
+
                                         long modelBookedCount = vehicles.stream()
-                                                        .filter(v -> v.getStatus() == VehicleStatus.BOOKED)
+                                                        .filter(v -> currentlyBookedIds.contains(v.getId()))
                                                         .count();
+
                                         long modelMaintenanceCount = vehicles.stream()
                                                         .filter(v -> v.getStatus() == VehicleStatus.UNDER_MAINTENANCE)
                                                         .count();
@@ -489,7 +413,7 @@ public class CarModelService {
                                                         .divide(BigDecimal.valueOf(vehicles.size()), 2,
                                                                         java.math.RoundingMode.HALF_UP);
 
-                                        return com.exploresg.fleetservice.dto.FleetModelBreakdown.builder()
+                                        return FleetModelBreakdown.builder()
                                                         .manufacturer(model.getManufacturer())
                                                         .model(model.getModel())
                                                         .imageUrl(model.getImageUrl())
@@ -504,13 +428,49 @@ public class CarModelService {
                                 .collect(Collectors.toList());
 
                 // 7. Build and return the complete dashboard
-                return com.exploresg.fleetservice.dto.FleetDashboardDto.builder()
+                return FleetDashboardDto.builder()
                                 .vehicleStatus(vehicleStatus)
                                 .serviceReminders(serviceReminders)
                                 .workOrders(workOrders)
                                 .vehicleAssignments(vehicleAssignments)
                                 .statistics(statistics)
                                 .fleetByModel(fleetByModel)
+                                .build();
+        }
+
+        /**
+         * Creates an empty dashboard when no vehicles exist.
+         */
+        private FleetDashboardDto createEmptyDashboard() {
+                return FleetDashboardDto.builder()
+                                .vehicleStatus(VehicleStatusSummary.builder()
+                                                .available(0)
+                                                .underMaintenance(0)
+                                                .booked(0)
+                                                .total(0)
+                                                .build())
+                                .serviceReminders(ServiceRemindersSummary.builder()
+                                                .overdue(0)
+                                                .dueSoon(0)
+                                                .build())
+                                .workOrders(WorkOrdersSummary.builder()
+                                                .active(0)
+                                                .pending(0)
+                                                .build())
+                                .vehicleAssignments(VehicleAssignmentsSummary.builder()
+                                                .assigned(0)
+                                                .unassigned(0)
+                                                .build())
+                                .statistics(FleetStatistics.builder()
+                                                .totalVehicles(0)
+                                                .totalModels(0)
+                                                .averageMileage(0.0)
+                                                .totalMileage(0L)
+                                                .totalPotentialDailyRevenue(BigDecimal.ZERO)
+                                                .totalRevenue(BigDecimal.ZERO)
+                                                .utilizationRate(0.0)
+                                                .build())
+                                .fleetByModel(List.of())
                                 .build();
         }
 
@@ -533,21 +493,9 @@ public class CarModelService {
         }
 
         /**
-         * Customer: Set vehicle status to BOOKED.
-         */
-        @Transactional
-        public boolean updateFleetVehicleStatusToBooked(UUID id) {
-                java.util.Optional<FleetVehicle> opt = fleetVehicleRepository.findById(id);
-                if (opt.isEmpty())
-                        return false;
-                FleetVehicle vehicle = opt.get();
-                vehicle.setStatus(VehicleStatus.BOOKED);
-                fleetVehicleRepository.save(vehicle);
-                return true;
-        }
-
-        /**
-         * Fleet Manager: Set vehicle status to any valid value.
+         * Fleet Manager: Set vehicle status to any valid operational value.
+         * Note: This only changes OPERATIONAL status (AVAILABLE/UNDER_MAINTENANCE).
+         * Booking status is managed separately via VehicleBookingRecordService.
          */
         @Transactional
         public boolean updateFleetVehicleStatus(UUID id, VehicleStatus status) {
@@ -561,22 +509,7 @@ public class CarModelService {
         }
 
         /**
-         * Customer: Set vehicle status to BOOKED and return updated vehicle.
-         */
-        @Transactional
-        public FleetVehicle updateFleetVehicleStatusToBookedWithDetails(UUID id) {
-                java.util.Optional<FleetVehicle> opt = fleetVehicleRepository.findById(id);
-                if (opt.isEmpty())
-                        return null;
-                FleetVehicle vehicle = opt.get();
-                vehicle.setStatus(VehicleStatus.BOOKED);
-                fleetVehicleRepository.save(vehicle);
-                return vehicle;
-        }
-
-        /**
-         * Fleet Manager: Set vehicle status to any valid value and return updated
-         * vehicle.
+         * Fleet Manager: Set vehicle status and return updated vehicle.
          */
         @Transactional
         public FleetVehicle updateFleetVehicleStatusWithDetails(UUID id, VehicleStatus status) {
@@ -585,7 +518,6 @@ public class CarModelService {
                         return null;
                 FleetVehicle vehicle = opt.get();
                 vehicle.setStatus(status);
-                fleetVehicleRepository.save(vehicle);
-                return vehicle;
+                return fleetVehicleRepository.save(vehicle);
         }
 }

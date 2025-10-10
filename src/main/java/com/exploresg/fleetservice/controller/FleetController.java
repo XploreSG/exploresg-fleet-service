@@ -248,11 +248,13 @@ public class FleetController {
      * Customer endpoint: Book a car (set status to BOOKED).
      * PATCH /api/v1/fleet/vehicles/{id}/book
      */
-    @PatchMapping("/vehicles/{id}/book")
-    public ResponseEntity<?> bookFleetVehicle(@PathVariable UUID id) {
-        var vehicle = carModelService.updateFleetVehicleStatusToBookedWithDetails(id);
-        return vehicle != null ? ResponseEntity.ok(vehicle) : ResponseEntity.notFound().build();
-    }
+    // @PatchMapping("/vehicles/{id}/book")
+    // public ResponseEntity<?> bookFleetVehicle(@PathVariable UUID id) {
+    // var vehicle =
+    // carModelService.updateFleetVehicleStatusToBookedWithDetails(id);
+    // return vehicle != null ? ResponseEntity.ok(vehicle) :
+    // ResponseEntity.notFound().build();
+    // }
 
     /**
      * Fleet Manager endpoint: Update car status to any valid value.
