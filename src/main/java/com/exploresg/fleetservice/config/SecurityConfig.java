@@ -28,18 +28,6 @@ public class SecurityConfig {
     @Value("${application.security.jwt.secret-key}")
     private String jwtSecretKey;
 
-    @Value("${application.security.cors.allowed-origins:http://localhost:3000}")
-    private String[] allowedOrigins;
-
-    @Value("${application.security.cors.allowed-methods:GET,POST,PUT,DELETE,OPTIONS}")
-    private String[] allowedMethods;
-
-    @Value("${application.security.cors.allowed-headers:Authorization,Content-Type}")
-    private String[] allowedHeaders;
-
-    @Value("${application.security.cors.allow-credentials:true}")
-    private boolean allowCredentials;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -96,15 +84,13 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        // CORS configuration now driven by environment variables for flexibility
-        // This allows easy configuration across dev, staging, and production
-        // environments
+        // This configuration is aligned with our other services to ensure
+        // our frontend can communicate with both services.
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(allowedOrigins));
-        configuration.setAllowedMethods(List.of(allowedMethods));
-        configuration.setAllowedHeaders(List.of(allowedHeaders));
-        configuration.setAllowCredentials(allowCredentials);
-
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
