@@ -70,8 +70,8 @@ COPY --from=builder --chown=appuser:appgroup /app/target/*.jar app.jar
 # Security: Switch to non-root user
 USER appuser
 
-# Expose application port
-EXPOSE 8081
+# Expose application port (container internal port)
+EXPOSE 8080
 
 # Health check for container orchestration
 # This allows Kubernetes to determine if container is healthy
@@ -79,7 +79,7 @@ HEALTHCHECK --interval=30s \
             --timeout=5s \
             --start-period=60s \
             --retries=3 \
-            CMD curl -f http://localhost:8081/actuator/health || exit 1
+            CMD curl -f http://localhost:8080/actuator/health || exit 1
 
 # Environment variables with secure defaults
 ENV JAVA_OPTS="-XX:+UseContainerSupport \
