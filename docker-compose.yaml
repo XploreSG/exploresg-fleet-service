@@ -3,9 +3,9 @@ services:
     image: postgres:15
     container_name: dev-exploresg-fleet-db
     environment:
-      POSTGRES_DB: exploresg-fleet-service-db
-      POSTGRES_USER: exploresguser
-      POSTGRES_PASSWORD: exploresgpass
+      POSTGRES_DB: ${POSTGRES_DB:-exploresg-fleet-service-db}
+      POSTGRES_USER: ${POSTGRES_USER:-exploresguser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-exploresgpass}
     ports:
       - "5433:5432" # Use a different host port (5433)
     volumes:
@@ -32,9 +32,9 @@ services:
       fleet-db:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://fleet-db:5432/exploresg-fleet-service-db
-      SPRING_DATASOURCE_USERNAME: exploresguser
-      SPRING_DATASOURCE_PASSWORD: exploresgpass
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:postgresql://fleet-db:5432/exploresg-fleet-service-db}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-exploresguser}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-exploresgpass}
     ports:
       - "8081:8081"
     networks:
