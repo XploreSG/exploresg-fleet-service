@@ -83,7 +83,7 @@
 ### Development (Human Readable)
 
 ```
-2025-10-11 14:23:45.123 INFO  [abc-123-def] [http-nio-8080-exec-1] com.exploresg.authservice.controller.AuthController - User signup/profile update initiated for userId: 42, email: user@example.com
+2025-10-11 14:23:45.123 INFO  [abc-123-def] [http-nio-8080-exec-1] com.exploresg.fleetservice.controller.FleetController - User action initiated for userId: 42, email: user@example.com
 ```
 
 ### Production (JSON)
@@ -93,9 +93,9 @@
   "timestamp": "2025-10-11T14:23:45.123Z",
   "level": "INFO",
   "thread": "http-nio-8080-exec-1",
-  "logger": "com.exploresg.authservice.controller.AuthController",
-  "message": "User signup/profile update initiated for userId: 42, email: user@example.com",
-  "application": "exploresg-auth-service",
+  "logger": "com.exploresg.fleetservice.controller.FleetController",
+  "message": "User action initiated for userId: 42, email: user@example.com",
+  "application": "exploresg-fleet-service",
   "environment": "prod",
   "correlationId": "abc-123-def-456",
   "userId": "42",
@@ -129,7 +129,7 @@ curl http://localhost:8080/api/v1/check?email=test@example.com
 ./mvnw clean package -DskipTests
 
 # Run with prod profile
-SPRING_PROFILES_ACTIVE=prod java -jar target/auth-service-0.0.1-SNAPSHOT.jar
+SPRING_PROFILES_ACTIVE=prod java -jar target/fleet-service-0.0.1-SNAPSHOT.jar
 
 # Make a request
 curl http://localhost:8080/api/v1/check?email=test@example.com
@@ -151,7 +151,7 @@ curl -X GET http://localhost:8080/api/v1/check?email=test@example.com \
 # Check logs - should include [test-correlation-123]
 ```
 
-### 4. Test User Context (Requires Auth)
+### 4. Test User Context (Requires Authentication)
 
 ```bash
 # Make authenticated request
@@ -304,7 +304,7 @@ A: Adjust log levels in `application-prod.properties`
 
 ## 🎊 Achievement Unlocked
 
-Your ExploreSG Auth Service now has:
+Your ExploreSG Fleet Service now has:
 
 - ✅ **Production-grade structured logging**
 - ✅ **Distributed tracing support**
