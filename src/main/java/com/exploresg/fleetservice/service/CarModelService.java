@@ -6,6 +6,8 @@ import com.exploresg.fleetservice.model.FleetVehicle;
 import com.exploresg.fleetservice.model.VehicleStatus;
 import com.exploresg.fleetservice.repository.CarModelRepository;
 import com.exploresg.fleetservice.repository.FleetVehicleRepository;
+import com.exploresg.fleetservice.repository.VehicleBookingRecordRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +35,9 @@ public class CarModelService {
 
         private final CarModelRepository carModelRepository;
         private final FleetVehicleRepository fleetVehicleRepository;
-        private final VehicleBookingRecordService bookingRecordService;
+        // private final VehicleBookingRecordService bookingRecordService;
+        // --- THIS IS THE CRITICAL CHANGE ---
+        private final VehicleBookingRecordRepository bookingRecordRepository;
 
         /**
          * Creates a new CarModel and saves it to the database.
@@ -273,7 +277,8 @@ public class CarModelService {
 
         /**
          * Retrieves comprehensive dashboard statistics for a fleet manager.
-         * NOW PROPERLY INTEGRATES WITH VehicleBookingRecordService for accurate booking
+         * NOW PROPERLY INTEGRATES WITH VehicleBookingRecordRepository for accurate
+         * booking
          * counts.
          */
         @Transactional(readOnly = true)
@@ -284,6 +289,18 @@ public class CarModelService {
                         return createEmptyDashboard();
                 }
 
+                // --- REFACTORED LOGIC ---
+                // Get currently booked vehicle IDs directly from the repository
+                LocalDateTime now = LocalDateTime.now();
+                List<UUID> currentlyBookedIds = allVehicles.stream()
+                                .map(FleetVehicle::getId)
+                                .filter(vehicleId -> bookingRecordRepository.existsConflictingBooking(vehicleId, now,
+                                                now))
+                                .collect(Collectors.toList());
+
+                long bookedCount = currentlyBookedIds.size();
+                // --- END REFACTORED LOGIC ---
+
                 // 1. Calculate vehicle status counts
                 long availableCount = allVehicles.stream()
                                 .filter(v -> v.getStatus() == VehicleStatus.AVAILABLE)
@@ -293,9 +310,6 @@ public class CarModelService {
                                 .filter(v -> v.getStatus() == VehicleStatus.UNDER_MAINTENANCE)
                                 .count();
 
-                // Get booked count from booking record service (CRITICAL FIX)
-                long bookedCount = bookingRecordService.countCurrentlyBookedVehicles(ownerId);
-
                 VehicleStatusSummary vehicleStatus = VehicleStatusSummary.builder()
                                 .available(availableCount)
                                 .booked(bookedCount)
@@ -304,8 +318,6 @@ public class CarModelService {
                                 .build();
 
                 // 2. Calculate service reminders
-                LocalDateTime now = LocalDateTime.now();
-
                 long overdueCount = allVehicles.stream()
                                 .filter(v -> v.getExpectedReturnDate() != null
                                                 && v.getExpectedReturnDate().isBefore(now)
@@ -372,16 +384,13 @@ public class CarModelService {
                                 .averageMileage(averageMileage)
                                 .totalMileage(totalMileage)
                                 .totalPotentialDailyRevenue(totalPotentialRevenue)
-                                .totalRevenue(totalPotentialRevenue)
+                                .totalRevenue(totalPotentialRevenue) // Note: This might need more complex calculation
                                 .utilizationRate(utilizationRate)
                                 .build();
 
                 // 6. Group vehicles by model and calculate breakdowns
                 Map<CarModel, List<FleetVehicle>> vehiclesByModel = allVehicles.stream()
                                 .collect(Collectors.groupingBy(FleetVehicle::getCarModel));
-
-                // Get currently booked vehicle IDs for model breakdown
-                List<UUID> currentlyBookedIds = bookingRecordService.getCurrentlyBookedVehicleIds(ownerId);
 
                 List<FleetModelBreakdown> fleetByModel = vehiclesByModel.entrySet()
                                 .stream()
@@ -393,6 +402,7 @@ public class CarModelService {
                                                         .filter(v -> v.getStatus() == VehicleStatus.AVAILABLE)
                                                         .count();
 
+                                        // Use the pre-calculated list of booked IDs for efficiency
                                         long modelBookedCount = vehicles.stream()
                                                         .filter(v -> currentlyBookedIds.contains(v.getId()))
                                                         .count();

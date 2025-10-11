@@ -1,23 +1,27 @@
 package com.exploresg.fleetservice.dto;
 
+import java.time.LocalDateTime;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateBookingRecordRequest {
+public class AtomicReservationRequest {
 
     @NotNull
-    private UUID vehicleId;
+    private String modelId;
 
     @NotNull
-    private UUID bookingId;
+    private String vendorId;
+
+    @NotNull
+    private String customerId;
+
+    @NotNull
+    private String bookingId;
 
     @NotNull
     private LocalDateTime startDate;
