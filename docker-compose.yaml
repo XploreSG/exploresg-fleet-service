@@ -2,6 +2,8 @@ services:
   fleet-db:
     image: postgres:15
     container_name: dev-exploresg-fleet-db
+    env_file:
+      - .env
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-exploresg-fleet-service-db}
       POSTGRES_USER: ${POSTGRES_USER:-exploresguser}
@@ -28,6 +30,8 @@ services:
       context: .
     image: exploresg-fleet-backend:dev
     container_name: dev-exploresg-fleet-service
+    env_file:
+      - .env
     depends_on:
       fleet-db:
         condition: service_healthy
@@ -36,7 +40,7 @@ services:
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-exploresguser}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-exploresgpass}
     ports:
-      - "8081:8081"
+      - "8081:8080" # Map host port 8081 to container port 8080
     networks:
       - default
       - exploresg-network # Connect the app to the shared network
