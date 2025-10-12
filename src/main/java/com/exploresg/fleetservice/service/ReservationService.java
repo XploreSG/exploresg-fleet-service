@@ -26,7 +26,8 @@ public class ReservationService {
         private final FleetVehicleRepository fleetVehicleRepository;
         private final VehicleBookingRecordRepository bookingRecordRepository;
 
-        @Value("${booking.reservation.expiry-seconds:30}")
+        // @Value("${booking.reservation.expiry-seconds:30}")
+        @Value("${booking.reservation.expiry-seconds:300}")
         private int reservationExpirySeconds;
 
         /**
