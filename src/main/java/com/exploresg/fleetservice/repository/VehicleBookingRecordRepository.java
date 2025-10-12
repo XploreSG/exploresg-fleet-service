@@ -1,83 +1,91 @@
 package com.exploresg.fleetservice.repository;
 
-import com.exploresg.fleetservice.model.VehicleBookingRecord;
+// import com.exploresg.fleetservice.entity.VehicleBookingRecord;
+// import com.exploresg.fleetservice.entity.VehicleBookingRecord.ReservationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.exploresg.fleetservice.model.VehicleBookingRecord;
+import com.exploresg.fleetservice.model.VehicleBookingRecord.ReservationStatus;
+
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface VehicleBookingRecordRepository extends JpaRepository<VehicleBookingRecord, UUID> {
 
   /**
-   * Check if there are any CONFIRMED or PENDING bookings that overlap with the
-   * given date range
-   * Uses efficient date range overlap logic: (start1 < end2) AND (end1 > start2)
+   * Find reservation by booking ID (for idempotency checks)
    */
-  @Query("""
-      SELECT COUNT(vbr) > 0
-      FROM VehicleBookingRecord vbr
-      WHERE vbr.vehicleId = :vehicleId
-        AND vbr.reservationStatus IN ('CONFIRMED', 'PENDING')
-        AND vbr.bookingStartDate < :endDate
-        AND vbr.bookingEndDate > :startDate
-      """)
-  boolean existsConflictingBooking(
+  Optional<VehicleBookingRecord> findByBookingId(UUID bookingId);
+
+  /**
+   * Find all PENDING reservations that have expired
+   */
+  @Query("SELECT vbr FROM VehicleBookingRecord vbr " +
+      "WHERE vbr.reservationStatus = 'PENDING' " +
+      "AND vbr.expiresAt < :now")
+  List<VehicleBookingRecord> findExpiredPendingReservations(@Param("now") LocalDateTime now);
+
+  /**
+   * Bulk update expired PENDING reservations to EXPIRED status
+   * Returns the number of records updated
+   */
+  @Modifying
+  @Query("UPDATE VehicleBookingRecord vbr " +
+      "SET vbr.reservationStatus = 'EXPIRED', " +
+      "    vbr.lastUpdatedAt = :now " +
+      "WHERE vbr.reservationStatus = 'PENDING' " +
+      "AND vbr.expiresAt < :now")
+  int expirePendingReservations(@Param("now") LocalDateTime now);
+
+  /**
+   * Check if a vehicle has any overlapping bookings (CONFIRMED or PENDING)
+   */
+  @Query("SELECT COUNT(vbr) > 0 FROM VehicleBookingRecord vbr " +
+      "WHERE vbr.vehicle.id = :vehicleId " +
+      "AND vbr.reservationStatus IN ('CONFIRMED', 'PENDING') " +
+      "AND vbr.bookingStartDate < :endDate " +
+      "AND vbr.bookingEndDate > :startDate")
+  boolean hasOverlappingBookings(
       @Param("vehicleId") UUID vehicleId,
       @Param("startDate") LocalDateTime startDate,
       @Param("endDate") LocalDateTime endDate);
 
   /**
-   * Find all expired PENDING reservations
-   * Used by background cleanup job
+   * Count available vehicles for a car model in a date range
+   * Excludes vehicles with CONFIRMED or PENDING bookings that overlap
    */
-  @Query("""
-      SELECT vbr
-      FROM VehicleBookingRecord vbr
-      WHERE vbr.reservationStatus = 'PENDING'
-        AND vbr.expiresAt < :currentTime
-      """)
-  List<VehicleBookingRecord> findExpiredPendingReservations(
-      @Param("currentTime") LocalDateTime currentTime);
-
-  /**
-   * Find all bookings for a specific vehicle within a date range
-   * Useful for debugging and reporting
-   */
-  @Query("""
-      SELECT vbr
-      FROM VehicleBookingRecord vbr
-      WHERE vbr.vehicleId = :vehicleId
-        AND vbr.reservationStatus IN ('CONFIRMED', 'PENDING')
-        AND vbr.bookingStartDate < :endDate
-        AND vbr.bookingEndDate > :startDate
-      ORDER BY vbr.bookingStartDate ASC
-      """)
-  List<VehicleBookingRecord> findBookingsForVehicleInDateRange(
-      @Param("vehicleId") UUID vehicleId,
+  @Query("SELECT COUNT(DISTINCT fv.id) " +
+      "FROM FleetVehicle fv " +
+      "WHERE fv.carModel.publicId = :modelPublicId " +
+      "AND fv.status = 'AVAILABLE' " +
+      "AND NOT EXISTS (" +
+      "    SELECT 1 FROM VehicleBookingRecord vbr " +
+      "    WHERE vbr.vehicle.id = fv.id " +
+      "    AND vbr.reservationStatus IN ('CONFIRMED', 'PENDING') " +
+      "    AND vbr.bookingStartDate < :endDate " +
+      "    AND vbr.bookingEndDate > :startDate" +
+      ")")
+  long countAvailableVehicles(
+      @Param("modelPublicId") UUID modelPublicId,
       @Param("startDate") LocalDateTime startDate,
       @Param("endDate") LocalDateTime endDate);
 
   /**
-   * Find all bookings for a specific booking ID (from booking service)
+   * Find all bookings for a specific booking ID across all services
    */
-  List<VehicleBookingRecord> findByBookingId(UUID bookingId);
+  List<VehicleBookingRecord> findAllByBookingId(UUID bookingId);
 
   /**
-   * Count active (CONFIRMED + PENDING) bookings for a vehicle
+   * Find all CONFIRMED bookings for a vehicle
    */
-  @Query("""
-      SELECT COUNT(vbr)
-      FROM VehicleBookingRecord vbr
-      WHERE vbr.vehicleId = :vehicleId
-        AND vbr.reservationStatus IN ('CONFIRMED', 'PENDING')
-        AND vbr.bookingEndDate > :currentTime
-      """)
-  long countActiveBookingsForVehicle(
-      @Param("vehicleId") UUID vehicleId,
-      @Param("currentTime") LocalDateTime currentTime);
+  List<VehicleBookingRecord> findByVehicleIdAndReservationStatus(
+      UUID vehicleId,
+      ReservationStatus status);
 }
