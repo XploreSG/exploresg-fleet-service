@@ -31,17 +31,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // 1. CORS Configuration (Identical to auth-service)
+                // 1. CORS Configuration (Aligned with fleet-service)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                // 2. CSRF Disabled for stateless APIs (Identical to auth-service)
+                // 2. CSRF Disabled for stateless APIs (Aligned with fleet-service)
                 .csrf(csrf -> csrf.disable())
-                // 3. Stateless Session Management (Identical to auth-service)
+                // 3. Stateless Session Management (Aligned with fleet-service)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 4. Route Permissions (Adapted for fleet-service)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/hello",
+                                "/api/v1/fleet/health", // Health check for service monitoring
                                 "/api/v1/fleet/models", // This is our public endpoint for browsing cars
+                                "/api/v1/fleet/bookings/**", // Allow booking service to access without auth (dev only)
+                                "/api/v1/fleet/reservations/**", // Allow booking service reservation endpoints (dev
+                                                                 // only)
                                 // Swagger/OpenAPI endpoints
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
@@ -84,10 +88,10 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        // This configuration is identical to the auth-service to ensure
+        // This configuration is aligned with our other services to ensure
         // our frontend can communicate with both services.
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8082"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);

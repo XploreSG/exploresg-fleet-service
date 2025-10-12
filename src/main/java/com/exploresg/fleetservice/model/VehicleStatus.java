@@ -1,7 +1,8 @@
 package com.exploresg.fleetservice.model;
 
 /**
- * Represents the possible statuses of a vehicle in the fleet.
+ * Represents the possible OPERATIONAL statuses of a vehicle in the fleet.
+ * The BOOKED status is now managed by the VehicleBookingRecord table.
  */
 public enum VehicleStatus {
     /**
@@ -12,10 +13,9 @@ public enum VehicleStatus {
     /**
      * The vehicle is currently undergoing maintenance and cannot be rented.
      */
-    UNDER_MAINTENANCE,
+    UNDER_MAINTENANCE
 
-    /**
-     * The vehicle is currently booked and unavailable.
-     */
-    BOOKED
+    // The 'BOOKED' status has been removed. A vehicle's booking status is now
+    // determined
+    // by the presence of a corresponding entry in the VehicleBookingRecord table.
 }

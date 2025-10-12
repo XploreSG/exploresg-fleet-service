@@ -3,12 +3,20 @@ package com.exploresg.fleetservice.repository;
 import com.exploresg.fleetservice.model.CarModel;
 import com.exploresg.fleetservice.model.FleetVehicle;
 import com.exploresg.fleetservice.model.VehicleStatus;
+
+import jakarta.persistence.LockModeType;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import java.util.UUID; // <-- NEW IMPORT
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 // JpaRepository<Entity, ID_TYPE>
 public interface FleetVehicleRepository extends JpaRepository<FleetVehicle, UUID> { // <-- ID TYPE CHANGED TO UUID
@@ -81,10 +89,12 @@ public interface FleetVehicleRepository extends JpaRepository<FleetVehicle, UUID
     @Query(value = "SELECT f.* FROM fleet_vehicles f " +
             "JOIN car_models cm ON cm.id = f.car_model_id " +
             "WHERE f.owner_id = :ownerId " +
-            "AND (:licensePlate IS NULL OR LOWER(f.license_plate) LIKE LOWER(CONCAT('%', :licensePlate, '%'))) " +
+            "AND (:licensePlate IS NULL OR LOWER(f.license_plate) LIKE LOWER(CONCAT('%', :licensePlate, '%'))) "
+            +
             "AND (:status IS NULL OR f.status = CAST(:status AS TEXT)) " +
             "AND (:model IS NULL OR LOWER(cm.model) LIKE LOWER(CONCAT('%', :model, '%'))) " +
-            "AND (:manufacturer IS NULL OR LOWER(cm.manufacturer) LIKE LOWER(CONCAT('%', :manufacturer, '%'))) " +
+            "AND (:manufacturer IS NULL OR LOWER(cm.manufacturer) LIKE LOWER(CONCAT('%', :manufacturer, '%'))) "
+            +
             "AND (:location IS NULL OR LOWER(f.current_location) LIKE LOWER(CONCAT('%', :location, '%')))", countQuery = "SELECT COUNT(*) FROM fleet_vehicles f "
                     +
                     "JOIN car_models cm ON cm.id = f.car_model_id " +
@@ -92,7 +102,8 @@ public interface FleetVehicleRepository extends JpaRepository<FleetVehicle, UUID
                     "AND (:licensePlate IS NULL OR LOWER(f.license_plate) LIKE LOWER(CONCAT('%', :licensePlate, '%'))) "
                     +
                     "AND (:status IS NULL OR f.status = CAST(:status AS TEXT)) " +
-                    "AND (:model IS NULL OR LOWER(cm.model) LIKE LOWER(CONCAT('%', :model, '%'))) " +
+                    "AND (:model IS NULL OR LOWER(cm.model) LIKE LOWER(CONCAT('%', :model, '%'))) "
+                    +
                     "AND (:manufacturer IS NULL OR LOWER(cm.manufacturer) LIKE LOWER(CONCAT('%', :manufacturer, '%'))) "
                     +
                     "AND (:location IS NULL OR LOWER(f.current_location) LIKE LOWER(CONCAT('%', :location, '%')))", nativeQuery = true)
@@ -116,4 +127,72 @@ public interface FleetVehicleRepository extends JpaRepository<FleetVehicle, UUID
      * Used for dashboard statistics.
      */
     long countByOwnerId(UUID ownerId);
+
+    /**
+     * Find all vehicles of a model that are AVAILABLE status
+     * Used for availability count checks (before pessimistic locking)
+     */
+    @Query("""
+            SELECT fv
+            FROM FleetVehicle fv
+            WHERE fv.carModel.publicId = :modelPublicId
+              AND fv.status = 'AVAILABLE'
+            """)
+    List<FleetVehicle> findAvailableVehiclesByModelPublicId(
+            @Param("modelPublicId") UUID modelPublicId);
+
+    /**
+     * 🔐 CRITICAL: Find one available vehicle with pessimistic locking
+     * 
+     * This query uses FOR UPDATE SKIP LOCKED to prevent race conditions.
+     * Only ONE transaction can lock each vehicle at a time.
+     * 
+     * The query:
+     * 1. Finds vehicles of the requested model
+     * 2. Filters to AVAILABLE status only
+     * 3. Excludes vehicles with overlapping CONFIRMED or PENDING bookings
+     * 4. Orders by mileage (prefer lower mileage vehicles)
+     * 5. Locks the selected row FOR UPDATE
+     * 6. SKIP LOCKED means if a vehicle is already locked, skip it and try the next
+     */
+    // @Lock(LockModeType.PESSIMISTIC_WRITE) <-- REMOVE THIS LINE
+    @Query(value = """
+            SELECT fv.*
+            FROM fleet_vehicles fv
+            WHERE fv.car_model_id = (
+                SELECT id FROM car_models WHERE public_id = :modelPublicId
+            )
+            AND fv.status = 'AVAILABLE'
+            AND NOT EXISTS (
+                SELECT 1
+                FROM vehicle_booking_records vbr
+                WHERE vbr.vehicle_id = fv.id
+                  AND vbr.reservation_status IN ('CONFIRMED', 'PENDING')
+                  AND vbr.booking_start_date < :endDate
+                  AND vbr.booking_end_date > :startDate
+            )
+            ORDER BY fv.mileage_km ASC, fv.id ASC
+            LIMIT 1
+            FOR UPDATE SKIP LOCKED
+            """, nativeQuery = true)
+    Optional<FleetVehicle> findOneAvailableVehicleForBooking(
+            @Param("modelPublicId") UUID modelPublicId,
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate);
+
+    /**
+     * Check if a specific vehicle is currently booked
+     * Used for dashboard/reporting
+     */
+    @Query("""
+            SELECT COUNT(vbr) > 0
+            FROM VehicleBookingRecord vbr
+            WHERE vbr.vehicle.id = :vehicleId
+              AND vbr.reservationStatus = 'CONFIRMED'
+              AND vbr.bookingStartDate <= :currentTime
+              AND vbr.bookingEndDate > :currentTime
+            """)
+    boolean isVehicleCurrentlyBooked(
+            @Param("vehicleId") UUID vehicleId,
+            @Param("currentTime") LocalDateTime currentTime);
 }

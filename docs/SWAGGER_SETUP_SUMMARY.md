@@ -49,7 +49,7 @@ Your Swagger documentation is now available at:
 
 ### For Protected Endpoints (JWT Required)
 
-1. Authenticate with your auth service to get a JWT token
+1. Authenticate with your authentication service to get a JWT token
 2. Click the "Authorize" button (🔒) at the top right
 3. Enter your JWT token (with or without "Bearer " prefix)
 4. Click "Authorize" and then "Close"

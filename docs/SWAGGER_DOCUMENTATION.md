@@ -22,7 +22,7 @@ Simply select the endpoint and click "Try it out" to test it.
 
 ### For Protected Endpoints (Requires JWT)
 
-1. **Obtain a JWT Token**: First, authenticate with the auth service to get a JWT token
+1. **Obtain a JWT Token**: First, authenticate with your authentication service to get a JWT token
 2. **Authorize in Swagger**:
    - Click the "Authorize" button at the top right of the Swagger UI
    - Enter your JWT token in the format: `Bearer <your-token-here>` or just paste the token directly

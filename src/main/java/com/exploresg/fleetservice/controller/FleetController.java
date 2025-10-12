@@ -7,6 +7,9 @@ import com.exploresg.fleetservice.model.CarModel;
 import com.exploresg.fleetservice.service.CarModelService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +30,7 @@ import java.util.UUID;
 public class FleetController {
 
     private final CarModelService carModelService;
+    private static final Logger log = LoggerFactory.getLogger(FleetController.class);
 
     /**
      * Endpoint for an ADMIN to create a new master CarModel.
@@ -38,7 +42,10 @@ public class FleetController {
     @PostMapping("/models")
     @PreAuthorize(SecurityConstants.HAS_ROLE_ADMIN)
     public ResponseEntity<CarModel> createCarModel(@Valid @RequestBody CreateCarModelRequest request) {
+        String correlation = MDC.get("correlationId");
+        log.info("createCarModel invoked, correlationId={}", correlation);
         CarModel createdCarModel = carModelService.createCarModel(request);
+        log.info("createCarModel completed, id={}, correlationId={}", createdCarModel.getId(), correlation);
         return new ResponseEntity<>(createdCarModel, HttpStatus.CREATED);
     }
 
@@ -50,7 +57,10 @@ public class FleetController {
      */
     @GetMapping("/models")
     public ResponseEntity<List<OperatorCarModelDto>> getAvailableModels() {
+        String correlation = MDC.get("correlationId");
+        log.info("getAvailableModels invoked, correlationId={}", correlation);
         List<OperatorCarModelDto> models = carModelService.getAvailableModelsPerOperator();
+        log.info("getAvailableModels returning {} models, correlationId={}", models.size(), correlation);
         return ResponseEntity.ok(models);
     }
 
@@ -248,11 +258,13 @@ public class FleetController {
      * Customer endpoint: Book a car (set status to BOOKED).
      * PATCH /api/v1/fleet/vehicles/{id}/book
      */
-    @PatchMapping("/vehicles/{id}/book")
-    public ResponseEntity<?> bookFleetVehicle(@PathVariable UUID id) {
-        var vehicle = carModelService.updateFleetVehicleStatusToBookedWithDetails(id);
-        return vehicle != null ? ResponseEntity.ok(vehicle) : ResponseEntity.notFound().build();
-    }
+    // @PatchMapping("/vehicles/{id}/book")
+    // public ResponseEntity<?> bookFleetVehicle(@PathVariable UUID id) {
+    // var vehicle =
+    // carModelService.updateFleetVehicleStatusToBookedWithDetails(id);
+    // return vehicle != null ? ResponseEntity.ok(vehicle) :
+    // ResponseEntity.notFound().build();
+    // }
 
     /**
      * Fleet Manager endpoint: Update car status to any valid value.

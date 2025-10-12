@@ -16,3 +16,6 @@ target
 # Docker files that shouldn't be in the image
 Dockerfile*
 docker-compose.yml
+**/.env
+**/.env.*
+*.tmp

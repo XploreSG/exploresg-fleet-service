@@ -47,7 +47,7 @@ Implemented a type-safe Role enum system to reduce the chance of errors when wor
 3. **Autocomplete Support**: IDE can suggest available roles
 4. **Refactoring-Friendly**: Easy to rename or change role names
 5. **Single Source of Truth**: All roles defined in one place
-6. **Consistency**: Ensures same role names across auth-service and fleet-service
+6. **Consistency**: Ensures same role names across the authentication/authorization service and fleet-service
 
 ## Usage Examples
 
@@ -75,7 +75,7 @@ String roleName = Role.ADMIN.getRoleName(); // "ADMIN"
 
 ## Notes
 
-- The enum should be kept in sync with the auth-service Role enum
+- The enum should be kept in sync with the central authentication/authorization Role enum (or a shared library) to avoid mismatches between services
 - When adding new roles, update both the enum and SecurityConstants
 - The constants use string concatenation to maintain compatibility with Spring Security's SpEL expressions
 
