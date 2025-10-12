@@ -294,7 +294,7 @@ public class CarModelService {
                 LocalDateTime now = LocalDateTime.now();
                 List<UUID> currentlyBookedIds = allVehicles.stream()
                                 .map(FleetVehicle::getId)
-                                .filter(vehicleId -> bookingRecordRepository.existsConflictingBooking(vehicleId, now,
+                                .filter(vehicleId -> bookingRecordRepository.hasOverlappingBookings(vehicleId, now,
                                                 now))
                                 .collect(Collectors.toList());
 
