@@ -2,18 +2,65 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <springProfile name="dev">
+    <!-- Property for application name -->
+    <springProperty name="APPLICATION_NAME" source="spring.application.name" defaultValue="exploresg-fleet-service"/>
+    <springProperty name="ACTIVE_PROFILE" source="spring.profiles.active" defaultValue="default"/>
+
+    <!-- Development Profile - Human Readable with Colors -->
+    <springProfile name="dev,local">
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
-                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%X{correlationId}] [%thread] %logger{36} - %msg%n</pattern>
+                <pattern>%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%-5level) %clr([%X{correlationId:-NO_CORRELATION_ID}]){magenta} %clr([%thread]){faint} %clr(%logger{36}){cyan} - %msg%n</pattern>
             </encoder>
         </appender>
 
-        <root level="DEBUG">
+        <root level="INFO">
             <appender-ref ref="CONSOLE" />
         </root>
+        
+        <!-- More verbose logging for our packages in dev -->
+        <logger name="com.exploresg.fleetservice" level="DEBUG"/>
     </springProfile>
 
+    <!-- Staging Profile - Pretty JSON for Debugging -->
+    <springProfile name="staging">
+        <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+                <providers>
+                    <timestamp>
+                        <timeZone>UTC</timeZone>
+                    </timestamp>
+                    <version/>
+                    <message/>
+                    <loggerName/>
+                    <threadName/>
+                    <logLevel/>
+                    <logLevelValue/>
+                    <pattern>
+                        <pattern>
+                            {
+                                "application": "${APPLICATION_NAME}",
+                                "environment": "${ACTIVE_PROFILE}"
+                            }
+                        </pattern>
+                    </pattern>
+                    <mdc/>
+                    <stackTrace/>
+                    <context/>
+                </providers>
+                <!-- Pretty print for readability in staging -->
+                <jsonGeneratorDecorator class="net.logstash.logback.decorate.PrettyPrintingJsonGeneratorDecorator"/>
+            </encoder>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="JSON_CONSOLE" />
+        </root>
+        
+        <logger name="com.exploresg.fleetservice" level="DEBUG"/>
+    </springProfile>
+
+    <!-- Production Profile - Compact JSON for Performance -->
     <springProfile name="prod">
         <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
@@ -21,12 +68,30 @@
                     <timestamp>
                         <timeZone>UTC</timeZone>
                     </timestamp>
-                    <message />
-                    <loggerName />
-                    <threadName />
-                    <logLevel />
-                    <mdc />
-                    <stackTrace />
+                    <version/>
+                    <message/>
+                    <loggerName/>
+                    <threadName/>
+                    <logLevel/>
+                    <logLevelValue/>
+                    <pattern>
+                        <pattern>
+                            {
+                                "application": "${APPLICATION_NAME}",
+                                "environment": "${ACTIVE_PROFILE}"
+                            }
+                        </pattern>
+                    </pattern>
+                    <mdc/>
+                    <stackTrace>
+                        <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                            <maxDepthPerThrowable>30</maxDepthPerThrowable>
+                            <maxLength>2048</maxLength>
+                            <shortenedClassNameLength>20</shortenedClassNameLength>
+                            <rootCauseFirst>true</rootCauseFirst>
+                        </throwableConverter>
+                    </stackTrace>
+                    <context/>
                 </providers>
             </encoder>
         </appender>
@@ -34,12 +99,31 @@
         <root level="INFO">
             <appender-ref ref="JSON_CONSOLE" />
         </root>
+        
+        <!-- Reduce noise from Spring framework in production -->
+        <logger name="org.springframework" level="WARN"/>
+        <logger name="org.hibernate" level="WARN"/>
     </springProfile>
 
-    <!-- default fallback -->
+    <!-- Test Profile - Minimal Logging -->
+    <springProfile name="test">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <root level="WARN">
+            <appender-ref ref="CONSOLE" />
+        </root>
+        
+        <logger name="com.exploresg.fleetservice" level="INFO"/>
+    </springProfile>
+
+    <!-- Default fallback -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%X{correlationId}] [%thread] %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%X{correlationId:-NO_CORRELATION_ID}] [%thread] %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
