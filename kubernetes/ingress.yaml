@@ -5,17 +5,26 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # CORS Configuration for production
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://www.xplore.town,https://xplore.town"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET,POST,PUT,DELETE,OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Authorization,Content-Type"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-max-age: "3600"
+    # Path rewriting to remove /fleet prefix before forwarding to service
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   tls:
     - hosts:
-        - explore.example.com
+        - api.xplore.town
       secretName: exploresg-tls
   rules:
-    - host: explore.example.com
+    - host: api.xplore.town
       http:
         paths:
-          - path: /
-            pathType: Prefix
+          - path: /fleet(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: exploresg-fleet-service
