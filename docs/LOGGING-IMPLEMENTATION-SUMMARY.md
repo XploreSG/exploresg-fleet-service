@@ -2,8 +2,8 @@
 
 ## 🎉 Status: PRODUCTION LOGGING READY
 
-**Date Completed:** October 11, 2025  
-**Implementation Time:** ~1 hour  
+**Date Completed:** October 15, 2025  
+**Service:** ExploreSG Fleet Service  
 **Status:** ✅ Fully functional and production-ready
 
 ---
@@ -25,15 +25,13 @@
 
 - ✅ `RequestCorrelationFilter.java` - Generates/tracks correlation IDs
 - ✅ `UserContextLoggingFilter.java` - Adds user info to MDC
-- ✅ `RequestLoggingInterceptor.java` - HTTP request/response logging
+- ✅ `RequestLoggingInterceptor.java` - HTTP request/response logging with IP tracking
 - ✅ `WebMvcConfig.java` - Registers interceptors
-- ✅ Updated `AuthController.java` - Security audit logging
 
 ### 4. Documentation
 
-- ✅ `LOGGING-GUIDE.md` - 400+ lines comprehensive guide
-- ✅ `LOGGING-QUICK-REFERENCE.md` - Quick start guide
-- ✅ Updated `PRODUCTION-READINESS-REVIEW.md`
+- ✅ `LOGGING-GUIDE.md` - Comprehensive logging guide
+- ✅ `LOGGING-IMPLEMENTATION-SUMMARY.md` - This summary document
 
 ---
 
@@ -83,25 +81,24 @@
 ### Development (Human Readable)
 
 ```
-2025-10-11 14:23:45.123 INFO  [abc-123-def] [http-nio-8080-exec-1] com.exploresg.fleetservice.controller.FleetController - User action initiated for userId: 42, email: user@example.com
+2025-10-15 10:23:45.123 INFO  [abc-123-def] [http-nio-8080-exec-1] c.e.f.i.RequestLoggingInterceptor - HTTP GET /api/v1/fleet/vehicles completed with status 200 in 125ms from 192.168.1.100
 ```
 
 ### Production (JSON)
 
 ```json
 {
-  "timestamp": "2025-10-11T14:23:45.123Z",
+  "timestamp": "2025-10-15T10:23:45.456Z",
   "level": "INFO",
   "thread": "http-nio-8080-exec-1",
-  "logger": "com.exploresg.fleetservice.controller.FleetController",
-  "message": "User action initiated for userId: 42, email: user@example.com",
+  "logger": "com.exploresg.fleetservice.interceptor.RequestLoggingInterceptor",
+  "message": "HTTP GET /api/v1/fleet/vehicles completed with status 200 in 125ms from 192.168.1.100",
   "application": "exploresg-fleet-service",
   "environment": "prod",
   "correlationId": "abc-123-def-456",
-  "userId": "42",
-  "userEmail": "user@example.com",
-  "requestMethod": "POST",
-  "requestPath": "/api/v1/signup",
+  "userId": "user-42",
+  "requestMethod": "GET",
+  "requestPath": "/api/v1/fleet/vehicles",
   "clientIp": "192.168.1.100"
 }
 ```
@@ -117,48 +114,48 @@
 SPRING_PROFILES_ACTIVE=dev ./mvnw spring-boot:run
 
 # Make a request
-curl http://localhost:8080/api/v1/check?email=test@example.com
+curl http://localhost:8080/api/v1/fleet/models
 
 # You should see colored, readable logs in console
 ```
 
-### 2. Test Production JSON Logging
+### 2. Test Production JSON Logging (PowerShell)
 
-```bash
+```powershell
 # Build the project
-./mvnw clean package -DskipTests
+.\mvnw clean package -DskipTests
 
 # Run with prod profile
-SPRING_PROFILES_ACTIVE=prod java -jar target/fleet-service-0.0.1-SNAPSHOT.jar
+$env:SPRING_PROFILES_ACTIVE="prod"
+java -jar target/fleet-service-0.0.1-SNAPSHOT.jar
 
 # Make a request
-curl http://localhost:8080/api/v1/check?email=test@example.com
+curl http://localhost:8080/api/v1/fleet/models
 
 # Logs will be in JSON format
 ```
 
-### 3. Test Correlation ID
+### 3. Test Correlation ID (PowerShell)
 
-```bash
+```powershell
 # Send request with custom correlation ID
-curl -X GET http://localhost:8080/api/v1/check?email=test@example.com \
-  -H "X-Correlation-ID: test-correlation-123" \
+curl http://localhost:8080/api/v1/fleet/models `
+  -H "X-Correlation-ID: test-fleet-correlation-123" `
   -v
 
-# Check response header
-# Should see: X-Correlation-ID: test-correlation-123
-
-# Check logs - should include [test-correlation-123]
+# Check response header - should include X-Correlation-ID
+# Check logs - should include [test-fleet-correlation-123]
 ```
 
 ### 4. Test User Context (Requires Authentication)
 
-```bash
+```powershell
 # Make authenticated request
-curl -X GET http://localhost:8080/api/v1/me \
-  -H "Authorization: Bearer $JWT_TOKEN"
+$token = "your-jwt-token"
+curl http://localhost:8080/api/v1/fleet/vehicles `
+  -H "Authorization: Bearer $token"
 
-# Logs should include userId and userEmail
+# Logs should include userId from JWT
 ```
 
 ---
@@ -269,11 +266,12 @@ fields @timestamp, requestPath, message
 
 ## 📚 Documentation Links
 
-| Document                                                         | Purpose                   |
-| ---------------------------------------------------------------- | ------------------------- |
-| [LOGGING-GUIDE.md](LOGGING-GUIDE.md)                             | Complete 400+ line guide  |
-| [LOGGING-QUICK-REFERENCE.md](LOGGING-QUICK-REFERENCE.md)         | Quick start reference     |
-| [PRODUCTION-READINESS-REVIEW.md](PRODUCTION-READINESS-REVIEW.md) | Overall production review |
+| Document                                                         | Purpose                        |
+| ---------------------------------------------------------------- | ------------------------------ |
+| [LOGGING-GUIDE.md](LOGGING-GUIDE.md)                             | Complete logging guide         |
+| [HEALTH-CHECK-GUIDE.md](HEALTH-CHECK-GUIDE.md)                   | Health check configuration     |
+| [KUBERNETES-DEPLOYMENT-GUIDE.md](KUBERNETES-DEPLOYMENT-GUIDE.md) | K8s deployment instructions    |
+| [CLOUD-READINESS-CHECKLIST.md](CLOUD-READINESS-CHECKLIST.md)     | Production readiness checklist |
 
 ---
 
@@ -319,7 +317,7 @@ Your ExploreSG Fleet Service now has:
 ## 👥 Credits
 
 **Implemented by:** GitHub Copilot  
-**Date:** October 11, 2025  
+**Date:** October 15, 2025  
 **Technologies Used:**
 
 - Logback + Logstash Encoder

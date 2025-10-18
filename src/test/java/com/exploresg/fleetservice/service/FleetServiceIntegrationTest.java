@@ -26,6 +26,7 @@ public class FleetServiceIntegrationTest {
     public void deleteAll() {
         carModelRepository.deleteAll();
     }
+
     @Test
     @Order(1)
     public void testCreateCarModel() {
@@ -49,7 +50,7 @@ public class FleetServiceIntegrationTest {
         assertEquals(createdCar.getModelYear(), request.getModelYear());
         assertEquals(createdCar.getManufacturer(), request.getManufacturer());
         assertEquals(createdCar.getEngineCapacityCc(), request.getEngineCapacityCc());
-        assertEquals(createdCar.getHasAirConditioning(), request.isHasAirConditioning());
+        assertEquals(createdCar.isHasAirConditioning(), request.isHasAirConditioning());
         assertEquals(createdCar.getImageUrl(), request.getImageUrl());
         assertEquals(createdCar.getZeroToHundredSec(), request.getZeroToHundredSec());
         assertEquals(createdCar.getFuelType(), request.getFuelType());
@@ -57,9 +58,10 @@ public class FleetServiceIntegrationTest {
         assertEquals(createdCar.getSafetyRating(), request.getSafetyRating());
         assertEquals(createdCar.getSeats(), request.getSeats());
     }
+
     @Test
     @Order(2)
-    public void shouldReturnAllCarModels(){
+    public void shouldReturnAllCarModels() {
         List<CarModel> carmodels = carModelService.getAllCarModels();
         assertTrue(!carmodels.isEmpty());
     }

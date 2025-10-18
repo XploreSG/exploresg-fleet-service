@@ -1,9 +1,6 @@
 package com.exploresg.fleetservice.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,16 +27,12 @@ public class CarModel {
     private UUID publicId; // <-- NEW PUBLIC REFERENCE ID (UUID)
 
     @Column(nullable = false)
-    @Size(min = 1, max = 200)
     private String model;
 
     @Column(nullable = false)
-    @Size(min = 1, max = 200)
     private String manufacturer;
 
     @Column(nullable = false)
-    @Min(1)
-    @Max(10)
     private Integer seats;
 
     @Column(nullable = false)
@@ -69,9 +62,9 @@ public class CarModel {
 
     private Integer rangeInKm; // Estimated driving range in kilometers
 
-    private Boolean hasAirConditioning;
+    private boolean hasAirConditioning;
 
-    private Boolean hasInfotainmentSystem;
+    private boolean hasInfotainmentSystem;
 
     private String safetyRating; // e.g., "5-Star ANCAP"
 

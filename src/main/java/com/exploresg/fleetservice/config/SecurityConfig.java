@@ -17,6 +17,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.crypto.spec.SecretKeySpec;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -27,6 +28,18 @@ public class SecurityConfig {
 
     @Value("${application.security.jwt.secret-key}")
     private String jwtSecretKey;
+
+    @Value("${cors.allowed-origins:http://localhost:3000}")
+    private String allowedOrigins;
+
+    @Value("${cors.allowed-methods:GET,POST,PUT,DELETE,OPTIONS}")
+    private String allowedMethods;
+
+    @Value("${cors.allowed-headers:*}")
+    private String allowedHeaders;
+
+    @Value("${cors.allow-credentials:true}")
+    private boolean allowCredentials;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,16 +53,25 @@ public class SecurityConfig {
                 // 4. Route Permissions (Adapted for fleet-service)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                "/",
+                                "/error",
                                 "/hello",
                                 "/api/v1/fleet/health", // Health check for service monitoring
                                 "/api/v1/fleet/models", // This is our public endpoint for browsing cars
                                 "/api/v1/fleet/bookings/**", // Allow booking service to access without auth (dev only)
                                 "/api/v1/fleet/reservations/**", // Allow booking service reservation endpoints (dev
                                                                  // only)
+                                // Actuator endpoints for Kubernetes health probes
+                                "/actuator/health",
+                                "/actuator/health/liveness",
+                                "/actuator/health/readiness",
+                                "/actuator/info",
+                                "/actuator/prometheus",
                                 // Swagger/OpenAPI endpoints
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html")
+                                "/swagger-ui.html",
+                                "/openapi/**")
                         .permitAll()
                         // All other requests require authentication
                         .anyRequest().authenticated())
@@ -91,10 +113,14 @@ public class SecurityConfig {
         // This configuration is aligned with our other services to ensure
         // our frontend can communicate with both services.
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8082"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
+        configuration.setAllowedMethods(Arrays.asList(allowedMethods.split(",")));
+        configuration.setAllowedHeaders(Arrays.asList(allowedHeaders.split(",")));
+        configuration.setAllowCredentials(allowCredentials);
+        // Expose headers that frontend needs to read
+        configuration.setExposedHeaders(List.of("Authorization", "Content-Type"));
+        // Cache preflight requests for 1 hour to reduce overhead
+        configuration.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
