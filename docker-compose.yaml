@@ -1,6 +1,7 @@
 services:
   fleet-db:
     image: postgres:15
+    platform: linux/arm64/v8
     container_name: dev-exploresg-fleet-db
     env_file:
       - .env
@@ -39,6 +40,10 @@ services:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:postgresql://fleet-db:5432/exploresg-fleet-service-db}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-exploresguser}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-exploresgpass}
+      RABBIT_HOST: ${RABBIT_HOST:-rabbitmq}
+      RABBIT_USERNAME: ${RABBIT_USERNAME:-guest}
+      RABBIT_PASSWORD: ${RABBIT_PASSWORD:-guest}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-somesecretkey}
     ports:
       - "8081:8080" # Map host port 8081 to container port 8080
     networks:

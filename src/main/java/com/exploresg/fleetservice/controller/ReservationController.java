@@ -2,6 +2,7 @@ package com.exploresg.fleetservice.controller;
 
 import com.exploresg.fleetservice.dto.*;
 import com.exploresg.fleetservice.service.ReservationService;
+import com.exploresg.fleetservice.util.MessageProducer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -37,6 +39,7 @@ import java.util.UUID;
 public class ReservationController {
 
         private final ReservationService reservationService;
+        private final MessageProducer messageProducer;
 
         /**
          * ⭐ ENDPOINT 1: Create Temporary Reservation (BEFORE Payment)
@@ -230,7 +233,14 @@ public class ReservationController {
                 // For now, just return a placeholder
                 // TODO: Implement getReservationById in ReservationService
 
-                return ResponseEntity.ok()
-                                .body("Reservation details endpoint - To be implemented");
-        }
+        return ResponseEntity.ok()
+                .body("Reservation details endpoint - To be implemented");
+    }
+
+    @GetMapping("/reservations/notify")
+    public ResponseEntity<?> getReservationDetails(Principal principal) {
+        messageProducer.sendMessage(principal.getName());
+        return ResponseEntity.ok()
+                .body("Email sent");
+    }
 }
