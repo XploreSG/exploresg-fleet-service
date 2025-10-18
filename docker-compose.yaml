@@ -8,6 +8,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-exploresg-fleet-service-db}
       POSTGRES_USER: ${POSTGRES_USER:-exploresguser}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-exploresgpass}
+      RABBIT_HOST: ${POSTGRES_DB:-rabbitmq}
     ports:
       - "5433:5432" # Use a different host port (5433)
     volumes:
