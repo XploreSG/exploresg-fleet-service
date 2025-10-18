@@ -40,6 +40,8 @@ services:
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-exploresguser}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-exploresgpass}
       RABBIT_HOST: ${RABBIT_HOST:-rabbitmq}
+      RABBIT_USERNAME: ${RABBIT_USERNAME:-guest}
+      RABBIT_PASSWORD: ${RABBIT_PASSWORD:-guest}
     ports:
       - "8081:8080" # Map host port 8081 to container port 8080
     networks:
