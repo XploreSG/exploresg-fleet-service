@@ -58,10 +58,21 @@ spec:
           resources:
             requests:
               cpu: "250m"
-              memory: "256Mi"
+              memory: "512Mi"
             limits:
               cpu: "500m"
-              memory: "512Mi"
+              memory: "768Mi"
+
+          # JVM Memory Optimization
+          env:
+            - name: JAVA_OPTS
+              value: >-
+                -XX:MaxRAMPercentage=70.0
+                -XX:InitialRAMPercentage=30.0
+                -XX:+UseG1GC
+                -XX:MaxGCPauseMillis=200
+                -XX:+ExitOnOutOfMemoryError
+                -Djava.security.egd=file:/dev/./urandom
 ---
 apiVersion: v1
 kind: Service

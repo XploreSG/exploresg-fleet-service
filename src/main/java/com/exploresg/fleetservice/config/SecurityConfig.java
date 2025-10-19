@@ -57,7 +57,10 @@ public class SecurityConfig {
                                 "/error",
                                 "/hello",
                                 "/api/v1/fleet/health", // Health check for service monitoring
-                                "/api/v1/fleet/models", // This is our public endpoint for browsing cars
+                                "/api/v1/fleet/models", // Public endpoint for browsing all cars
+                                "/api/v1/fleet/models/*/availability-count", // Public endpoint for checking
+                                                                             // availability
+                                "/api/v1/fleet/operators/*/models", // Public endpoint for browsing cars by operator
                                 "/api/v1/fleet/bookings/**", // Allow booking service to access without auth (dev only)
                                 "/api/v1/fleet/reservations/**", // Allow booking service reservation endpoints (dev
                                                                  // only)
