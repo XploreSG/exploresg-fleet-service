@@ -113,6 +113,12 @@
             <version>2.7.0</version>
         </dependency>
 
+		<!-- Jackson JSR310 for Java 8 Date/Time API support (LocalDateTime, Instant, etc.) -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
+
 		<!-- Force a safe commons-lang3 version to mitigate reported vulnerability in transitive deps -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
