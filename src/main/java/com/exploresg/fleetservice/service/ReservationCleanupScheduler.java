@@ -50,8 +50,12 @@ public class ReservationCleanupScheduler {
      * - Query reduction: 360/hour → 12/hour (97% reduction)
      * - Log reduction: ~700 lines/hour → ~24 lines/hour
      * - Estimated memory savings: ~100MB
+     * 
+     * Startup optimization: Delayed to 2 minutes after app start
+     * - Prevents additional DB load during critical startup phase
+     * - Allows liveness/readiness probes to pass first
      */
-    @Scheduled(fixedDelay = 300000, initialDelay = 30000)
+    @Scheduled(fixedDelay = 300000, initialDelay = 120000)
     @Transactional
     public void cleanupExpiredReservations() {
         try {

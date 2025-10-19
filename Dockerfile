@@ -74,17 +74,21 @@ USER appuser
 EXPOSE 8080
 
 # Health check for container orchestration
-# This allows Kubernetes to determine if container is healthy
+# Increased start-period to 120s to accommodate 40-second startup time
+# Using liveness endpoint for Kubernetes compatibility
 HEALTHCHECK --interval=30s \
-            --timeout=5s \
-            --start-period=60s \
+            --timeout=10s \
+            --start-period=120s \
             --retries=3 \
-            CMD curl -f http://localhost:8080/actuator/health || exit 1
+            CMD curl -f http://localhost:8080/actuator/health/liveness || exit 1
 
 # Environment variables with secure defaults
+# Optimized for faster startup in Kubernetes
 ENV JAVA_OPTS="-XX:+UseContainerSupport \
-               -XX:MaxRAMPercentage=75.0 \
-               -XX:InitialRAMPercentage=50.0 \
+               -XX:MaxRAMPercentage=70.0 \
+               -XX:InitialRAMPercentage=30.0 \
+               -XX:+TieredCompilation \
+               -XX:TieredStopAtLevel=1 \
                -XX:+UseG1GC \
                -XX:MaxGCPauseMillis=200 \
                -XX:+HeapDumpOnOutOfMemoryError \
@@ -94,7 +98,8 @@ ENV JAVA_OPTS="-XX:+UseContainerSupport \
                -Djava.security.egd=file:/dev/./urandom \
                -Dfile.encoding=UTF-8 \
                -Dsun.net.inetaddr.ttl=60 \
-               -Duser.timezone=UTC"
+               -Duser.timezone=UTC \
+               -Dspring.backgroundpreinitializer.ignore=true"
 
 # Application entrypoint
 # Using exec form with shell wrapper for environment variable expansion
